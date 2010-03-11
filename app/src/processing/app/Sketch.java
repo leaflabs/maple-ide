@@ -24,6 +24,7 @@
 package processing.app;
 
 import processing.app.debug.AvrdudeUploader;
+import processing.app.debug.DFUUploader;
 import processing.app.debug.Compiler;
 import processing.app.debug.RunnerException;
 import processing.app.debug.Sizer;
@@ -1472,7 +1473,17 @@ public class Sketch {
     throws RunnerException {
     long size = 0;
     long maxsize = Integer.parseInt(Base.getBoardPreferences().get("upload.maximum_size"));
-    Sizer sizer = new Sizer(buildPath, suggestedClassName);
+
+    String buildUsing = Base.getBoardPreferences().get("build.using");
+    if (buildUsing == null) {
+      // fall back on global prefs
+      buildUsing = Preferences.get("build.using");
+    }
+
+    if (buildUsing.equals("make")) {
+      System.out.println("Binary sketch size is reported above. Check it against a "+  maxsize + " byte maximum)");      
+    } else {
+      Sizer sizer = new Sizer(buildPath, suggestedClassName);
       try {
       size = sizer.computeSize();
       System.out.println("Binary sketch size: " + size + " bytes (of a " +

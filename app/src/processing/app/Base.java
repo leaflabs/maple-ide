@@ -1515,7 +1515,19 @@ public class Base {
     }  
   }
   
-  
+  static public String getArmBasePath() {
+// Actually, tools are bundled on linux...
+//     if(Base.isLinux()) {
+//       return ""; // tools are installed system-wide and in the path
+//     } else {
+//       return getHardwarePath() + File.separator + "tools" +
+//              File.separator + "arm" + File.separator + "bin" + File.separator;
+//     }  
+
+    return getHardwarePath() + File.separator + "tools" +
+      File.separator + "arm" + File.separator + "bin" + File.separator;
+  }
+
   static public Target getTarget() {
     return Base.targetsTable.get(Preferences.get("target"));
   }
