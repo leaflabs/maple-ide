@@ -39,7 +39,6 @@ public class DFUUploader extends Uploader  {
   public DFUUploader() {
   }
 
-  // XXX: add support for uploading sketches using a programmer
   public boolean uploadUsingPreferences(String buildPath, String className, boolean verbose)
     throws RunnerException {
 
@@ -73,7 +72,7 @@ public class DFUUploader extends Uploader  {
     }
 
     if (fileType.equals("bin")) {
-      String usbID = Base.getBoardPreferences().get(".upload.usbID");
+      String usbID = Base.getBoardPreferences().get("upload.usbID");
       if (usbID == null) {
         /* fall back on default */
         /* this isnt great because is default Avrdude or dfu-util? */
@@ -81,18 +80,14 @@ public class DFUUploader extends Uploader  {
       }
 
       /* todo, add handle to let user choose altIf at upload time! */
-      String altIf = Base.getBoardPreferences().get(".upload.altID");
-
-//       commandDownloader.add("hexdump");
-//       commandDownloader.add(buildPath+File.separator+className+".bin");
-//       executeUploadCommand(commandDownloader);
+      String altIf = Base.getBoardPreferences().get("upload.altID");
 
       List commandDownloader = new ArrayList();
       commandDownloader.add("dfu-util");
       commandDownloader.add("-a "+altIf);
       commandDownloader.add("-R");
       commandDownloader.add("-d "+usbID);
-      commandDownloader.add("-D"+ buildPath+File.separator+className+".bin");//"./thisbin.bin");
+      commandDownloader.add("-D"+ buildPath+File.separator+className+".bin"); //"./thisbin.bin");
 
       return executeUploadCommand(commandDownloader);
     }
@@ -106,23 +101,92 @@ public class DFUUploader extends Uploader  {
     commandDownloader.add("dfu-util");
     commandDownloader.addAll(params);
 
-//     commandDownloader = new ArrayList();
-//     commandDownloader.add("cp");
-//     commandDownloader.add("/home/poslathian/programming/leafGoog/Maple/leaflabs/build_box/build/maple_build.bin");
-//     commandDownloader.add("./");
-//     executeUploadCommand(commandDownloader);
-
-//     commandDownloader = new ArrayList();
-//     commandDownloader.add("hexdump");
-//     commandDownloader.add("./maple_build.bin");
-//     executeUploadCommand(commandDownloader);
-
-//     commandDownloader = new ArrayList();
-//     commandDownloader.add("dfu-util");
-
-//     commandDownloader.add("-D");
-//     commandDownloader.add("/home/poslathian/programming/leafGoog/Maple/leaflabs/build_box/build/maple_build.bin");
-
     return executeUploadCommand(commandDownloader);
+  }
+
+  // Need to overload this from Uploader to use the system-wide dfu-util
+  protected boolean executeUploadCommand(Collection commandDownloader) 
+    throws RunnerException
+  {
+    firstErrorFound = false;  // haven't found any errors yet
+    secondErrorFound = false;
+    notFoundError = false;
+    int result=0; // pre-initialized to quiet a bogus warning from jikes
+    
+    String userdir = System.getProperty("user.dir") + File.separator;
+
+    try {
+      String[] commandArray = new String[commandDownloader.size()];
+      commandDownloader.toArray(commandArray);
+      
+      String avrBasePath;
+      
+      if(Base.isLinux()) {
+        avrBasePath = new String(Base.getHardwarePath() + "/tools/"); 
+      }
+      else {
+        avrBasePath = new String(Base.getHardwarePath() + "/tools/avr/bin/"); 
+      }
+      
+      //commandArray[0] = avrBasePath + commandArray[0];
+      
+      if (verbose || Preferences.getBoolean("upload.verbose")) {
+        for(int i = 0; i < commandArray.length; i++) {
+          System.out.print(commandArray[i] + " ");
+        }
+        System.out.println();
+      }
+      Process process = Runtime.getRuntime().exec(commandArray);
+      new MessageSiphon(process.getInputStream(), this);
+      new MessageSiphon(process.getErrorStream(), this);
+
+      // wait for the process to finish.  if interrupted
+      // before waitFor returns, continue waiting
+      //
+      boolean compiling = true;
+      while (compiling) {
+        try {
+          result = process.waitFor();
+          compiling = false;
+        } catch (InterruptedException intExc) {
+        }
+      } 
+      if(exception!=null) {
+        exception.hideStackTrace();
+        throw exception;   
+      }
+      if(result!=0)
+        return false;
+    } catch (Exception e) {
+      String msg = e.getMessage();
+      if ((msg != null) && (msg.indexOf("uisp: not found") != -1) && (msg.indexOf("avrdude: not found") != -1)) {
+        //System.err.println("uisp is missing");
+        //JOptionPane.showMessageDialog(editor.base,
+        //                              "Could not find the compiler.\n" +
+        //                              "uisp is missing from your PATH,\n" +
+        //                              "see readme.txt for help.",
+        //                              "Compiler error",
+        //                              JOptionPane.ERROR_MESSAGE);
+        return false;
+      } else {
+        e.printStackTrace();
+        result = -1;
+      }
+    }
+    //System.out.println("result2 is "+result);
+    // if the result isn't a known, expected value it means that something
+    // is fairly wrong, one possibility is that jikes has crashed.
+    //
+    if (exception != null) throw exception;
+
+    if ((result != 0) && (result != 1 )) {
+      exception = new RunnerException(SUPER_BADNESS);
+      //editor.error(exception);
+      //PdeBase.openURL(BUGS_URL);
+      //throw new PdeException(SUPER_BADNESS);
+    }
+
+    return (result == 0); // ? true : false;      
+
   }
 }
