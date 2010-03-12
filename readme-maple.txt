@@ -27,7 +27,8 @@ Changes from stock arduino codebase
  * hardware/maple directory, including bootloader/ and core/
  * app/src/processing/app/Base.java: add getArmBasePath
  * app/src/processing/app/Sketch.java: imports, sizer handling
- * app/src/processing/app/debug/DFUUploader.java: new
  * app/src/processing/app/debug/Sizer.java: don't size make builds
-
+ * app/src/processing/app/debug/DFUUploader.java: new
+ * app/src/processing/app/debug/Compiler.java: exposed a couple methods
+ * app/src/processing/app/debug/ArmCompiler.java: new, extends Compiler
 

@@ -26,6 +26,7 @@
 package processing.app.debug;
 
 import processing.app.Base;
+import processing.app.Preferences;
 
 import java.io.*;
 import java.util.*;
@@ -52,7 +53,7 @@ public class Sizer implements MessageConsumer {
         return 1;      // GUI will tell user to check manually
     } else {
         String avrBasePath = Base.getAvrBasePath();
-        String commandSize[] = new String[] {
+        commandSize = new String[] {
           avrBasePath + "avr-size",
           " "
         };

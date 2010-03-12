@@ -1411,7 +1411,7 @@ public class Sketch {
     // compile the program. errors will happen as a RunnerException
     // that will bubble up to whomever called build().
     Compiler compiler;
-    if(Base.getBoardPreferences().get("build.using" == "make") {
+    if(Base.getBoardPreferences().get("build.using") == "make") {
         compiler = new ArmCompiler();
     } else {
         compiler = new Compiler();
@@ -1491,13 +1491,13 @@ public class Sketch {
     } else {
       Sizer sizer = new Sizer(buildPath, suggestedClassName);
       try {
-      size = sizer.computeSize();
-      System.out.println("Binary sketch size: " + size + " bytes (of a " +
-        maxsize + " byte maximum)");      
-    } catch (RunnerException e) {
-      System.err.println("Couldn't determine program size: " + e.getMessage());
+        size = sizer.computeSize();
+        System.out.println("Binary sketch size: " + size + " bytes (of a " +
+          maxsize + " byte maximum)");      
+      } catch (RunnerException e) {
+        System.err.println("Couldn't determine program size: " + e.getMessage());
+      }
     }
-
     if (size > maxsize)
       throw new RunnerException(
         "Sketch too big; see http://www.arduino.cc/en/Guide/Troubleshooting#size for tips on reducing it.");

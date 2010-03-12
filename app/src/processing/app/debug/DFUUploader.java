@@ -41,7 +41,8 @@ public class DFUUploader extends Uploader  {
 
   // XXX: add support for uploading sketches using a programmer
   public boolean uploadUsingPreferences(String buildPath, String className, boolean verbose)
-  throws RunnerException {
+    throws RunnerException {
+
     this.verbose = verbose;
     String uploadUsing = Base.getBoardPreferences().get("upload.using");
     if (uploadUsing == null) {
@@ -56,7 +57,7 @@ public class DFUUploader extends Uploader  {
     return false;
   }
 
-  public boolean burnBootloader(String programmer) throws RunnerException {
+  public boolean burnBootloader(String target, String programmer) throws RunnerException {
     /* no support for openocd/bootloader overwrite yet */
     return false;
   }

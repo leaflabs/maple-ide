@@ -255,7 +255,7 @@ public class Compiler implements MessageConsumer {
   /**
    * Either succeeds or throws a RunnerException fit for public consumption.
    */
-  private void execAsynchronously(List commandList) throws RunnerException {
+  protected void execAsynchronously(List commandList) throws RunnerException {
     String[] command = new String[commandList.size()];
     commandList.toArray(command);
     int result = 0;
@@ -548,7 +548,7 @@ public class Compiler implements MessageConsumer {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  static private void createFolder(File folder) throws RunnerException {
+  static protected void createFolder(File folder) throws RunnerException {
     if (folder.isDirectory()) return;
     if (!folder.mkdir())
       throw new RunnerException("Couldn't create: " + folder);

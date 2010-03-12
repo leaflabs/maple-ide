@@ -1,6 +1,9 @@
 /* -*- mode: java; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 
 /*
+
+  Modified version of Compiler.java, which is...
+
   Part of the Processing project - http://processing.org
 
   Copyright (c) 2004-08 Ben Fry and Casey Reas
@@ -35,7 +38,7 @@ import java.util.*;
 import java.util.zip.*;
 
 
-public class Compiler implements MessageConsumer extends Compiler {
+public class ArmCompiler extends Compiler {
 
   public ArmCompiler() { }
 
@@ -91,7 +94,7 @@ public class Compiler implements MessageConsumer extends Compiler {
     // then collecting them into the core.a library file.
 
     List<File> coreObjectFiles = 
-      compileFiles(avrBasePath, buildPath, includePaths,
+      compileFiles(armBasePath, buildPath, includePaths,
                    findFilesInPath(corePath, "S", true),
                    findFilesInPath(corePath, "c", true),
                    findFilesInPath(corePath, "cpp", true),
@@ -126,7 +129,7 @@ public class Compiler implements MessageConsumer extends Compiler {
       // this library can use includes in its utility/ folder
       includePaths.add(utilityFolder.getAbsolutePath());
       objectFiles.addAll(
-        compileFilesARM(armBasePath, outputFolder.getAbsolutePath(), includePaths,
+        compileFiles(armBasePath, outputFolder.getAbsolutePath(), includePaths,
                      findFilesInFolder(libraryFolder, "S", false),
                      findFilesInFolder(libraryFolder, "c", false),
                      findFilesInFolder(libraryFolder, "cpp", false),
@@ -134,7 +137,7 @@ public class Compiler implements MessageConsumer extends Compiler {
       outputFolder = new File(outputFolder, "utility");
       createFolder(outputFolder);
       objectFiles.addAll(
-        compileFilesARM(armBasePath, outputFolder.getAbsolutePath(), includePaths,
+        compileFiles(armBasePath, outputFolder.getAbsolutePath(), includePaths,
                      findFilesInFolder(new File(libraryFolder, "utility"), "S", false),
                      findFilesInFolder(new File(libraryFolder, "utility"), "c", false),
                      findFilesInFolder(new File(libraryFolder, "utility"), "cpp", false),
@@ -147,7 +150,7 @@ public class Compiler implements MessageConsumer extends Compiler {
 
     System.out.print("Compiling the sketch with arm-none-eabi\n");
     objectFiles.addAll(
-      compileFilesARM(armBasePath, buildPath, includePaths,
+      compileFiles(armBasePath, buildPath, includePaths,
                    findFilesInPath(buildPath, "S", false),
                    findFilesInPath(buildPath, "c", false),
                    findFilesInPath(buildPath, "cpp", false),
