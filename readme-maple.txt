@@ -27,9 +27,11 @@ Changes from stock arduino codebase
  * removed all Eclipse project cruft
  * hardware/leaflabs directory, including bootloader/ and core/
  * app/src/processing/app/Base.java: add getArmBasePath
- * app/src/processing/app/Sketch.java: imports, delegation
- * app/src/processing/app/debug/Sizer.java: don't size make builds
- * app/src/processing/app/debug/DFUUploader.java: new
- * app/src/processing/app/debug/Compiler.java: exposed a couple methods
+ * app/src/processing/app/Sketch.java: imports, compiler/uploader selection
+ * app/src/processing/app/debug/Sizer.java: don't try to size make builds
+ * app/src/processing/app/debug/DFUUploader.java: new dfu-util uploader
+ * app/src/processing/app/debug/Compiler.java: expose a couple methods
  * app/src/processing/app/debug/ArmCompiler.java: new, extends Compiler
+ * build/macosx/dist/Arduino.app/Contents/Resources/processing.icns,
+   build/shared/lib: UI skin and preferences
 
