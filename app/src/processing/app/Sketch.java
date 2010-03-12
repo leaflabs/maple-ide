@@ -26,6 +26,7 @@ package processing.app;
 import processing.app.debug.AvrdudeUploader;
 import processing.app.debug.DFUUploader;
 import processing.app.debug.Compiler;
+import processing.app.debug.ArmCompiler;
 import processing.app.debug.RunnerException;
 import processing.app.debug.Sizer;
 import processing.app.debug.Uploader;
@@ -1409,7 +1410,12 @@ public class Sketch {
 
     // compile the program. errors will happen as a RunnerException
     // that will bubble up to whomever called build().
-    Compiler compiler = new Compiler();
+    Compiler compiler;
+    if(Base.getBoardPreferences().get("build.using" == "make") {
+        compiler = new ArmCompiler();
+    } else {
+        compiler = new Compiler();
+    }
     if (compiler.compile(this, buildPath, primaryClassName, verbose)) {
       return primaryClassName;
     }

@@ -28,5 +28,6 @@ Changes from stock arduino codebase
  * app/src/processing/app/Base.java: add getArmBasePath
  * app/src/processing/app/Sketch.java: imports, sizer handling
  * app/src/processing/app/debug/DFUUploader.java: new
+ * app/src/processing/app/debug/Sizer.java: don't size make builds
 
 
