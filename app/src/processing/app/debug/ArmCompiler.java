@@ -63,10 +63,6 @@ public class ArmCompiler extends Compiler {
     // the pms object isn't used for anything but storage
     MessageStream pms = new MessageStream(this);
 
-    String buildUsing = Base.getBoardPreferences().get("build.using");
-
-    System.out.print("Compiling core arm-none-eabi\n");
-
     String armBasePath = Base.getArmBasePath();
     Map<String, String> boardPreferences = Base.getBoardPreferences();
     String core = boardPreferences.get("build.core");
@@ -92,13 +88,14 @@ public class ArmCompiler extends Compiler {
 
     // 1. compile the target (core), outputting .o files to <buildPath> and
     // then collecting them into the core.a library file.
+    System.out.print("Compiling core arm-none-eabi\n");
 
-    List<File> coreObjectFiles = 
+    objectFiles.addAll(
       compileFiles(armBasePath, buildPath, includePaths,
                    findFilesInPath(corePath, "S", true),
                    findFilesInPath(corePath, "c", true),
                    findFilesInPath(corePath, "cpp", true),
-                   boardPreferences);
+                   boardPreferences));
     
     /*
     List baseCommandAR = new ArrayList(Arrays.asList(new String[] {
@@ -138,9 +135,9 @@ public class ArmCompiler extends Compiler {
       createFolder(outputFolder);
       objectFiles.addAll(
         compileFiles(armBasePath, outputFolder.getAbsolutePath(), includePaths,
-                     findFilesInFolder(new File(libraryFolder, "utility"), "S", false),
-                     findFilesInFolder(new File(libraryFolder, "utility"), "c", false),
-                     findFilesInFolder(new File(libraryFolder, "utility"), "cpp", false),
+                     findFilesInFolder(utilityFolder, "S", false),
+                     findFilesInFolder(utilityFolder, "c", false),
+                     findFilesInFolder(utilityFolder, "cpp", false),
                      boardPreferences));
       // other libraries should not see this library's utility/ folder
       includePaths.remove(includePaths.size() - 1);
@@ -160,7 +157,7 @@ public class ArmCompiler extends Compiler {
     System.out.print("Linking...\n");
     String linkerInclude = "-L"+corePath+File.separator+"lanchon-stm32";
     String linkerScript  = "-T"+corePath+File.separator+boardPreferences.get("build.linker");
-    String mapOut        = "-Map="+buildPath+File.separator+primaryClassName+".map";
+    //String mapOut        = "-Map="+buildPath+File.separator+primaryClassName+".map";
     List baseCommandLinker = new ArrayList(Arrays.asList(new String[] {
       armBasePath + "arm-none-eabi-gcc",
       linkerScript,
@@ -178,10 +175,12 @@ public class ArmCompiler extends Compiler {
     }));
 
     for (File file : objectFiles) {
+      //System.out.println(file);
       baseCommandLinker.add(file.getAbsolutePath());
     }
 
     baseCommandLinker.add("-L" + buildPath);
+    System.out.print("(exec linker async)\n");
     execAsynchronously(baseCommandLinker);
 
     List commandObjCopy = new ArrayList(Arrays.asList(new String[] {
@@ -192,6 +191,7 @@ public class ArmCompiler extends Compiler {
       buildPath + File.separator + primaryClassName + ".bin"
     }));
     
+    System.out.print("(exec obj copy async)\n");
     execAsynchronously(commandObjCopy);
 
     List commandSize = new ArrayList(Arrays.asList(new String[] {
@@ -201,6 +201,7 @@ public class ArmCompiler extends Compiler {
       buildPath + File.separator + primaryClassName + ".bin"
     }));
     
+    System.out.print("(exec size async)\n");
     execAsynchronously(commandSize);
 
     return true;
@@ -260,8 +261,8 @@ public class ArmCompiler extends Compiler {
       "-Wall",
       "-Os",
       //      "-g",
-      "-DF_CPU=" + Preferences.get("boards." + Preferences.get("board") + ".build.f_cpu"),
-      "-D"+Preferences.get("boards."+Preferences.get("board")+".build.vect"),
+      "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
+      "-D"+ boardPreferences.get("build.vect"),
       "-DARDUINO=" + Base.REVISION,
     }));
 
@@ -296,8 +297,8 @@ public class ArmCompiler extends Compiler {
     baseCommandCompiler.add("-ffunction-sections");
     baseCommandCompiler.add("-fdata-sections");
     baseCommandCompiler.add("-Wl,--gc-sections");
-    baseCommandCompiler.add("-DF_CPU=" + Preferences.get("boards." + Preferences.get("board") + ".build.f_cpu"));
-    baseCommandCompiler.add("-D"+Preferences.get("boards."+Preferences.get("board")+".build.vect"));
+    baseCommandCompiler.add("-DF_CPU=" + boardPreferences.get("build.f_cpu"));
+    baseCommandCompiler.add("-D" + boardPreferences.get("build.vect"));
     baseCommandCompiler.add("-DARDUINO=" + Base.REVISION);
     baseCommandCompiler.add("-c");
 
@@ -328,8 +329,8 @@ public class ArmCompiler extends Compiler {
     baseCommandCompilerCPP.add("-ffunction-sections");
     baseCommandCompilerCPP.add("-fdata-sections");
     baseCommandCompilerCPP.add("-Wl,--gc-sections");
-    baseCommandCompilerCPP.add("-DF_CPU=" + Preferences.get("boards." + Preferences.get("board") + ".build.f_cpu"));
-    baseCommandCompilerCPP.add("-D"+Preferences.get("boards."+Preferences.get("board")+".build.vect"));
+    baseCommandCompilerCPP.add("-DF_CPU=" + boardPreferences.get("build.f_cpu"));
+    baseCommandCompilerCPP.add("-D" + boardPreferences.get("build.vect"));
     baseCommandCompilerCPP.add("-DARDUINO=" + Base.REVISION);
     baseCommandCompilerCPP.add("-fno-rtti");
     baseCommandCompilerCPP.add("-fno-exceptions");

@@ -29,6 +29,7 @@
 
 package processing.app.preproc;
 
+import processing.app.debug.Target;
 import processing.app.*;
 import processing.core.*;
 
@@ -219,7 +220,44 @@ public class PdePreprocessor {
    *
    * @param out         PrintStream to write it to.
    */
-  protected void writeFooter(PrintStream out) throws java.lang.Exception {}
+  protected void writeFooter(PrintStream out) throws java.lang.Exception {
+    // Open the file main.cxx and copy its entire contents to the bottom of the
+    // generated sketch .cpp file...
+
+	Map<String, String> boardPreferences = Base.getBoardPreferences();
+    String buildUsing = Base.getBoardPreferences().get("build.using");
+    if (buildUsing == null) {
+      // fall back on global prefs
+      buildUsing = Preferences.get("build.using");
+    }
+    if (buildUsing.equals("make")) {
+        String core = boardPreferences.get("build.core");
+        String corePath;
+
+        if (core.indexOf(':') == -1) {
+        Target t = Base.getTarget();
+        File coreFolder = new File(new File(t.getFolder(), "cores"), core);
+        corePath = coreFolder.getAbsolutePath();
+        } else {
+        Target t = Base.targetsTable.get(core.substring(0, core.indexOf(':')));
+        File coresFolder = new File(t.getFolder(), "cores");
+        File coreFolder = new File(coresFolder, core.substring(core.indexOf(':') + 1));
+        corePath = coreFolder.getAbsolutePath();
+        }
+
+        String mainFileName = corePath + File.separator + "main.cxx";
+        FileReader reader = new FileReader(mainFileName);
+
+        LineNumberReader mainfile = new LineNumberReader(reader);
+
+        String line;
+        while ((line = mainfile.readLine()) != null) {
+            out.print(line + "\n");
+        }
+
+        mainfile.close();
+    }
+  }
 
 
   public ArrayList<String> getExtraImports() {

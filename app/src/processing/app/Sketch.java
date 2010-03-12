@@ -1411,9 +1411,17 @@ public class Sketch {
     // compile the program. errors will happen as a RunnerException
     // that will bubble up to whomever called build().
     Compiler compiler;
-    if(Base.getBoardPreferences().get("build.using") == "make") {
+    String buildUsing = Base.getBoardPreferences().get("build.using");
+    if (buildUsing == null) {
+      // fall back on global prefs
+      buildUsing = Preferences.get("build.using");
+    }
+    System.out.print("Going to build using '" + buildUsing + "'");
+    if(buildUsing.equals("make")) {
+        System.out.println(" (ARM)");
         compiler = new ArmCompiler();
     } else {
+        System.out.println(" (AVR)");
         compiler = new Compiler();
     }
     if (compiler.compile(this, buildPath, primaryClassName, verbose)) {
@@ -1511,7 +1519,22 @@ public class Sketch {
 
     // download the program
     //
-    uploader = new AvrdudeUploader();
+    String uploadProgram = Base.getBoardPreferences().get("upload.uploader");
+
+    if (uploadProgram == null) {
+      uploadProgram = Preferences.get("upload.uploader");
+    }
+
+    System.err.println("Loading via " + uploadProgram);
+
+    if (uploadProgram.equals("dfu-util")) {
+      uploader = new DFUUploader();
+    } else if (uploadProgram.equals("avrdude")) {
+      uploader = new AvrdudeUploader();
+    } else {
+      throw new RunnerException("No valid uploader (dfu-util or avrdude) selected in your preferences!");                                
+    }
+
     boolean success = uploader.uploadUsingPreferences(buildPath,
                                                       suggestedClassName,
                                                       verbose);
