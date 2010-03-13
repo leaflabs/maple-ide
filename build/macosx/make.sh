@@ -11,6 +11,34 @@ then
   exit
 fi
 
+DIST_ARCHIVE=maple-ide-deps-macosx-0018.tar.gz
+DIST_URL=http://leaflabs.com/pub
+
+### -- SETUP DIST FILES ----------------------------------------
+
+# Have we extracted the dist files yet?
+if test ! -d dist/tools/arm
+then
+  # Have we downloaded the dist files yet? 
+  if test ! -f $DIST_ARCHIVE
+  then
+    echo "Downloading distribution files for macosx platform: " $DIST_ARCHIVE
+    wget $DIST_URL/$DIST_ARCHIVE
+    if test ! -f $DIST_ARCHIVE
+    then
+      echo "!!! Problem downloading distribution files; please fetch zip file manually and put it here: "
+      echo `pwd`
+      exit 1
+    fi
+  fi
+  echo "Extracting distribution files for macosx platform: " $DIST_ARCHIVE
+  tar --extract --file=$DIST_ARCHIVE --ungzip --directory=dist 
+  if test ! -d dist/tools/arm
+  then
+    echo "!!! Problem extracting dist file, please fix it."
+    exit 1
+  fi
+fi
 
 ### -- SETUP WORK DIR -------------------------------------------
 
@@ -48,13 +76,31 @@ else
   cp -X ../../app/lib/RXTXcomm.jar "$RESOURCES/"
 
   echo Copying examples...
-  cp -r ../shared/examples "$RESOURCES/"
+  cp -rX ../shared/examples "$RESOURCES/"
 
-  echo Extracting reference...
-  unzip -q -d "$RESOURCES/" ../shared/reference.zip
+  # TODO: maple-ide doesn't have references yet
+  #echo Extracting reference...
+  #unzip -q -d "$RESOURCES/" ../shared/reference.zip
 
-  echo Extracting avr tools...
-  unzip -q -d "$RESOURCES/hardware" dist/tools-universal.zip
+  echo Copying avr tools...
+  #unzip -q -d "$RESOURCES/hardware" dist/tools-universal.zip
+  cp -rX dist/avr "$RESOURCES/hardware/tools/avr" 
+
+  echo Copying arm tools...
+  #unzip -q -d "$RESOURCES/hardware/tools" dist/arm.zip
+  cp -rX dist/arm "$RESOURCES/hardware/tools/arm" 
+
+  echo Move dfu-util
+  mv work/Arduino.app/Contents/Resources/Java/hardware/tools/arm/bin/dfu-util work/Arduino.app/Contents/Resources/Java/hardware/tools/avr/bin
+  mv work/Arduino.app/Contents/Resources/Java/hardware/tools/arm/Resources work/Arduino.app/Contents/Resources/Java/hardware/tools/avr
+  if [ "$OSX_VERSION" = "10.6" ]
+  then
+      echo Adding OS X 10.6 Compatible Binaries
+      rm -rf work/Arduino.app/Contents/Resources/Java/hardware/tools/arm
+      rm -rf work/Arduino.app/Contents/Resources/Java/hardware/tools/__MACOSX
+      #unzip -q -d "$RESOURCES/hardware/tools" dist/arm2.zip
+      cp -rX dist/arm2 "$RESOURCES/hardware/tools/arm2" 
+  fi
 fi
 
 
