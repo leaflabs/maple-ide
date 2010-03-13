@@ -1,5 +1,33 @@
 #!/bin/sh
 
+DIST_ARCHIVE=maple-ide-deps-windows-0018.tar.gz
+DIST_URL=http://leaflabs.com/pub
+
+### -- SETUP DIST FILES ----------------------------------------
+
+# Have we extracted the dist files yet?
+if test ! -d dist/tools/arm
+then 
+  # Have we downloaded the dist files yet? 
+  if test ! -f $DIST_ARCHIVE
+  then
+    echo "Downloading distribution files for windows platform: " $DIST_ARCHIVE
+    wget $DIST_URL/$DIST_ARCHIVE
+    if test ! -f $DIST_ARCHIVE
+    then 
+      echo "!!! Problem downloading distribution files; please fetch zip file manually and put it here: "
+      echo `pwd`
+      exit 1
+    fi
+  fi  
+  echo "Extracting distribution files for windows platform: " $DIST_ARCHIVE
+  tar --extract --file=$DIST_ARCHIVE --ungzip --directory=dist
+  if test ! -d dist/tools/arm
+  then
+    echo "!!! Problem extracting dist file, please fix it."
+    exit 1
+  fi
+fi 
 
 ### -- SETUP WORK DIR -------------------------------------------
 
@@ -19,6 +47,7 @@ else
 
   cp -r ../../hardware work/
   cp -r ../../libraries work/
+  mkdir work/hardware/tools
 
   cp ../../app/lib/antlr.jar work/lib/
   cp ../../app/lib/ecj.jar work/lib/
@@ -29,21 +58,31 @@ else
   echo Copying examples...
   cp -r ../shared/examples work/
 
-  echo Extracting reference...
-  unzip -q -d work/ ../shared/reference.zip
+  #echo Extracting reference...
+  #unzip -q -d work/ ../shared/reference.zip
 
-  echo Extracting avr tools...
-  unzip -q -d work/hardware/ avr_tools.zip
+  echo Copying avr tools...
+  cp -r dist/tools/avr work/hardware/tools/avr
+  #unzip -q -d work/hardware/ avr_tools.zip
 
-  echo Extracting enormous JRE...
-  unzip -q -d work/ jre.zip
+  echo Copying arm tools...
+  cp -r dist/tools/arm work/hardware/tools/arm
+  #unzip -q -d work/hardware/tools/arm/ arm.zip
+
+  echo Copy dfu-util...
+  cp dist/dfu-util.exe work/hardware/tools/arm/bin
+
+
+  echo Copying enormous JRE...
+  cp -r dist/java work/java
+  #unzip -q -d work/ jre.zip
 
   # build the processing.exe bundle
   # there are a few hacks in the source to launch4j-3.0.1
   # to build them, use the following:
   # cd head_src/gui_head && make -f Makefile.win
   cd launcher
-  ./launch4j/launch4jc.exe config.xml
+  USERPROFILE=../work/ ./launch4j/launch4jc.exe config.xml
   cp arduino.exe ../work/
   cd ..
 
