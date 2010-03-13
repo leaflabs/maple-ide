@@ -1,0 +1,6 @@
+WHERE MY TOOLS AT?
+-----------------------------------------------------------------------------
+The contents of lib/ and tools/ have been spun out of the repository into a
+seperate zip file, which should be fetched and extracted automatically when
+the make.sh script is run.
+

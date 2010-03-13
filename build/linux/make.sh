@@ -4,7 +4,7 @@ DIST_ARCHIVE=maple-ide-deps-linux-0018.tar.gz
 DIST_URL=http://leaflabs.com/pub
 
 # Have we extracted the dist files yet?
-if test ! -d dist/java
+if test ! -d dist/tools/arm
 then
   # Have we downloaded the dist files yet? 
   if test ! -f $DIST_ARCHIVE
@@ -20,7 +20,7 @@ then
   fi
   echo "Extracting distribution files for linux platform: " $DIST_ARCHIVE
   tar --extract --file=maple-ide-deps-linux-0018.tar.gz --ungzip --directory=dist
-  if test ! -d dist/java
+  if test ! -d dist/tools/arm
   then
     echo "!!! Problem extracting dist file, please fix it."
     exit 1
@@ -56,37 +56,21 @@ else
   unzip -q -d work/ ../shared/reference.zip
 
   cp -r dist/tools work/hardware/
-  cp dist/lib/librxtxSerial.so work/lib/librxtxSerial.so
 
   install -m 755 dist/arduino work/arduino
 
-  echo Extracting JRE...
+  echo NOT extracting full JRE... will attempt to use system-wide version
+  #echo Extracting JRE...
   cp -r dist/java work/java
 
   ARCH=`uname -m`
   if [ $ARCH = "i686" ]
   then
-    echo JRE is OK
+    echo Using 32-bit librxtxSerial.so
+    cp dist/lib/librxtxSerial.so work/lib/librxtxSerial.so
   else 
-#    echo This is not my beautiful house.
-#    if [ $ARCH = "x86_64" ]
-#    then 
-#      echo You gots the 64.
-#    fi
-    echo "
-NOTE -------------------------------------------------------------------------
-I tried to copy a generic Java runtime environment (JRE) into work/java. This 
-JRE was intended for 32-bit x86 platforms and you seem to be running something
-else. If you have 32-bit compatability libraries you'll probably be find, but
-if you have trouble try removing work/java and creating a symbolic link to a
-JRE appropriate for your platform (eg the one that comes with your 
-distribution):
-
-  ln -s /path/to/jre `pwd`/work/java
-
-If you do this you will need to use the 64-bit version of librxtxSerial.so:
-
-  cp dist/lib/librxtxSerial.so.x86_64 work/lib/librxtxSerial.so\n\n"
+    echo Using 64-bit librxtxSerial.so
+    cp dist/lib/librxtxSerial.so.x86_64 work/lib/librxtxSerial.so
   fi
 fi
 
@@ -105,10 +89,7 @@ cd core
 
 perl preproc.pl
 mkdir -p bin
-../build/linux/work/java/bin/java \
-    -cp ../build/linux/work/java/lib/tools.jar \
-    com.sun.tools.javac.Main \
-    -d bin -source 1.5 -target 1.5 \
+javac -d bin -source 1.5 -target 1.5 \
     src/processing/core/*.java src/processing/xml/*.java
 #find bin -name "*~" -exec rm -f {} ';'
 rm -f ../build/linux/work/lib/core.jar
@@ -126,10 +107,7 @@ cd app
 rm -rf ../build/linux/work/classes
 mkdir ../build/linux/work/classes
 
-../build/linux/work/java/bin/java \
-    -cp ../build/linux/work/java/lib/tools.jar \
-    com.sun.tools.javac.Main \
-    -source 1.5 -target 1.5 \
+javac -source 1.5 -target 1.5 \
     -classpath ../build/linux/work/lib/core.jar:../build/linux/work/lib/antlr.jar:../build/linux/work/lib/ecj.jar:../build/linux/work/lib/jna.jar:../build/linux/work/lib/oro.jar:../build/linux/work/lib/RXTXcomm.jar:../build/linux/work/java/lib/tools.jar \
     -d ../build/linux/work/classes \
     src/processing/app/*.java \
