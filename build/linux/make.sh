@@ -3,6 +3,8 @@
 DIST_ARCHIVE=maple-ide-deps-linux-0018.tar.gz
 DIST_URL=http://leaflabs.com/pub
 
+### -- SETUP DIST FILES ----------------------------------------
+
 # Have we extracted the dist files yet?
 if test ! -d dist/tools/arm
 then
@@ -19,7 +21,7 @@ then
     fi
   fi
   echo "Extracting distribution files for linux platform: " $DIST_ARCHIVE
-  tar --extract --file=maple-ide-deps-linux-0018.tar.gz --ungzip --directory=dist
+  tar --extract --file=$DIST_ARCHIVE --ungzip --directory=dist
   if test ! -d dist/tools/arm
   then
     echo "!!! Problem extracting dist file, please fix it."
