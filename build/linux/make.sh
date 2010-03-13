@@ -57,7 +57,7 @@ else
 
   cp -r dist/tools work/hardware/
 
-  install -m 755 dist/arduino work/arduino
+  install -m 755 dist/maple-ide work/maple-ide
 
   echo NOT extracting full JRE... will attempt to use system-wide version
   #echo Extracting JRE...
