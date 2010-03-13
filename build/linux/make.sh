@@ -1,5 +1,31 @@
 #!/bin/sh
 
+DIST_ARCHIVE=maple-ide-deps-linux-0018.tar.gz
+DIST_URL=http://leaflabs.com/pub
+
+# Have we extracted the dist files yet?
+if test ! -d dist/java
+then
+  # Have we downloaded the dist files yet? 
+  if test ! -f $DIST_ARCHIVE
+  then
+    echo "Downloading distribution files for linux platform: " $DIST_ARCHIVE
+    wget $DIST_URL/$DIST_ARCHIVE
+    if test ! -f $DIST_ARCHIVE
+    then 
+      echo "!!! Problem downloading distribution files; please fetch zip file manually and put it here: "
+      echo `pwd`
+      exit 1
+    fi
+  fi
+  echo "Extracting distribution files for linux platform: " $DIST_ARCHIVE
+  tar --extract --file=maple-ide-deps-linux-0018.tar.gz --ungzip --directory=dist
+  if test ! -d dist/java
+  then
+    echo "!!! Problem extracting dist file, please fix it."
+    exit 1
+  fi
+fi
 
 ### -- SETUP WORK DIR -------------------------------------------
 
@@ -30,15 +56,17 @@ else
   unzip -q -d work/ ../shared/reference.zip
 
   cp -r dist/tools work/hardware/
-  cp dist/lib/librxtxSerial.so work/lib/
+  cp dist/lib/librxtxSerial.so work/lib/librxtxSerial.so
 
   install -m 755 dist/arduino work/arduino
+
+  echo Extracting JRE...
+  cp -r dist/java work/java
 
   ARCH=`uname -m`
   if [ $ARCH = "i686" ]
   then
-    echo Extracting JRE...
-    tar --extract --file=jre.tgz --ungzip --directory=work
+    echo JRE is OK
   else 
 #    echo This is not my beautiful house.
 #    if [ $ARCH = "x86_64" ]
@@ -46,12 +74,19 @@ else
 #      echo You gots the 64.
 #    fi
     echo "
-The Java bundle that is included with Processing supports only i686 by default.
-To build the code, you will need to install the Java 1.5.0_15 JDK (not a JRE,
-and not any other version), and create a symlink to the directory where it is
-installed. Create the symlink in the \"work\" directory, and named it \"java\":
-ln -s /path/to/jdk1.5.0_15 `pwd`/work/java"
-    exit
+NOTE -------------------------------------------------------------------------
+I tried to copy a generic Java runtime environment (JRE) into work/java. This 
+JRE was intended for 32-bit x86 platforms and you seem to be running something
+else. If you have 32-bit compatability libraries you'll probably be find, but
+if you have trouble try removing work/java and creating a symbolic link to a
+JRE appropriate for your platform (eg the one that comes with your 
+distribution):
+
+  ln -s /path/to/jre `pwd`/work/java
+
+If you do this you will need to use the 64-bit version of librxtxSerial.so:
+
+  cp dist/lib/librxtxSerial.so.x86_64 work/lib/librxtxSerial.so\n\n"
   fi
 fi
 
