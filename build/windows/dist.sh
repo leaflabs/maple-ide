@@ -35,6 +35,7 @@ cp -r dist/drivers arduino/
 
 cp -r ../../hardware arduino/
 cp -r ../../libraries arduino/
+mkdir arduino/hardware/tools/
 
 
 if [ $1 ]
@@ -54,10 +55,13 @@ cp ../../readme.txt arduino/
 echo Copying examples...
 cp -r ../shared/examples arduino/
 
-echo Extracting reference...
-unzip -q -d arduino/ ../shared/reference.zip
+#echo Extracting reference...
+#unzip -q -d arduino/ ../shared/reference.zip
 
-unzip -q -d arduino/hardware avr_tools.zip
+cp -r dist/tools/avr arduino/hardware/tools/avr
+cp -r dist/tools/arm arduino/hardware/tools/arm
+unzip -q -d arduino/hardware/tools/arm arm.zip
+cp dist/dfu-util.exe arduino/hardware/tools/arm/bin
 
 # add java (jre) files
 unzip -q -d arduino jre.zip
