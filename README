@@ -1,0 +1,73 @@
+
+maple-ide is a graphical programming environment for the Maple development
+board developed by LeafLabs. It is a modified version of the popular open
+source Arduino environment targeted towards the ARM Cortex-M3 microcontroller
+in the Maple; the regular arduino toolchain is only targeted towards the Atmel
+series of AVR microcontrollers. 
+
+This is the source code repository for the maple-ide; if you just want to
+program your Maple board you probably want to download a binary release 
+package for your particular platform.
+
+ 
+Disclaimer
+------------------------------------------------------------------------------
+We make no claims that we "preserve" any design or strategy behind arduino,
+which is why this being released as a separate branch of arduino and not as a
+patch. Arduino is clearly organized around compiling to avr, and compiling to
+arm is more of a hack.
+
+
+Build Requirements
+------------------------------------------------------------------------------
+NOTE: there are seperate requirements to actually compile and upload
+      sketches using the environment; these are just the tools needed
+      to build the Java user interface.
+
+A number of file archives are not included in this repository and must be 
+downloaded and copied in seperately to build for a given platform:
+
+    avr_tools.zip           ./build/windows/avr_tools.zip
+    jre.tgz                 ./build/linux/jre.tgz
+    jre.zip                 ./build/windows/jre.zip
+    reference.zip           ./build/shared/reference.zip
+    template.dmg.gz         ./build/macosx/template.dmg.gz
+    tools-universal.zip     ./build/macosx/dist/tools-universal.zip
+
+Linux build requirements:
+ - a reasonable development environment (tar, perl, gzip, etc)
+ - A java 1.5+ environment with javac on the path 
+
+Mac OSX build requirements:
+ - TODO
+
+Windows build requirements:
+ - TODO
+
+
+Changes from stock arduino codebase
+------------------------------------------------------------------------------
+ * removed all Eclipse project cruft
+ * hardware/leaflabs directory, including bootloader/ and core/
+ * app/src/processing/app/Base.java: add getArmBasePath
+ * app/src/processing/app/Sketch.java: imports, compiler/uploader selection
+ * app/src/processing/app/debug/Sizer.java: don't try to size make builds
+ * app/src/processing/app/debug/DFUUploader.java: new dfu-util uploader
+ * app/src/processing/app/debug/Compiler.java: expose a couple methods
+ * app/src/processing/app/debug/ArmCompiler.java: new, extends Compiler
+ * build/macosx/dist/Arduino.app/Contents/Resources/processing.icns,
+   build/shared/lib: UI skin and preferences
+ * build/*/dist/*: dist files broken out into external zip downloads
+ * build/*/*sh: make files are heavily modified
+
+TODO
+------------------------------------------------------------------------------
+ * Testing on linux platform
+ * Entire compile/release/upload toolchain for windows and OSX
+ * Port or replace extension libraries
+
+Backburner:
+ * Include link to porting documentation in the compiler error output
+   to minize confusion if a user tries to compile an incompatible AVR
+   sketch
+

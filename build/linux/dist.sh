@@ -13,11 +13,11 @@ else
 fi
 
 ARCH=`uname -m`
-if [ $ARCH != "i686" ]
-then
-  echo At present, the Linux distribution can only be built on i686 \(32-bit\).
-  exit
-fi
+#if [ $ARCH != "i686" ]
+#then
+#  echo At present, the Linux distribution can only be built on i686 \(32-bit\).
+#  exit
+#fi
 
 ./make.sh
 
@@ -39,7 +39,7 @@ cp -r ../../hardware arduino/
 cp -r ../../libraries arduino/
 
 cp -r dist/tools arduino/hardware
-cp dist/lib/librxtxSerial.so arduino/lib
+cp work/lib/librxtxSerial.so arduino/lib
 
 if [ $1 ]
 then
@@ -61,7 +61,7 @@ cp work/lib/pde.jar arduino/lib/
 cp work/lib/core.jar arduino/lib/
 
 # get platform-specific goodies from the dist dir
-install -m 755 dist/arduino arduino/arduino
+install -m 755 dist/maple-ide arduino/maple-ide
 
 # make sure notes.txt is unix LFs
 # the 2> is because the app is a little chatty
@@ -81,7 +81,7 @@ find arduino -name ".svn" -exec rm -rf {} 2> /dev/null ';'
 
 # zip it all up for release
 echo Creating tarball and finishing...
-P5=arduino-$RELEASE
+P5=maple-ide-$RELEASE
 mv arduino $P5
 
 tar cfz $P5.tgz $P5
