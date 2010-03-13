@@ -12,7 +12,7 @@ then
 fi
 
 DIST_ARCHIVE=maple-ide-deps-macosx-0018.tar.gz
-DIST_URL=http://leaflabs.com/pub
+DIST_URL=http://leaflabs.googlecode.com/files/
 
 ### -- SETUP DIST FILES ----------------------------------------
 
