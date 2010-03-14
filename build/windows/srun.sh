@@ -3,7 +3,7 @@
 QT_JAVA_PATH="$WINDIR\\system32\\QTJava.zip"
 if test -f "${QT_JAVA_PATH}"
 then
-  #echo "Found Quicktime at $QT_JAVA_PATH"
+  echo "Found Quicktime at $QT_JAVA_PATH"
 else 
   QT_JAVA_PATH="$WINDIR\\system\\QTJava.zip"
   if test -f "${QT_JAVA_PATH}"
@@ -13,7 +13,7 @@ else
     echo "quicktime for java must be installed before building."
     exit 1;
   then
-    #echo "Found Quicktime at $QT_JAVA_PATH"
+    echo "Found Quicktime at $QT_JAVA_PATH"
   else
   fi
 fi

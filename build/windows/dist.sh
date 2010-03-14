@@ -60,14 +60,16 @@ cp -r ../shared/examples arduino/
 
 cp -r dist/tools/avr arduino/hardware/tools/avr
 cp -r dist/tools/arm arduino/hardware/tools/arm
-unzip -q -d arduino/hardware/tools/arm arm.zip
+#unzip -q -d arduino/hardware/tools/arm arm.zip
 cp dist/dfu-util.exe arduino/hardware/tools/arm/bin
+cp dist/dfu-util.exe arduino/ # TODO: both places?
 
 # add java (jre) files
-unzip -q -d arduino jre.zip
+#unzip -q -d arduino jre.zip
+cp -r dist/java arduino/java
 
 # get platform-specific goodies from the dist dir
-cp launcher/arduino.exe arduino/
+cp launcher/arduino.exe arduino/maple-ide.exe
 
 # grab pde.jar and export from the working dir
 cp work/lib/pde.jar arduino/lib/
