@@ -82,8 +82,8 @@ else
   # to build them, use the following:
   # cd head_src/gui_head && make -f Makefile.win
   cd launcher
-  USERPROFILE=../work/ ./launch4j/launch4jc.exe config.xml
-  cp arduino.exe ../work/
+  USERPROFILE=../work/ ../work/java/bin/java -jar launch4j/launch4j.jar config.xml
+  cp arduino.exe ../work/maple-ide.exe
   cd ..
 
   # chmod +x the crew
