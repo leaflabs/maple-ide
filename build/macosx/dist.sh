@@ -62,11 +62,11 @@ echo Creating disk image...
 
 SOURCE_DIR="work"
 SOURCE_FILES="Arduino.app"
-OUTPUT_DMG="arduino-$RELEASE"
+OUTPUT_DMG="maple-ide-$RELEASE"
 WORK_DMG="working.dmg"
 WORK_DIR="working_dir"
 
-gzip -cd template.dmg.gz > "$WORK_DMG"
+gzip -cd dist/template.dmg.gz > "$WORK_DMG"
 mkdir -p "$WORK_DIR"
 hdiutil attach "$WORK_DMG" -noautoopen -quiet -mountpoint "$WORK_DIR"
 for i in "$SOURCE_FILES"; do
