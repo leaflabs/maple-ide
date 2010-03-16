@@ -84,13 +84,15 @@ else
 
   echo Copying avr tools...
   #unzip -q -d "$RESOURCES/hardware" dist/tools-universal.zip
-  cp -rX dist/avr "$RESOURCES/hardware/tools/avr" 
+  mkdir -p "$RESOURCES/hardware/tools"
+  cp -rX dist/tools/avr "$RESOURCES/hardware/tools/" 
 
   echo Copying arm tools...
   #unzip -q -d "$RESOURCES/hardware/tools" dist/arm.zip
-  cp -rX dist/arm "$RESOURCES/hardware/tools/arm" 
+  cp -rX dist/tools/arm "$RESOURCES/hardware/tools/" 
 
   echo Move dfu-util
+  mkdir -p  work/Arduino.app/Contents/Resources/Java/hardware/tools/avr/bin
   mv work/Arduino.app/Contents/Resources/Java/hardware/tools/arm/bin/dfu-util work/Arduino.app/Contents/Resources/Java/hardware/tools/avr/bin
   mv work/Arduino.app/Contents/Resources/Java/hardware/tools/arm/Resources work/Arduino.app/Contents/Resources/Java/hardware/tools/avr
   if [ "$OSX_VERSION" = "10.6" ]
@@ -98,8 +100,8 @@ else
       echo Adding OS X 10.6 Compatible Binaries
       rm -rf work/Arduino.app/Contents/Resources/Java/hardware/tools/arm
       rm -rf work/Arduino.app/Contents/Resources/Java/hardware/tools/__MACOSX
-      #unzip -q -d "$RESOURCES/hardware/tools" dist/arm2.zip
-      cp -rX dist/arm2 "$RESOURCES/hardware/tools/arm2" 
+      #unzip -q -d "$RESOURCES/hardware/tools/" dist/arm2.zip
+      cp -rX dist/tools/arm_snowleopard "$RESOURCES/hardware/tools/arm2" 
   fi
 fi
 
