@@ -33,7 +33,8 @@ cp ../../app/lib/ecj.jar arduino/lib/
 cp ../../app/lib/jna.jar arduino/lib/
 cp ../../app/lib/oro.jar arduino/lib/
 cp ../../app/lib/RXTXcomm.jar arduino/lib/
-cp ../../readme.txt arduino/
+cp ../../readme-arduino.txt arduino/
+cp ../../README-dist arduino/README.txt
 
 cp -r ../../hardware arduino/
 cp -r ../../libraries arduino/
@@ -50,8 +51,8 @@ fi
 echo Copying examples...
 cp -r ../shared/examples arduino/
 
-echo Extracting reference...
-unzip -q -d arduino/ ../shared/reference.zip
+#echo Extracting reference...
+#unzip -q -d arduino/ ../shared/reference.zip
 
 # add java (jre) files
 #tar --extract --file=jre.tgz --ungzip --directory=arduino
@@ -84,8 +85,14 @@ echo Creating tarball and finishing...
 P5=maple-ide-$RELEASE
 mv arduino $P5
 
-tar cfz $P5.tgz $P5
+tar cfz $P5-linux64.tgz $P5
 # nah, keep the new directory around
 #rm -rf $P5
 
-echo Done.
+echo Done with 64bit.
+
+echo Using 32-bit librxtxSerial.so
+cp dist/lib/librxtxSerial.so $P5/lib/librxtxSerial.so
+tar cfz $P5-linux32.tgz $P5
+echo Done with 32bit.
+

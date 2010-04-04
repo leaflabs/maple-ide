@@ -1,3 +1,11 @@
+                                   _         _     _      
+             _ __ ___   __ _ _ __ | | ___   (_) __| | ___ 
+            | '_ ` _ \ / _` | '_ \| |/ _ \  | |/ _` |/ _ \
+            | | | | | | (_| | |_) | |  __/  | | (_| |  __/
+            |_| |_| |_|\__,_| .__/|_|\___|  |_|\__,_|\___|
+                            |_|                              
+                                                by leaflabs!
+
 
 maple-ide is a graphical programming environment for the Maple development
 board developed by LeafLabs. It is a modified version of the popular open
@@ -7,15 +15,24 @@ series of AVR microcontrollers.
 
 This is the source code repository for the maple-ide; if you just want to
 program your Maple board you probably want to download a binary release 
-package for your particular platform.
+package for your particular platform. The latest version of this repository
+can be found at: http://github.com/leaflabs/maple-ide
+
+This IDE includes a full ARM compiler toolchain ("arm-none-eabi-gcc") and a low
+level library for the STM32 Cortex-M3 plaform called libmaple. libmaple is 
+developed seperately and can be used straight from the command line; it is
+available at: http://github.com/leaflabs/libmaple
 
  
 Disclaimer
 ------------------------------------------------------------------------------
 We make no claims that we "preserve" any design or strategy behind arduino,
 which is why this being released as a separate branch of arduino and not as a
-patch. Arduino is clearly organized around compiling to avr, and compiling to
-arm is more of a hack.
+patch. Arduino is clearly organized around compiling to AVR, and compiling to
+ARM is a hack. In the future we hope that the arduino compilation and upload
+infrastructure will be generalized so that boards like the Maple which require
+a non-AVR compiler can be developed for in the regular IDE by installing a
+plugin or library.
 
 
 Build Requirements
@@ -42,6 +59,7 @@ Mac OSX build requirements:
  - TODO
 
 Windows build requirements:
+ - a cygwin build environment (see the arduino build docs)
  - TODO
 
 
@@ -64,10 +82,10 @@ TODO
 ------------------------------------------------------------------------------
  * Testing on linux platform
  * Entire compile/release/upload toolchain for windows and OSX
- * Port or replace extension libraries
+ * Port or replace extension libraries 
 
 Backburner:
- * Include link to porting documentation in the compiler error output
-   to minize confusion if a user tries to compile an incompatible AVR
-   sketch
+ * Include link to documentation for porting AVR sketches to ARM in the
+   compiler error output to minize confusion if a user tries to compile an
+   incompatible AVR sketch
 

@@ -1,3 +1,3 @@
 #!/bin/sh
 
-cd work && ./arduino && cd ..
+cd work && ./maple-ide && cd ..

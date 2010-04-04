@@ -17,7 +17,7 @@ VERSIONED=`cat ../../app/src/processing/app/Base.java | grep $REVISION`
 if [ -z "$VERSIONED" ]
 then
   echo Fix the revision number in Base.java
-  exit
+  #exit
 fi
 
 ./make.sh
@@ -50,7 +50,7 @@ cp ../../app/lib/jna.jar arduino/lib/
 cp ../../app/lib/oro.jar arduino/lib/
 cp ../../app/lib/RXTXcomm.jar arduino/lib/
 
-cp ../../readme.txt arduino/
+cp ../../readme-arduino.txt arduino/
 
 echo Copying examples...
 cp -r ../shared/examples arduino/
