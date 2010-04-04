@@ -1,20 +1,25 @@
 /* *****************************************************************************
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * The MIT License
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * Copyright (c) 2010 Perry Hung.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  Created: 12/18/09 02:38:10
- *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * ****************************************************************************/
 
 /**
@@ -73,13 +78,12 @@
 
 #ifndef _TIMERS_H_
 #define _TIMERS_H_
-#include  <inttypes.h>
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-typedef volatile uint32_t* TimerCCR;
+typedef volatile uint32* TimerCCR;
 
 #define TIMER1_BASE        0x40012C00
 #define TIMER2_BASE        0x40000000
@@ -111,11 +115,11 @@ typedef volatile uint32_t* TimerCCR;
 
 
 /* Turn on timer with prescale as the divisor
- * void timer_init(uint32_t timer, uint16_t prescale)
+ * void timer_init(uint32 timer, uint16 prescale)
  *      timer     ->  {1-4}
  *      prescale  ->  {1-65535}
  * */
-void timer_init(uint8_t, uint16_t);
+void timer_init(uint8, uint16);
 void timers_disable(void);
 void timers_disable_channel(uint8, uint8);
 
@@ -124,7 +128,7 @@ void timers_disable_channel(uint8, uint8);
  * register for the pin cause it saves pwmWrite() a couple of
  * cycles.
  *
- * void timer_pwm(uint8_t channel, uint8_t duty_cycle);
+ * void timer_pwm(uint8 channel, uint8 duty_cycle);
  *      channel    -> {TIMERx_CHn_CCR}
  *      duty_cycle -> {0-65535}
  *
@@ -132,7 +136,7 @@ void timers_disable_channel(uint8, uint8);
  *      pin has been set to alternate function output
  *      timer has been initialized
  */
-static inline void timer_pwm_write_ccr(TimerCCR CCR, uint16_t duty_cycle) {
+static inline void timer_pwm_write_ccr(TimerCCR CCR, uint16 duty_cycle) {
     *CCR = duty_cycle;
 }
 

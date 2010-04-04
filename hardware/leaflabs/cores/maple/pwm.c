@@ -1,20 +1,25 @@
 /* *****************************************************************************
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * The MIT License
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * Copyright (c) 2010 Perry Hung.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  Created: 12/18/09 02:41:24
- *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * ****************************************************************************/
 
 /**
@@ -25,38 +30,21 @@
 
 #include "wiring.h"
 #include "timers.h"
-#include "gpio.h"
+#include "io.h"
 #include "pwm.h"
 
-#define NOT_A_TIMER 0
+extern const PinMapping PIN_MAP[NR_MAPLE_PINS];
 
-static const TimerCCR PIN_TO_TIMER[NR_MAPLE_PINS] = {
-    TIMER2_CH4_CCR,                     // D0/A6
-    TIMER2_CH3_CCR,                     // D1/A7
-    TIMER2_CH1_CCR,                     // D2/A8
-    TIMER2_CH2_CCR,                     // D3/A9
-    NOT_A_TIMER,                        // D4
-    TIMER4_CH1_CCR,                     // D5
-    TIMER1_CH1_CCR,                     // D6
-    TIMER1_CH2_CCR,                     // D7
-    TIMER1_CH3_CCR,                     // D8
-    TIMER4_CH2_CCR,                     // D9
-    NOT_A_TIMER,                        // D10/A10
-    TIMER3_CH2_CCR,                     // D11/A11
-    TIMER3_CH1_CCR,                     // D12/A12
-    NOT_A_TIMER,                        // D13/A13
-};
-
-void pwmWrite(uint8_t pin, uint16_t duty_cycle) {
+void pwmWrite(uint8 pin, uint16 duty_cycle) {
     TimerCCR ccr;
 
     if (pin >= NR_MAPLE_PINS) {
         return;
     }
 
-    ccr = PIN_TO_TIMER[pin];
+    ccr = PIN_MAP[pin].timer_channel;
 
-    if (ccr == NOT_A_TIMER)
+    if (ccr == TIMER_INVALID)
         return;
 
     timer_pwm_write_ccr(ccr, duty_cycle);

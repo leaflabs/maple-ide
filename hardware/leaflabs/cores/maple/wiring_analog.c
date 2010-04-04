@@ -1,20 +1,25 @@
 /* *****************************************************************************
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * The MIT License
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * Copyright (c) 2010 Perry Hung.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  Created: 12/18/09 02:41:55
- *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * ****************************************************************************/
 
 /**
@@ -25,33 +30,15 @@
 
 #include "libmaple.h"
 #include "wiring.h"
-#include "adc.h"
+#include "io.h"
 
-/* Indexed by pins A[0-15]  */
-uint32_t PIN_TO_ADC[NR_ANALOG_PINS] = {
-    10,                     // A0/D14    ADC10
-    11,                     // A1/D15    ADC11
-    12,                     // A2/D16    ADC12
-    13,                     // A3/D17    ADC13
-    14,                     // A4/D18    ADC14
-    15,                     // A5/D19    ADC15
-     3,                     // A6/D0     ADC3
-     2,                     // A7/D1     ADC2
-     0,                     // A8/D2     ADC0
-     1,                     // A9/D3     ADC1
-     4,                     // A10/D10   ADC4
-     7,                     // A11/D11   ADC7
-     6,                     // A12/D12   ADC6
-     5,                     // A13/D13   ADC5
-     8,                     // A14/D26   ADC8
-     9,                     // A15/D11   ADC9
-};
+extern const PinMapping PIN_MAP[NR_MAPLE_PINS];
 
 /* Assumes that the ADC has been initialized and
  * that the pin is set to ANALOG_INPUT */
-uint32_t analogRead(uint8_t pin) {
+uint32 analogRead(uint8 pin) {
     if (pin >= NR_ANALOG_PINS)
         return 0;
 
-    return adc_read(PIN_TO_ADC[pin]);
+    return adc_read(PIN_MAP[pin].adc);
 }

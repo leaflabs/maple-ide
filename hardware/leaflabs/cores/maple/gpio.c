@@ -1,20 +1,25 @@
 /* *****************************************************************************
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * The MIT License
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * Copyright (c) 2010 Perry Hung.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  Created: 12/18/09 02:35:49
- *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * ****************************************************************************/
 
 /**
@@ -24,21 +29,20 @@
  */
 
 #include "libmaple.h"
-#include "stm32f10x_rcc.h"
+#include "rcc.h"
 #include "gpio.h"
 
 void gpio_init(void) {
-   /* Turn on clocks for GPIO  */
-   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA |
-                          RCC_APB2Periph_GPIOB |
-                          RCC_APB2Periph_GPIOC |
-                          RCC_APB2Periph_AFIO,
-                          ENABLE);
+   rcc_enable_clk_gpioa();
+   rcc_enable_clk_gpiob();
+   rcc_enable_clk_gpioc();
+   rcc_enable_clk_gpiod();
+   rcc_enable_clk_afio();
 }
 
 void gpio_set_mode(GPIO_Port* port, uint8 gpio_pin, uint8 mode) {
-    uint32_t tmp;
-    uint32_t shift = POS(gpio_pin % 8);
+    uint32 tmp;
+    uint32 shift = POS(gpio_pin % 8);
     GPIOReg CR;
 
     ASSERT(port);

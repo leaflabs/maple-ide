@@ -1,20 +1,25 @@
 /* *****************************************************************************
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * The MIT License
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * Copyright (c) 2010 Perry Hung.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  Created: 12/18/09 02:38:26
- *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * ****************************************************************************/
 
 /**
@@ -24,9 +29,9 @@
  */
 
 #include "libmaple.h"
-#include "stm32f10x_rcc.h"
-#include "usart.h"
+#include "rcc.h"
 #include "nvic.h"
+#include "usart.h"
 
 #define USART1_BASE         0x40013800
 #define USART2_BASE         0x40004400
@@ -78,20 +83,20 @@ typedef struct usart_port {
 
 void USART1_IRQHandler(void) {
     /* Read the data  */
-    ring_buf1.buf[ring_buf1.tail++] = (uint8_t)(((usart_port*)(USART1_BASE))->DR);
+    ring_buf1.buf[ring_buf1.tail++] = (uint8)(((usart_port*)(USART1_BASE))->DR);
     ring_buf1.tail %= USART_RECV_BUF_SIZE;
 }
 
 /* Don't overrun your buffer, seriously  */
 void USART2_IRQHandler(void) {
     /* Read the data  */
-    ring_buf2.buf[ring_buf2.tail++] = (uint8_t)(((usart_port*)(USART2_BASE))->DR);
+    ring_buf2.buf[ring_buf2.tail++] = (uint8)(((usart_port*)(USART2_BASE))->DR);
     ring_buf2.tail %= USART_RECV_BUF_SIZE;
 }
 /* Don't overrun your buffer, seriously  */
 void USART3_IRQHandler(void) {
     /* Read the data  */
-    ring_buf3.buf[ring_buf3.tail++] = (uint8_t)(((usart_port*)(USART3_BASE))->DR);
+    ring_buf3.buf[ring_buf3.tail++] = (uint8)(((usart_port*)(USART3_BASE))->DR);
     ring_buf3.tail %= USART_RECV_BUF_SIZE;
 }
 
@@ -123,21 +128,21 @@ void usart_init(uint8 usart_num, uint32 baud) {
         port = (usart_port*)USART1_BASE;
         ring_buf = &ring_buf1;
         clk_speed = USART1_CLK;
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+        rcc_enable_clk_usart1();
         REG_SET(NVIC_ISER1, BIT(5));
         break;
     case 2:
         port = (usart_port*)USART2_BASE;
         ring_buf = &ring_buf2;
         clk_speed = USART2_CLK;
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+        rcc_enable_clk_usart2();
         REG_SET(NVIC_ISER1, BIT(6));
         break;
     case 3:
         port = (usart_port*)USART3_BASE;
         ring_buf = &ring_buf3;
         clk_speed = USART3_CLK;
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
+        rcc_enable_clk_usart3();
         REG_SET(NVIC_ISER1, BIT(7));
         break;
     default:
@@ -156,7 +161,7 @@ void usart_init(uint8 usart_num, uint32 baud) {
     fractional_part = integer_part - (100 * (tmp >> 4));
     tmp |= (((fractional_part * 16) + 50) / 100) & ((uint8)0x0F);
 
-    port->BRR = (uint16_t)tmp;
+    port->BRR = (uint16)tmp;
 
     port->CR1 = USART_TE          |    // transmitter enable
                 USART_RE          |    // receiver enable
@@ -306,13 +311,13 @@ uint32 usart_data_available(uint8 usart_num) {
 
 
 /**
- *  @brief Output a character out the uart
+ *  @brief Output a byte out the uart
  *
  *  @param[in] usart_num usart number to output on
- *  @param[in] ch character to send
+ *  @param[in] byte byte to send
  *
  */
-void usart_putc(uint8 usart_num, uint8 ch) {
+void usart_putc(uint8 usart_num, uint8 byte) {
     ASSERT((usart_num <= NR_USARTS) && (usart_num > 0));
     usart_port *port;
 
@@ -331,11 +336,11 @@ void usart_putc(uint8 usart_num, uint8 ch) {
         ASSERT(0);
     }
 
-    if (ch == '\n') {
-        usart_putc(usart_num, '\r');
-    }
+//    if (ch == '\n') {
+//        usart_putc(usart_num, '\r');
+//    }
 
-    port->DR = ch;
+    port->DR = byte;
 
     /* Wait for transmission to complete  */
     while ((port->SR & USART_TXE) == 0)

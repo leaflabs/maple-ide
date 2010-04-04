@@ -1,22 +1,28 @@
 /* *****************************************************************************
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * The MIT License
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * Copyright (c) 2010 Andrew Meyer.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * ****************************************************************************/
 
 /**
- *  @file HardwareUsb.cpp
- *
  *  @brief Wiring like serial api to USB virtual COM
  */
 
@@ -34,8 +40,8 @@ HardwareUsb::HardwareUsb(void) {
   rx_buffer_offset_out = 0;
 }
 
-uint8_t HardwareUsb::read(void) {
-  uint8_t outVal = rx_buffer[rx_buffer_offset_out++];
+uint8 HardwareUsb::read(void) {
+  uint8 outVal = rx_buffer[rx_buffer_offset_out++];
 
 #if 1
   if (rx_buffer_offset_out == rx_buffer_offset_in) {
@@ -46,7 +52,7 @@ uint8_t HardwareUsb::read(void) {
   return outVal;
 }
 
-uint8_t HardwareUsb::available(void) {
+uint8 HardwareUsb::available(void) {
   ASSERT(rx_buffer_offset_out >= 0);
   //  return rx_buffer_offset+1;
   //  return usb_serialGetRecvLen();
@@ -70,7 +76,7 @@ void HardwareUsb::usb_rx_cb(void) {
    BootVectTable *vectTable = (BootVectTable*)(BOOTLOADER_VECT_TABLE);
    HardwareUsb *thisPtr = (HardwareUsb*) vectTable->usb_local_obj_ptr;
 
-   uint8_t numBytes = usb_serialGetRecvLen();
+   uint8 numBytes = usb_serialGetRecvLen();
 
 #if 0
    /* ONE-SHOT-TO-READ Version (buffer cleared on next recv interrupt */

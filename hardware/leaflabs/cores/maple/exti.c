@@ -1,21 +1,27 @@
 /* *****************************************************************************
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * The MIT License
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * Copyright (c) 2010 Perry Hung.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  Created: 12/18/09 02:35:22
- *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * ****************************************************************************/
+
 
 /**
  *  @file exti.c
@@ -98,8 +104,8 @@ void EXTI4_IRQHandler(void) {
 
 void EXTI9_5_IRQHandler(void) {
     /* Figure out which channel it came from  */
-    uint32_t pending;
-    uint32_t i;
+    uint32 pending;
+    uint32 i;
     pending = REG_GET(EXTI_PR);
     pending = GET_BITS(pending, 5, 9);
 
@@ -116,8 +122,8 @@ void EXTI9_5_IRQHandler(void) {
 
 void EXTI15_10_IRQHandler(void) {
     /* Figure out which channel it came from  */
-    uint32_t pending;
-    uint32_t i;
+    uint32 pending;
+    uint32 i;
     pending = REG_GET(EXTI_PR);
     pending = GET_BITS(pending, 10, 15);
 
@@ -133,7 +139,7 @@ void EXTI15_10_IRQHandler(void) {
 }
 
 
-void exti_attach_interrupt(uint8_t channel, uint8_t port, voidFuncPtr handler, uint8_t mode) {
+void exti_attach_interrupt(uint8 channel, uint8 port, voidFuncPtr handler, uint8 mode) {
     ASSERT(channel < NR_EXTI_CHANNELS);
     ASSERT(port < NR_EXTI_PORTS);
     ASSERT(mode < NR_EXTI_MODES);
@@ -227,7 +233,7 @@ void exti_attach_interrupt(uint8_t channel, uint8_t port, voidFuncPtr handler, u
 }
 
 
-void exti_detach_interrupt(uint8_t channel) {
+void exti_detach_interrupt(uint8 channel) {
     ASSERT(channel < NR_EXTI_CHANNELS);
     ASSERT(EXTI0 == 0);
     /* Is this interrupt actually on?  */

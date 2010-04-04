@@ -1,20 +1,25 @@
 /* *****************************************************************************
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * The MIT License
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * Copyright (c) 2010 Perry Hung.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  Created: 12/18/09 02:40:56
- *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * ****************************************************************************/
 
 /**
@@ -26,7 +31,8 @@
 #ifndef _IO_H
 #define _IO_H
 
-#include <inttypes.h>
+#include "gpio.h"
+#include "adc.h"
 
 #ifdef __cplusplus
 extern "C"{
@@ -75,47 +81,26 @@ extern "C"{
 #define D38  38
 #define D39  39
 
-#define A0   D14
-#define A1   D15
-#define A2   D16
-#define A3   D17
-#define A4   D18
-#define A5   D19
-#define A6   D0
-#define A7   D1
-#define A8   D2
-#define A9   D3
-#define A10  D10
-#define A11  D11
-#define A12  D12
-#define A13  D13
-#define A14  D26
-#define A15  D11
-
 typedef enum WiringPinMode {
     OUTPUT,
+    OUTPUT_OPEN_DRAIN,
     INPUT,
+    INPUT_ANALOG,
     INPUT_PULLUP,
     INPUT_PULLDOWN,
     INPUT_FLOATING,
     PWM
 } WiringPinMode;
 
-#if 0
-typedef enum PinMode {
-    INPUT_FLOATING,
-    INPUT_ANALOG,
-    INPUT_DIGITAL,
-    INPUT_PULLDOWN,
-    INPUT_PULLUP,
-    INPUT,
-    OUTPUT,
-    PWM,
-    SERIAL,
-    SPI,
-    I2C,
-} PinMode;
-#endif
+typedef struct PinMapping {
+    GPIO_Port *port;
+    uint32 pin;
+    uint32 adc;
+    TimerCCR timer_channel;
+} PinMapping;
+
+#define ADC_INVALID       0xFFFFFFFF
+#define TIMER_INVALID     (TimerCCR)0xFFFFFFFF
 
 /* Set pin to mode
  * pinMode(pin, mode):
@@ -129,7 +114,7 @@ typedef enum PinMode {
  *         OUTPUT_OPEN_DRAIN
  *     }
  */
-void pinMode(uint8_t, uint8_t);
+void pinMode(uint8, uint8);
 
 /*
  * Writes VALUE to digital pin[0-38]
@@ -137,21 +122,21 @@ void pinMode(uint8_t, uint8_t);
  *     pin -> {0-38, D0-D39, A0-16}
  *     value -> LOW, HIGH;
 */
-void digitalWrite(uint8_t, uint8_t);
+void digitalWrite(uint8, uint8);
 
 /* Read a digital value from pin, the pin mode must be set to
  * {INPUT, INPUT_PULLUP, INPUT_PULLDOWN}
  * digitalRead(pin)
  *     pin -> {0-38, D0-D39, A0-16}
  */
-uint32_t digitalRead(uint8_t);
+uint32 digitalRead(uint8);
 
 /* Read an analog value from pin, the pin mode must be set
  * to INPUT_ANALOG
  * analogRead(pin)
  *     pin -> {A0-A16}
  *     */
-uint32_t analogRead(uint8_t);
+uint32 analogRead(uint8);
 
 #ifdef __cplusplus
 } // extern "C"

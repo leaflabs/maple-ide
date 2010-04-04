@@ -1,20 +1,25 @@
 /* *****************************************************************************
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * The MIT License
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * Copyright (c) 2010 Perry Hung.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  Created: 12/18/09 02:34:47
- *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * ****************************************************************************/
 
 /**
@@ -23,10 +28,9 @@
  *  @brief Analog to digital converter routines
  */
 
-#include "stm32f10x_rcc.h"
+#include "libmaple.h"
+#include "rcc.h"
 #include "adc.h"
-#include <stdio.h>
-#include <inttypes.h>
 
 /* The ADC input clock is generated from PCLK2/APB2 divided by a prescaler
  * and it must not exceed 14MHz.
@@ -59,15 +63,9 @@
  * At 55.5 cycles/sample, the external input impedance < 50kOhms*/
 
 void adc_init(void) {
-    /* PCLK2 is the APB2 clock */
-    RCC_ADCCLKConfig(RCC_PCLK2_Div6);
-
-    /* Enable ADC1 clock so that we can talk to it */
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
-
-    /* Put everything back to power-on defaults */
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1, ENABLE);
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1, DISABLE);
+   rcc_set_adc_prescaler(PCLK2_DIV_2);
+   rcc_enable_clk_adc1();
+   rcc_reset_adc1();
 
     ADC_CR1  = 0;
     ADC_CR2  = CR2_EXTSEL_SWSTART | CR2_EXTTRIG;  // Software triggers conversions

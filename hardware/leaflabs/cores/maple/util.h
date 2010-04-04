@@ -1,20 +1,25 @@
 /* *****************************************************************************
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * The MIT License
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * Copyright (c) 2010 Perry Hung.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  Created: 12/18/09 02:39:27
- *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * ****************************************************************************/
 
 /**
@@ -26,7 +31,6 @@
 /* Generally "useful" utility procedures  */
 #ifndef _UTIL_H_
 #define _UTIL_H_
-#include <inttypes.h>
 
 #define MAPLE_DEBUG 1
 
@@ -34,7 +38,7 @@
 #define BIT_MASK_SHIFT(mask, shift)    ((mask) << (shift))
 
 /* Return bits m to n of x  */
-#define GET_BITS(x, m, n) ((((uint32_t)x) << (31 - (n))) >> ((31 - (n)) + (m)))
+#define GET_BITS(x, m, n) ((((uint32)x) << (31 - (n))) >> ((31 - (n)) + (m)))
 
 /* Bit-banding macros  */
 #define BITBAND_SRAM_REF   0x20000000
@@ -46,14 +50,20 @@
 
 #define COUNTFLAG *((volatile unsigned char*) (BITBAND_PERI(SYSTICK_CSR,2)))
 
-#define REG_SET(reg, val)               (*(volatile uint32_t*)(reg)  = (val))
-#define REG_SET_BIT(reg, bit)           (*(volatile uint32_t*)(reg) |= BIT(bit))
-#define REG_CLEAR_BIT(reg, bit)         (*(volatile uint32_t*)(reg) &= ~BIT(bit))
-#define REG_SET_MASK(reg, mask)         (*(volatile uint32_t*)(reg) |= (uint32_t)(mask))
-#define REG_CLEAR_MASK(reg, mask)       (*(volatile uint32_t*)(reg) &= (uint32_t)~(mask))
+#define REG_SET(reg, val)               (*(volatile uint32*)(reg)  = (val))
+#define REG_SET_BIT(reg, bit)           (*(volatile uint32*)(reg) |= BIT(bit))
+#define REG_CLEAR_BIT(reg, bit)         (*(volatile uint32*)(reg) &= ~BIT(bit))
+#define REG_SET_MASK(reg, mask)         (*(volatile uint32*)(reg) |= (uint32)(mask))
+#define REG_CLEAR_MASK(reg, mask)       (*(volatile uint32*)(reg) &= (uint32)~(mask))
 
-#define REG_GET(reg)                    *(volatile uint32_t*)(reg)
+#define REG_GET(reg)                    *(volatile uint32*)(reg)
 
+#define __set_bits(addr, mask)          *(volatile uint32*)(addr) |= (uint32)(mask)
+#define __clear_bits(addr, mask)        (*(volatile uint32*)(addr) &= (uint32)~(mask))
+#define __get_bits(addr, mask)          (*(volatile uint32*)(addr) & (uint32)(mask))
+
+#define __read(reg)                     *(volatile uint32*)(reg)
+#define __write(reg, value)             *(volatile uint32*)(reg) = (value)
 
 #ifdef __cplusplus
 extern "C"{

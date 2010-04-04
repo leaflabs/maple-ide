@@ -1,20 +1,25 @@
 /* *****************************************************************************
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * The MIT License
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * Copyright (c) 2010 Perry Hung.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  Created: 12/18/09 02:37:54
- *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * ****************************************************************************/
 
 /**
@@ -24,75 +29,75 @@
  */
 
 #include "libmaple.h"
-#include "stm32f10x_rcc.h"
+#include "rcc.h"
 #include "timers.h"
 
 typedef struct {
-    volatile uint16_t CR1;
-    uint16_t  RESERVED0;
-    volatile uint16_t CR2;
-    uint16_t  RESERVED1;
-    volatile uint16_t SMCR;
-    uint16_t  RESERVED2;
-    volatile uint16_t DIER;
-    uint16_t  RESERVED3;
-    volatile uint16_t SR;
-    uint16_t  RESERVED4;
-    volatile uint16_t EGR;
-    uint16_t  RESERVED5;
-    volatile uint16_t CCMR1;
-    uint16_t  RESERVED6;
-    volatile uint16_t CCMR2;
-    uint16_t  RESERVED7;
-    volatile uint16_t CCER;
-    uint16_t  RESERVED8;
-    volatile uint16_t CNT;
-    uint16_t  RESERVED9;
-    volatile uint16_t PSC;
-    uint16_t  RESERVED10;
-    volatile uint16_t ARR;
-    uint16_t  RESERVED11;
-    volatile uint16_t RCR;
-    uint16_t  RESERVED12;
-    volatile uint16_t CCR1;
-    uint16_t  RESERVED13;
-    volatile uint16_t CCR2;
-    uint16_t  RESERVED14;
-    volatile uint16_t CCR3;
-    uint16_t  RESERVED15;
-    volatile uint16_t CCR4;
-    uint16_t  RESERVED16;
-    volatile uint16_t BDTR;   // Not used in general purpose timers
-    uint16_t  RESERVED17;     // Not used in general purpose timers
-    volatile uint16_t DCR;
-    uint16_t  RESERVED18;
-    volatile uint16_t DMAR;
-    uint16_t  RESERVED19;
+    volatile uint16 CR1;
+    uint16  RESERVED0;
+    volatile uint16 CR2;
+    uint16  RESERVED1;
+    volatile uint16 SMCR;
+    uint16  RESERVED2;
+    volatile uint16 DIER;
+    uint16  RESERVED3;
+    volatile uint16 SR;
+    uint16  RESERVED4;
+    volatile uint16 EGR;
+    uint16  RESERVED5;
+    volatile uint16 CCMR1;
+    uint16  RESERVED6;
+    volatile uint16 CCMR2;
+    uint16  RESERVED7;
+    volatile uint16 CCER;
+    uint16  RESERVED8;
+    volatile uint16 CNT;
+    uint16  RESERVED9;
+    volatile uint16 PSC;
+    uint16  RESERVED10;
+    volatile uint16 ARR;
+    uint16  RESERVED11;
+    volatile uint16 RCR;
+    uint16  RESERVED12;
+    volatile uint16 CCR1;
+    uint16  RESERVED13;
+    volatile uint16 CCR2;
+    uint16  RESERVED14;
+    volatile uint16 CCR3;
+    uint16  RESERVED15;
+    volatile uint16 CCR4;
+    uint16  RESERVED16;
+    volatile uint16 BDTR;   // Not used in general purpose timers
+    uint16  RESERVED17;     // Not used in general purpose timers
+    volatile uint16 DCR;
+    uint16  RESERVED18;
+    volatile uint16 DMAR;
+    uint16  RESERVED19;
 } Timer;
 
-void timer_init(uint8_t timer_num, uint16_t prescale) {
+void timer_init(uint8 timer_num, uint16 prescale) {
     Timer *timer;
-    uint32_t is_advanced = 0;
+    uint32 is_advanced = 0;
 
     ASSERT(timer_num > 0 && timer_num <= 4);
 
     switch(timer_num) {
     case 1:
         timer = (Timer*)TIMER1_BASE;
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
+        rcc_enable_clk_timer1();
         is_advanced = 1;
         break;
     case 2:
         timer = (Timer*)TIMER2_BASE;
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+        rcc_enable_clk_timer2();
         break;
     case 3:
         timer = (Timer*)TIMER3_BASE;
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+        rcc_enable_clk_timer3();
         break;
     case 4:
         timer = (Timer*)TIMER4_BASE;
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
+        rcc_enable_clk_timer4();
         break;
     }
 
