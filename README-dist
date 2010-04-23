@@ -1,24 +1,48 @@
-                                   _         _     _      
-             _ __ ___   __ _ _ __ | | ___   (_) __| | ___ 
-            | '_ ` _ \ / _` | '_ \| |/ _ \  | |/ _` |/ _ \
-            | | | | | | (_| | |_) | |  __/  | | (_| |  __/
-            |_| |_| |_|\__,_| .__/|_|\___|  |_|\__,_|\___|
-                            |_|                              
-                                                by leaflabs!
+                                    _         _     _      
+              _ __ ___   __ _ _ __ | | ___   (_) __| | ___ 
+             | '_ ` _ \ / _` | '_ \| |/ _ \  | |/ _` |/ _ \
+             | | | | | | (_| | |_) | |  __/  | | (_| |  __/
+             |_| |_| |_|\__,_| .__/|_|\___|  |_|\__,_|\___|
+                             |_|                              
+                                                 by leaflabs!
+
+
+        ?????   For help with this software please visit:   ?????
+                  http:www.leaflabs.net/docs/maple-ide/
 
 
 maple-ide is a graphical programming environment for the Maple development
-board developed by LeafLabs. It is a modified version of the popular open
-source Arduino environment targeted towards the ARM Cortex-M3 microcontroller
-in the Maple; the regular arduino toolchain is only targeted towards the Atmel
-series of AVR microcontrollers. 
+board developed by LeafLabs; 'ide' is a common acronym which stands for
+"Integraded Development Environment". This software is a modified version of
+the popular open source Arduino environment retargeted towards the ARM
+Cortex-M3 microcontroller in the Maple; the regular arduino toolchain is only
+targeted towards AVR microcontrollers. 
 
 This IDE includes a full ARM compiler toolchain ("arm-none-eabi-gcc") and a low
 level library for the STM32 Cortex-M3 plaform called libmaple. libmaple is 
 developed seperately and can be used straight from the command line; it is
 available at: http://github.com/leaflabs/libmaple
 
- 
+
+Installation
+------------------------------------------------------------------------------
+This binary release archive is usually unzipped into a convenient location 
+instead of being installed like a regular software package. The software will
+persistent configuration files and project directories in the user's home
+directory regardless of where the program lives.
+
+This software requires a couple odds and ends on some operating systems:
+
+    Linux: 
+        java (something in the past few years, say 1.5+)
+        dfu-util (for uploading over USB; part of the openmoko project)
+
+    Mac OSX: 
+        everything is included with maple-ide
+        
+    Windows: 
+        everything is included with maple-ide
+
 Disclaimer
 ------------------------------------------------------------------------------
 We make no claims that we "preserve" any design or strategy behind arduino,
