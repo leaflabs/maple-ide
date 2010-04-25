@@ -69,6 +69,7 @@ Changes from stock arduino codebase
  * hardware/leaflabs directory, including bootloader/ and core/
  * app/src/processing/app/Base.java: add getArmBasePath
  * app/src/processing/app/Sketch.java: imports, compiler/uploader selection
+ * app/src/processing/app/Serial.java: added support for setRTS()
  * app/src/processing/app/debug/Sizer.java: don't try to size make builds
  * app/src/processing/app/debug/DFUUploader.java: new dfu-util uploader
  * app/src/processing/app/debug/Compiler.java: expose a couple methods

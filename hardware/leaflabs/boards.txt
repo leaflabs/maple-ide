@@ -9,6 +9,7 @@ maple.upload.flash.maximum_size=100000
 maple.upload.usbID=0110:1001
 maple.upload.altID=1
 maple.upload.uploader=dfu-util
+maple.upload.auto_reset=true
 
 maple.build.mcu=cortex-m3
 maple.build.f_cpu=72000000L
@@ -29,6 +30,7 @@ mapleRAM.upload.flash.maximum_size=100000
 mapleRAM.upload.usbID=0110:1001
 mapleRAM.upload.altID=0
 mapleRAM.upload.uploader=dfu-util
+mapleRAM.upload.auto_reset=true
 
 mapleRAM.build.mcu=cortex-m3
 mapleRAM.build.f_cpu=72000000L

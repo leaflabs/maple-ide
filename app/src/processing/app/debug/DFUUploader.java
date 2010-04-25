@@ -79,6 +79,17 @@ public class DFUUploader extends Uploader  {
         usbID = Preferences.get("upload.usbID");
       }
 
+      /* if auto-reset, then emit the reset pulse on dtr/rts */
+      if (Preferences.get("upload.auto_reset") != null) {
+        if (Preferences.get("upload.auto_reset").toLowerCase().equals("true")) {
+          System.out.println("Resetting to bootloader via DTR pulse");
+          emitResetPulse();          
+        }
+      } else {
+        System.out.println("Resetting to bootloader via DTR pulse");
+        emitResetPulse();          
+      }
+
       /* todo, add handle to let user choose altIf at upload time! */
       String altIf = Base.getBoardPreferences().get("upload.altID");
 
@@ -102,6 +113,42 @@ public class DFUUploader extends Uploader  {
     commandDownloader.addAll(params);
 
     return executeUploadCommand(commandDownloader);
+  }
+
+  /* we need to ensure both RTS and DTR are low to start, 
+     then pulse DTR on its own. This is the reset signal
+     maple responds to
+  */
+  private void emitResetPulse() throws RunnerException {
+    try {
+      Serial serialPort = new Serial();
+     
+      serialPort.setDTR(false);
+
+      serialPort.setRTS(false);
+
+      try {
+        Thread.sleep(100);
+      } catch (InterruptedException e) {}
+
+      serialPort.setDTR(true);
+   
+      try {
+        Thread.sleep(100);
+      } catch (InterruptedException e) {}
+      
+      serialPort.setDTR(false);
+
+      /* wait a while for the device to reboot */
+      try {
+          Thread.sleep(800);
+      } catch (InterruptedException e) {}
+
+      serialPort.dispose();
+    } catch(Exception e) {
+      e.printStackTrace();
+      throw new RunnerException(e.getMessage());
+    }
   }
 
   // Need to overload this from Uploader to use the system-wide dfu-util
