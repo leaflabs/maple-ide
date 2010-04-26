@@ -41,6 +41,7 @@ cp -r ../../libraries arduino/
 
 cp -r dist/tools arduino/hardware
 cp work/lib/librxtxSerial.so arduino/lib
+cp work/tools/45-maple.rules arduino/tools
 
 if [ $1 ]
 then
@@ -63,6 +64,7 @@ cp work/lib/core.jar arduino/lib/
 
 # get platform-specific goodies from the dist dir
 install -m 755 dist/maple-ide arduino/maple-ide
+install -m 755 dist/install-udev-rules.sh arduino/install-udev-rules.sh
 
 # make sure notes.txt is unix LFs
 # the 2> is because the app is a little chatty

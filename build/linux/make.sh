@@ -54,12 +54,14 @@ else
   echo Copying examples...
   cp -r ../shared/examples work/
 
-  echo Extracting reference...
-  unzip -q -d work/ ../shared/reference.zip
+  #echo Extracting reference...
+  #unzip -q -d work/ ../shared/reference.zip
 
   cp -r dist/tools work/hardware/
 
+  cp dist/45-maple.rules work/tools/
   install -m 755 dist/maple-ide work/maple-ide
+  install -m 755 dist/install-udev-rules.sh work/install-udev-rules.sh
 
   echo NOT extracting full JRE... will attempt to use system-wide version
   #echo Extracting JRE...
