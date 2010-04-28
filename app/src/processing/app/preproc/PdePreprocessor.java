@@ -224,14 +224,15 @@ public class PdePreprocessor {
     // Open the file main.cxx and copy its entire contents to the bottom of the
     // generated sketch .cpp file...
 
-	Map<String, String> boardPreferences;
+    Map<String, String> boardPreferences;
+    String buildUsing;
     try {
         boardPreferences = Base.getBoardPreferences();
+    	buildUsing = boardPreferences.get("build.using");
     } catch (NullPointerException npe) {
         Base.showWarning("No board selected", "Please choose a board from the Tools menu.",npe);
         return;
     }
-    String buildUsing = boardPreferences.get("build.using");
     if (buildUsing == null) {
       // fall back on global prefs
       buildUsing = Preferences.get("build.using");
