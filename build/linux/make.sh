@@ -56,6 +56,8 @@ else
 
   #echo Extracting reference...
   #unzip -q -d work/ ../shared/reference.zip
+  echo Copying reference...
+  cp -r ../shared/reference work/
 
   cp -r dist/tools work/hardware/
 
