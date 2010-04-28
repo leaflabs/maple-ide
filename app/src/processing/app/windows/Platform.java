@@ -184,7 +184,7 @@ public class Platform extends processing.app.Platform {
     String appDataPath =
       Registry.getStringValue(REGISTRY_ROOT_KEY.CURRENT_USER, keyPath, "AppData");
 
-    File dataFolder = new File(appDataPath, "Arduino");
+    File dataFolder = new File(appDataPath, "MapleIDE");
     return dataFolder;
   }
 
@@ -213,7 +213,7 @@ public class Platform extends processing.app.Platform {
     String personalPath =
       Registry.getStringValue(REGISTRY_ROOT_KEY.CURRENT_USER, keyPath, "Personal");
 
-    return new File(personalPath, "Arduino");
+    return new File(personalPath, "MapleIDE");
   }
 
 

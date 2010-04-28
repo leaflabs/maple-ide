@@ -36,7 +36,7 @@ import java.util.zip.*;
 
 public class Compiler implements MessageConsumer {
   static final String BUGS_URL =
-    "http://code.google.com/p/arduino/issues/list";
+    "http://github.com/leaflabs/maple-ide/issues";
   static final String SUPER_BADNESS =
     "Compiler error, please submit this code to " + BUGS_URL;
 
