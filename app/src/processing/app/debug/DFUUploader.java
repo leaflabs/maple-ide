@@ -43,7 +43,12 @@ public class DFUUploader extends Uploader  {
     throws RunnerException {
 
     this.verbose = verbose;
-    String uploadUsing = Base.getBoardPreferences().get("upload.using");
+    String uploadUsing;
+    try {
+      uploadUsing = Base.getBoardPreferences().get("upload.using");
+    } catch (NullPointerException npe) {
+      throw new RunnerException("No board selected, please choose one from the Tools menu.");
+    }
     if (uploadUsing == null) {
       // fall back on global preference
       uploadUsing = Preferences.get("upload.using");
@@ -64,7 +69,12 @@ public class DFUUploader extends Uploader  {
   private boolean uploadViaDFU(String buildPath, String className)
   throws RunnerException {
     /* todo, check for size overruns! */
-    String fileType = Base.getBoardPreferences().get("upload.file_type");
+    String fileType;
+    try {
+      fileType = Base.getBoardPreferences().get("upload.file_type");
+    } catch (NullPointerException npe) {
+      throw new RunnerException("No board selected, please choose one from the Tools menu.");
+    }
     if (fileType == null) {
       /* fall back on default */
       /* this isnt great because is default Avrdude or dfu-util? */

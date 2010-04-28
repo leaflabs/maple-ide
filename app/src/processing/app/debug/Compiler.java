@@ -71,7 +71,13 @@ public class Compiler implements MessageConsumer {
     MessageStream pms = new MessageStream(this);
 
     String avrBasePath = Base.getAvrBasePath();
-    Map<String, String> boardPreferences = Base.getBoardPreferences();
+    Map<String, String> boardPreferences;
+    try {
+        boardPreferences = Base.getBoardPreferences();
+    } catch (NullPointerException npe) {
+        Base.showWarning("No board selected", "please choose one from the Tools menu.",npe);
+        return false;
+    }
     String core = boardPreferences.get("build.core");
     String corePath;
     
