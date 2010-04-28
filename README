@@ -77,14 +77,12 @@ Changes from stock arduino codebase
    build/shared/lib: UI skin and preferences
  * build/*/dist/*: dist files broken out into external zip downloads
  * build/*/*sh: make files are heavily modified
+ * build/shared/examples/Maple: Maple-specific examples
 
 TODO
 ------------------------------------------------------------------------------
- * Testing on linux platform
  * Entire compile/release/upload toolchain for windows and OSX
  * Port or replace extension libraries 
-
-Backburner:
  * Include link to documentation for porting AVR sketches to ARM in the
    compiler error output to minize confusion if a user tries to compile an
    incompatible AVR sketch

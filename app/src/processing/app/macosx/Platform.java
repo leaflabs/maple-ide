@@ -81,12 +81,12 @@ public class Platform extends processing.app.Platform {
 
 
   public File getSettingsFolder() throws Exception {
-    return new File(getLibraryFolder(), "Arduino");
+    return new File(getLibraryFolder(), "MapleIDE");
   }
 
 
   public File getDefaultSketchbookFolder() throws Exception {
-    return new File(getDocumentsFolder(), "Arduino");
+    return new File(getDocumentsFolder(), "MapleIDE");
     /*
     // looking for /Users/blah/Documents/Processing
     try {

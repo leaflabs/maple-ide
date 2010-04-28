@@ -22,19 +22,19 @@
   $Id: wiring.c 248 2007-02-03 15:36:30Z mellis $
 */
 
-#include "wiring_private.h"
+#include "wirish.h"
 
-void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, byte val)
+void shiftOut(uint8 dataPin, uint8 clockPin, uint8 bitOrder, uint8 val)
 {
-	int i;
+    int i;
 
-	for (i = 0; i < 8; i++)  {
-		if (bitOrder == LSBFIRST)
-			digitalWrite(dataPin, !!(val & (1 << i)));
-		else	
-			digitalWrite(dataPin, !!(val & (1 << (7 - i))));
-			
-		digitalWrite(clockPin, HIGH);
-		digitalWrite(clockPin, LOW);		
-	}
+    for (i = 0; i < 8; i++)  {
+        if (bitOrder == LSBFIRST)
+            digitalWrite(dataPin, !!(val & (1 << i)));
+        else
+            digitalWrite(dataPin, !!(val & (1 << (7 - i))));
+
+        digitalWrite(clockPin, HIGH);
+        digitalWrite(clockPin, LOW);
+    }
 }

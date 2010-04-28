@@ -22,63 +22,26 @@
  * THE SOFTWARE.
  * ****************************************************************************/
 
-#ifndef _WIRING_H_
-#define _WIRING_H_
+/**
+ *  @brief Maple board bring up
+ */
 
-#include "libmaple.h"
-#include "timers.h"
-#include "io.h"
-#include "binary.h"
-#include "bits.h"
-#include "time.h"
-#include "pwm.h"
-#include "ext_interrupts.h"
+#include "wirish.h"
+#include "rcc.h"
+#include "systick.h"
+#include "gpio.h"
+#include "nvic.h"
 
-#ifdef __cplusplus
-extern "C"{
-#endif
+void init(void) {
+   rcc_init();
+   nvic_init();
+   systick_init();
+   gpio_init();
+   adc_init();
+   timer_init(1, 1);
+   timer_init(2, 1);
+   timer_init(3, 1);
+   timer_init(4, 1);
+}
 
-#define MAPLE 1
-#define NR_MAPLE_PINS   39 // temporary
-
-#define HIGH 0x1
-#define LOW  0x0
-
-#define true 0x1
-#define false 0x0
-
-#define SERIAL  0x0
-#define DISPLAY 0x1
-
-#define LSBFIRST 0
-#define MSBFIRST 1
-
-#define USER_ADDR_ROM 0x08005000
-#define USER_ADDR_RAM 0x20000C00
-
-#define lowByte(w) ((w) & 0xff)
-#define highByte(w) ((w) >> 8)
-#define bitRead(value, bit) (((value) >> (bit)) & 0x01)
-#define bitSet(value, bit) ((value) |= (1UL << (bit)))
-#define bitClear(value, bit) ((value) &= ~(1UL << (bit)))
-#define bitWrite(value, bit, bitvalue) (bitvalue ? bitSet(value, bit) : bitClear(value, bit))
-#define bit(b) (1UL << (b))
-
-
-typedef uint8 boolean;
-typedef uint8 byte;
-
-void init(void);
-unsigned long pulseIn(uint8 pin, uint8 state, unsigned long timeout);
-void shiftOut(uint8 dataPin, uint8 clockPin, uint8 bitOrder, byte val);
-
-
-#ifdef __cplusplus
-} // extern "C"
-#endif
-
-
-
-
-#endif
 
