@@ -1,4 +1,4 @@
-pre04202010 maple-ide
+custom-build maple-ide
 
 Fix Linux make.sh, etc. scripts
 Test on Linux.
