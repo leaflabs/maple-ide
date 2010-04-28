@@ -26,26 +26,17 @@
  *  @brief 
  */
 
+#include "libmaple.h"
 #include "wirish.h"
-#include "timers.h"
 #include "io.h"
-#include "pwm.h"
 
 extern const PinMapping PIN_MAP[NR_MAPLE_PINS];
 
-void pwmWrite(uint8 pin, uint16 duty_cycle) {
-    TimerCCR ccr;
+/* Assumes that the ADC has been initialized and
+ * that the pin is set to ANALOG_INPUT */
+uint32 analogRead(uint8 pin) {
+    if (pin >= NR_ANALOG_PINS)
+        return 0;
 
-    if (pin >= NR_MAPLE_PINS) {
-        return;
-    }
-
-    ccr = PIN_MAP[pin].timer_channel;
-
-    if (ccr == TIMER_INVALID)
-        return;
-
-    timer_pwm_write_ccr(ccr, duty_cycle);
+    return adc_read(PIN_MAP[pin].adc);
 }
-
-
