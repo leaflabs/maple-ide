@@ -1,0 +1,12 @@
+/* minimal.css: very basic styling, not really cross-browser */
+body { margin: 25px; font-family: helvetica; }
+table,th,td { border: 1px solid black; }
+table { border-collapse: collapse; }
+td,th { padding: 8px; }
+.code { background-color: black; color: white; padding: 5px; width: 50em; 
+        margin-left: 40px; border: 2px solid gray; }
+.box { margin: 40px; border: 2px solid black; background-color: gray; 
+        padding: 10px; }
+.box h3 { margin-top: 0px; }
+h1 { border-bottom: 2px solid; }
+
