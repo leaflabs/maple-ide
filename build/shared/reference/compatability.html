@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head><title>Maple Reference Documentation</title>
+<style type="text/css">
+  body { margin: 25px; font-family: helvetica; }
+  table,th,td { border: 1px solid black; }
+  table { border-collapse: collapse; }
+  td { padding: 8px; }
+  .code { background-color: black; color: white; padding: 5px; width: 50em; 
+          margin-left: 40px; border: 2px solid gray; }
+  h1 { border-bottom: 2px solid; }
+</style></head> 
+<body> 
+<!-- minimalist html; this is designed to be copy/pasted into a website -->
+<!-- STARTDOC -->
+<h1>Maple-Arduino Compatability Notes</h1>
+
+<ul>
+  <li><a href="#overview">Overview</a>
+  <li><a href="#headers">Header Numbering and Incompatabilities</a>
+
+</ul>
+
+<h2><a name="overview">Overview</a></h2>
+The biggest difference between the Maple and most Arduino boards is that the
+Maple uses a 32-bit ARM Cortex-M3 architecture chip while the Arduinos have
+8-bit Atmel AVR chips. The different instruction set means that machine code
+(executable binary programs) is incompatible between the two and a different
+compiler (actually just a different version of gcc) is required. The compiler
+for the regular Arduino IDE is the popular "avr-gcc" package; the compiler
+for the Maple version of the IDE is Codesourcery's edition of gcc for the
+ARM EABI target (aka "arm-non-eabi-gcc"). 
+
+<p>
+The bitwidth of the processor means that the Maple can process 32-bit operations
+in a single instruction (for instance add two 32-bit integers together) while
+an Arduino processor would have to split up large operations into several
+smaller ones. In a lot of cases 8-bit operations are plenty (integers 0-255,
+single characters of text, etc), but if you're dealing with higher resolution
+data the speed up could be significant. A trade-off is that code could be
+larger as well; program instructions and memory locations can be up to 32-bits
+each as well, which in the worst case would quadruple program size. In reality
+the removal of extra instructions and fancy packing together of simple 
+instructions means that programs aren't much larger (or are even smaller).
+
+
+<h2><a name="headers">Header Numbering and Incompatabilities</a></h2>
+
+The numbering of headers is different; on the Maple each GPIO has a unique
+number: D0, D1, D2, all the way up to D37 (actually there are a couple
+more...).  On the Arduino the analog pins are numbered seperately (A0-A5) from
+the digital pins (D0-D13). 
+
+<p>
+The incompatible hardware differences are:
+<ul>
+
+  <li><b>i2c port:</b> on most Arduinos the i2c port is Analog Input 4 (SDA)
+  and Analog Input 5 (SCL); on the Maple i2c port 1 is D5 (SCL) and D9 (SDA),
+  and i2c port 2 is D29 (SCL) and D30 (SDA). It should be possible to skywire,
+  sacraficing signal quality (increased capacitance). Or i2c can be bit
+  banged reasonably well in software. Or this peripheral could potentially
+  be rerouted internally (but we haven't looked in to it).
+
+  <li><b>PWM on D10:</b> all the other standard Arduino PWM headers have 
+  PWM functionality on the Maple (D2,D3,D6,D9,D11), but not D10. We did our
+  best! It may be possible to reroute this peripheral internally using low
+  level configuration (but we haven't looked in to it). 
+
+  <li><b>EEPROM:</b> the Maple does not have any internal EEPROM. This 
+  functionality can be emulated with regular peristant flash memory, or with
+  an external EEPROM chip. 
+
+  <li><b>ISP Programming:</b> the Maple does not use an ISP/ICSP bus for 
+  debugging; it uses JTAG. 
+
+</ul>
+
+OTHER
+* pwm and analog bit lengths
+
+<h2><a name="software">Software Language/Library Changes</a></h2>
+
+<ul>
+  <li><b>32-bit int:</b> many standard functions either expect or return full
+  32-bit (4 byte) integer values instead of the regular 16-bit (2 byte)Arduino
+  values.
+
+  <li><b>pinMode types:</b> any GPIO (including analog pins) can be configured
+  into one of the following modes with a single call to pinMode: OUTPUT,
+  OUTPUT_OPEN_DRAIN, INPUT_FLOATING, INPUT_PULLUP, INPUT_PULLDOWN. Additionally
+  the PWM and Analog Input pins can be configured as INPUT_ANALOG and PWM 
+  respectively. See <a href="gpio.html">GPIO docs</a> for more info.
+
+  <li><b>Serial1 syntax:</b> like the Arduino Mega, the Maple has multiple 
+  USART ports. By default <code>Serial</code> is not maped to any of them,
+  use <code>Serial1</code> through <code>Serial3</code> instead.
+
+  <li><b>16-bit PWM</b>
+
+  <li><b>12-bit ADC</b>
+
+</ul>
+
+<h2><a name="porting">Sketch and Library Porting HOWTO</a></h2>
+
+First check the hardware and header differences above and see if your project
+or shield needs to be modified (eg, add 3.3v level converters or 
+
+
+<h3><i>About this Document</i></h3>
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<img alt="Creative Commons License" style="border-width:0" 
+    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+<br /><i>This documentation is released under a 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+Creative Commons Attribution-Share Alike 3.0</a> license.</i>
+
+<p>
+Translations are welcomed; give us a ping to make sure we aren't in the
+process of revising or editing first.
+
+<p>
+Changelog:
+<ul>
+    <li>28 April 2010 [bnewbold]: initial writeup
+</u>
+<!-- ENDDOC -->
+</body></html>
