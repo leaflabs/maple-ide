@@ -65,11 +65,36 @@ increase this maximum duty cycle (eg, an 8x prescaler would result in around an
 8ms maximum duty cycle). Note that the resolution is also effectively limited
 by the duty variable set by the user. 
 
+<p>
+Here are some commonly used PWM configurations (note: double check our math!):
+
+<table>
+  <tr><th>Purpose<th>Period (ms)<th>High (ms)<th>Prescaler<th>Period<th>Value
+  <tr><td>LED Throb
+      <td>0.020ms
+      <td>0 to 0.020ms
+      <td>1 (none)
+      <td>0 to 767
+  <tr><td>Servo Control
+      <td>20ms
+      <td>1.25 (0deg) <br>1.50ms (90deg) <br>1.75 (180deg)
+      <td>21 <br>21 <br>21
+      <td>4096 <br>4915 <br>5734
+
+
 <h2><a name="functions">Function Reference</a></h2>
 <dl>
   <dt><code>setMode(pin_num, PWM)</code>
   <dd>This command is usually called from <code>setup()</code> to tell the
   microcontroller that <code>pin_num</code> should be configured to PWM output.
+
+  <dt><code>timer_init(port, prescaler)</code>
+  <dd>Currently this low level libmaple function is the only way to change
+  the prescaler for a timer. Find the appropriate timer for a given PWM 
+  header using the table above, then set the prescaler. This function would
+  normally be called once from <code>setup()</code>, but the time can be
+  "reinitialized" with a new prescaler at any time. The default prescaler is
+  1 (eg, no prescaling). 
 
   <td><code>pwmWrite()</code>
   <dd>This command sets the first (lower) PWM variable. Usercode must manage
@@ -80,10 +105,17 @@ by the duty variable set by the user.
 <h2><a name="links">Recommended Reading</a></h2>
 
 <ul>
-  <li>demo project
-  <li>pwm wikipedia page
-  <li>arduino pwm pages
-  <li>arduino pwm reference
+  <li><a href="http://en.wikipedia.org/wiki/Pulse-width_modulation">
+      Wikipedia Article on Pulse-width modulation</a>
+  <li><a href="http://www.arduino.cc/en/Tutorial/PWM">
+      Arduino tutorial on PWM</a>
+  <li>"<a href="http://www.arcfn.com/2009/07/secrets-of-arduino-pwm.html">
+     Secrets of Arduino PWM</a>" by Ken Shirriff
+  <li>STMicro documentation for STM32F103RB microcontroller:<ul>
+    <li><a href="http://www.st.com/mcu/devicedocs-STM32F103RB-110.html">All</a>
+    <li><a href="http://www.st.com/stonline/products/literature/ds/13587.pdf">Datasheet (pdf)</a>
+    <li><a href="http://www.st.com/stonline/products/literature/rm/13902.pdf">Reference Manual (pdf)</a>
+    </ul>
 </ul>
 
 <div class="box">
