@@ -6,30 +6,55 @@
 </head><body> 
 <!-- minimalist html; this is designed to be copy/pasted into a website -->
 <!-- STARTDOC -->
-<h1>Maple IDE Reference Documentation</h1>
-<i>More complete documentation of this IDE and the Maple hardware may be
+<h1>Maple Reference Documentation</h1>
+<i>More recent/complete documentation of the IDE and the Maple hardware may be
 available at from the <a href="http://leaflabs.com/docs/">LeafLabs website</a>.
 </i>
 
 <p>
-<b><a href="quickstart.html">Quickstart</a></b>: Step by step instructions from
-installation through serial port monitoring.
+<b><a href="quickstart.html">Quickstart</a></b>: Installation through blinky
+lights real fast!
 
 <p>
-<b><a href="ide-troubleshooting.html">IDE Troubleshooting</a></b>: For help
-getting installed, common compiler errors, etc.
+<b><a href="installation.html">Installation</a></b>
 
 <p>
-<b><a href="hardware-troubleshooting.html">Hardware Troubleshooting</a></b>:
-For help debuging issues or unexpected behavior on the actual device. 
+<b>Hardware Devices:</b>
+<ul>
+  <li><b><a href="i2c.html">i2c</a></b> (inter-integrated circuit bus, aka
+  two-wire-interface or twi), a simple serial protocol for communications
+  between digital devices.
+
+  <li><b><a href="pwm.html">PWM</a></b> (pulse width modulation) Sometimes
+  confusingly refered to as "analog output" even though it's really digital.
+
+  <li><b><a href="spi.html">SPI</a></b>, the serial peripheral interface, for
+  high speed data transfer. Compatable with most SD cards.
+
+  <li><b><a href="adc.html">ADC</a></b> (analog digital conversion), for 
+  reading in analog voltage levels.
+
+  <li><b><a href="gpio.html">GPIO</a></b> (general purpose input/output), the
+  most basic digital on/off signaling on all of the header pins. Multiple modes
+  such as pull-up, pull-down, floating, open-drain, etc.
+
+  <li><b><a href="usart.html">USART</a></b> (universal asynchronous
+  receiver/transmitter), a generalized version of the classic RS232 serial bus,
+  often used for communications with a terminal or personal computer.
+
+  <li><b><a href="jtag.html">JTAG</a></b>, a powerful special purpose shift
+  register bus for debugging digital devices (eg reading out microcontroller
+  register states and stepping instruction by instruction). 
+
+  <li><b><a href="usb.html">USB</a></b> (universal serial bus), the now 
+  ubiquitous connector/protocol solution for PC-peripheral communications.
+  The Maple is usually programmed via USB and can communicate over it through
+  either a serial emulation channel or as a general purpose device.
+
+</ul>
 
 <p>
-<b><a href="language.html">Language</a></b> For help debuging issues or
-unexpected behavior on the actual device. 
-
-<p>
-<b><a href="errata.html">Errata</a></b>: A revision-by-revision list of 
-hardware changes, errors, and failure modes.
+<b><a href="language.html">Language Documentation</a></b> 
 
 <p>
 <b><a href="compatability.html">Compatability</a></b>: A comparison of hardware
@@ -37,16 +62,12 @@ and software differences between the Maple and Arduino boards, as well as
 advice for porting sketches and libraries.
 
 <p>
-<b>Specific Hardware Device Docs:</b>
-<ul>
-  <li><b><a href="i2c.html">i2c</a></b>
-  <li><b><a href="pwm.html">PWM</a></b>
-  <li><b><a href="spi.html">SPI</a></b>
-  <li><b><a href="adc.html">ADC</a></b>
-  <li><b><a href="gpio.html">GPIO</a></b>
-  <li><b><a href="usart.html">USART</a></b>
-  <li><b><a href="jtag.html">JTAG</a></b>
-</ul>
+<b><a href="troubleshooting.html">Troubleshooting</a></b>:
+For help debuging problems or unexpected behavior 
+
+<p>
+<b><a href="errata.html">Errata</a></b>: A revision-by-revision list of 
+hardware changes, errors, and failure modes.
 
 <!-- ENDDOC -->
 </body></html>

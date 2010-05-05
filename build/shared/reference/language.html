@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head><title>Maple Reference Documentation</title>
+<link rel="stylesheet" href="minimal.css" type="text/css">
+</head><body> 
+<!-- minimalist html; this is designed to be copy/pasted into a website -->
+<!-- STARTDOC -->
+<h1>Maple Reference Documentation: Language</h1>
+<p>
+This page will briefly summarize the Wiring/Arduino programming language and
+give some implementation details. Until it's written please see the extensive
+docs on the <a href="http://arduino.cc/en/Reference/Extended">Arduino
+website</a> (or follow a direct link from below).
+
+<ul>
+  <li><a href="#additions">Unique Maple Additions</a>
+  <li><a href="#arduino">Arduino Doc Links</a>
+  <li><a href="#links">Recommended Reading</a>
+</ul>
+
+<h2><a name="additions">Unique Maple Additions</a></h2>
+<dl>
+  <dt><code>ASSERT(...)</code>
+  <dd>The <code>ASSERT()</code> function can be very useful for basic program
+  debugging. The function accepts a boolean (eg, <code>ASSERT(state ==
+  WAIT);</code>); zero is false and any other number is true. If the boolean is
+  true the assertion passes and the program continues as usual. If it is false
+  the assertion fails: the program is halted, debug information is printed to
+  USART2, and the status LED begins to throb in intensity (it's noticably
+  different from blinking). The debug information is printed at 9600 baud and
+  consists of the filename and line number where the particular assertion
+  failed.
+
+  <br>Including assertions in a program increases the program size. When using
+  libmaple from the command line they can be silently disabled by setting the
+  <code>MAPLE_DEBUG</code> variable to 0 in src/lib/util.h; in this case all
+  assertions pass without any lost clock cycles.
+</dl>
+
+<h2><a name="arduino">Arduino Doc Links</a></h2>
+<i>(this table pulled straight from <a
+href="http://arduino.cc/en/Reference/Extended">http://arduino.cc/en/Reference/Extended)</a></i>
+
+[extended table]
+
+
+<h2><a name="links">Recommended Reading</a></h2>
+<ul>
+  <li>c programming reference
+  <li>c++ programming reference
+  <li>stm32 reference
+  <li>newlib docs (http://sourceware.org/newlib/)
+  <li>arduino extended language ref
+</ul>
+
+<div class="box">
+<h3><i>About this Document</i></h3>
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<img alt="Creative Commons License" style="border-width:0" 
+    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+<br /><i>This documentation is released under a 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+Creative Commons Attribution-Share Alike 3.0</a> license.</i>
+
+<p>
+Translations are welcomed; give us a ping to make sure we aren't in the
+process of revising or editing first.
+
+<p>
+Changelog:
+<ul>
+    <li>28 April 2010 [bnewbold]: initial writeup
+</u>
+</div>
+<!-- ENDDOC -->
+</body></html>

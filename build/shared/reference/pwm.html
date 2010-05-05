@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head><title>Maple Reference Documentation</title>
+<link rel="stylesheet" href="minimal.css" type="text/css">
+</head><body> 
+<!-- minimalist html; this is designed to be copy/pasted into a website -->
+<!-- STARTDOC -->
+<h1>Maple Reference Documentation: PWM</h1>
+<p>
+Pulse Width Modulatiom is a basic technique to create repeated square waves
+(digital high/low voltage transitions) of user defined length and duty cycle.
+It can be used as a way to encode an "analog" signal on a single 
+digital (high/low) line using the time between transitions ("pulse width") 
+as the variable; this technique is commonly used to send servo position 
+and motor speed commands. Another use is to use to the ratio of "high" and
+"low" time to approximate a voltage output; this technique can be used to
+dim an LED or even (with careful filtering) generate audio waveforms. 
+
+<ul>
+  <li><a href="#overview">Overview</a>
+  <li><a href="#background">Background</a>
+  <li><a href="#functions">Function Reference</a>
+  <li><a href="#links">Recommended Reading</a>
+</ul>
+
+<h2><a name="overview">Overview</a></h2>
+<p>
+The Maple has a large number of 16-bit PWM outputs, each connected to one of 4
+timers. Some configuration, such as the clock rate or prescaling, must be
+common to the entire timer. 
+<p>
+Note that unlike the Arduino, the Maple does not have PWM functionality on
+pin D10; all other pins are <a href="compatability.html">compatible</a>. 
+
+<table>
+  <tr><th>Timer <th>PWM Headers
+  <tr><td>1     <td>D6,D7,D8,D31,D32,D33,D34
+  <tr><td>2     <td>D0,D1,D2,D3,D11,D12
+  <tr><td>3     <td>D11,D12,D25,D27,D28
+  <tr><td>4     <td>D5,D9,D14,D24
+</table>
+
+<h2><a name="background">Background</a></h2>
+<p>
+In it's simplest form the device is a single counter with two variables. The
+counter starts at zero and the output starts at "high". The counter increments
+every clock cycle until it reaches the first variable number, at which point
+the output goes "low". The counter continues incrementing until it reaches the
+second variable at which point the output goes "high" again and the counter
+resets to zero. 
+
+<p>
+This simple functionality could be approximated in software by setting a GPIO
+high or low, but the beauty of PWM is that the usercode simply has to configure
+the device and set the two variables and the device will function on it's own;
+no further microprocessor cycles will be consumed. 
+
+<p>
+The Maple has 16-bit PWM resolution, which means that the counter and variables
+can go up to 65535, as opposed to 255 with 8-bit resolution. With a 72MHz 
+clock rate, a PWM output would have maximum duty cycle of about one millisecond;
+using a prescaler acts as a clock divider in front of the counter and can
+increase this maximum duty cycle (eg, an 8x prescaler would result in around an
+8ms maximum duty cycle). Note that the resolution is also effectively limited
+by the duty variable set by the user. 
+
+<h2><a name="functions">Function Reference</a></h2>
+<dl>
+  <dt><code>setMode(pin_num, PWM)</code>
+  <dd>This command is usually called from <code>setup()</code> to tell the
+  microcontroller that <code>pin_num</code> should be configured to PWM output.
+
+  <td><code>pwmWrite()</code>
+  <dd>This command sets the first (lower) PWM variable. Usercode must manage
+  the appropriate maximum accepted value (based on the configured duty) on it's
+  own.
+</dl>
+
+<h2><a name="links">Recommended Reading</a></h2>
+
+<ul>
+  <li>demo project
+  <li>pwm wikipedia page
+  <li>arduino pwm pages
+  <li>arduino pwm reference
+</ul>
+
+<div class="box">
+<h3><i>About this Document</i></h3>
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<img alt="Creative Commons License" style="border-width:0" 
+    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+<br /><i>This documentation is released under a 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+Creative Commons Attribution-Share Alike 3.0</a> license.</i>
+
+<p>
+Translations are welcomed; give us a ping to make sure we aren't in the
+process of revising or editing first.
+
+<p>
+Changelog:
+<ul>
+    <li>28 April 2010 [bnewbold]: initial writeup
+</u>
+</div>
+<!-- ENDDOC -->
+</body></html>
