@@ -10,42 +10,17 @@
 
 You'll need a maple board, a mini-b USB cable, a functional computer, and
 possibly root (or "administrator") access to that computer.
-
-<p>
 If you have trouble along the way try the <a href="install.html">install
 page</a> for more detailed download and installation instructions, and the
 <a href="troubleshooting.html">troubleshooting</a> page for help with some
 common problems. if all else fails try <a href="http://google.com/?q=maple+help">google</a>, our <a href="http://forum.leaflabs.com">forum</a>, or <a href="http://leaflabs.com/contact">contact us directly</a>!
 
-<h3>1. Install Java if Necessary</h3>
+<h3>1. Download the IDE</h3>
 
-The IDE is written in Java and requires a compatible runtime (JRE). Our windows
-release includes runtime, Mac OSX has one installed already, and it's pretty
-easy to install one on Linux. If you already have a JRE setup you can skip to
-the next step; <a href="http://sun.com/java">Sun Java 1.6</a> and <a
-href="http://openjdk.java.net/">OpenJDK 1.6</a> are known to work, and
-runtimes mostly compatible with Sun Java 1.4+ should probably get the job
-done. See the <a href="install.html">install page</a> for more details.
-
-<p>
-To install Java on a linux/unix system, try using your distribution's software
-packaging tool and search for "JRE" or "java". On modern Debian-based systems
-(including Ubuntu) you can try to install the OpenJDK 1.6 JRE with:
-
-<pre class="code">
-$ sudo aptitude install openjdk-6-jre
-</pre>
-
-<h3>2. Download the Maple IDE</h3>
-
-The latest binary release of the Maple IDE for popular platforms can be
-downloaded straight from LeafLabs's server using the links below. The package
-bundles together a compiler, an upload utility, a software library, and a
-simple GUI text editor to tie it all together.
-
-<p>
-All this software is <a href="http://fsf.org">free and open</a>, feel free to
-redistribute, hack, and generally mess around with it! We're grateful to the
+The latest binary release of the Maple IDE for can be downloaded using the
+links below. The package bundles together a compiler, an upload utility, a
+software library, and a simple GUI text editor. All this
+software is <a href="http://fsf.org">free and open</a>; we are grateful to the
 <a href="http://arduino.cc">Arduino</a>, <a
 href="http://www.codesourcery.com">Codesourcery</a>, <a
 href="http://gnu.org">GNU</a>, and <a href="http://openmoko.com">OpenMoko</a>
@@ -66,58 +41,41 @@ developers, as well as many others, who allow us to reuse their software.
   <td>Tested on 32bit Windows XP
   <td><a href="http://static.leaflabs.net/pub/leaflabs/maple-ide/LATEST-windows.zip">LATEST-windows.zip</a> (about 70mb)
 </table>
+<p>
+The IDE is written in Java and requires a compatible runtime (JRE).  Our windows
+release includes runtime, Mac OSX has one installed already, and it's pretty
+easy to install one on Linux. If you don't have a JRE and dont know how to get
+one setup see the <a href="installation.html#java">installation page</a>.
+
+<h3>2. Unzip it to a appropriate home</h3>
 
 <p>
-Again, see the install page for source code, developer snapshots, compilation
-instructions, etc.
-
-<h3>3. Unzip the IDE to a appropriate home</h3>
-
 Once it's downloaded, you need to chose a place to unzip the IDE. Unless
 you've got a special place of honor in mind just plop it on your desktop or in
-your home folder. Your system should have a tool to deal with the file time of
-the archive (gzipped tar files on Linux, .dmg archives on Mac OSX, and classic
-.zip files on Windows); make sure you actually extract the contents out of the
+your home folder. Make sure you actually extract the contents out of the
 archive instead of running it live out of the archive file.
 
 <p>
-On Linux the tar tool can be used from the command line a la:
-<pre class="code">
-$ tar -xvf maple-ide-SOMETHING.tgz
-</pre>
+On <b><i>Linux only</i></b>, you'll want to run the
+<code>install-udev-rules.sh</code> at this point; it will ask for root
+perimissions.
 
 <p>
-In the long run you might want to move the extracted program around; that's
-fine, your programs (sketches) and configuration options will be stored in your
-home folder (changeable in the Preferences menu).
-
-<h3>4. Install udev rules (Linux only)</h3>
-
-As a security precaution, new USB devices like the Maple are accessible only by
-the root user on Linux systems. It's thrilling to run around with root
-permissions every now and then but in the long run it's safer to configure the
-operating system to allow regular users access to the Maple when it's plugged
-in.
+On <b><i>Windows only</i></b>, you'll have to click through a bunch of driver
+installation nonsense the first time you plug in the device.
 
 <p>
-Enter the unzipped maple-ide folder and run the install-udev-rules.sh script to
-configure the system so that members of the "plugdev" group can access the
-maple device automatically; it will ask for root permissions (via "sudo"). Or
-you can manually copy the <code>45-maple.rules</code> file into
-<code>/etc/udev/rules.d</code> and set the appropriate permissions.
+On <b><i>Mac OS X only</i></b>, you can just drag and drop the Maple IDE folder
+to install it in your applications folder. You'll also want to install the
+serial port driver bundled in the archive, and ignore the ACM modem setup
+dialog that pops up when you plug in the Maple.
+
+<h3>3. Run maple-ide</h3>
 
 <p>
-If this doesn't work out for you (eg, an error gets thrown or later on you
-can't upload your program or connect to the serial port) check the <a
-href="install.html">install page</a> for more details and work arounds. As a
-temporary or last resort measure you can run the entire IDE as root below
-(<code>sudo maple-ide</code>).
+Double click, run from command line, or smash into the stack as appropriate!
 
-<h3>5. Run maple-ide</h3>
-
-Double click, run from command line, or smash into the stack as appropriate.
-
-<h3>6. Compile a program!</h3>
+<h3>4. Compile a program!</h3>
 
 Let's load up a simple example program that blinks the status LED. From the
 File menu select Examples, Digital, Blink. Go ahead and modify the file a
@@ -141,7 +99,7 @@ Press the "verify" button (furthest to the left with a "play" arrow) to compile
 the code. Unless you've got a persnickety typo you should eventually get back 
 a confirmation message in the bottom pane.
 
-<h3>7. Upload that program!</h3>
+<h3>5. Upload that program!</h3>
 
 Now it's (finally!) time to plug in your Maple. Use a mini-b cable, making sure
 that the power source jumper is on the USB header first. The maple should blink
@@ -156,10 +114,7 @@ progress bar flash by in the status window of the IDE, then some blinky
 patterns on the maple, and then a constant blink with whatever time period you
 programmed in above.
 
-<p>
-Hurray!
-
-<h3>8. Use the serial port monitor!</h3>
+<h3>6. Use the serial port monitor!</h3>
 
 As a last step to make sure everything has been configured correctly, let's
 upload a hello world program that will send text from the Maple back to the IDE
@@ -176,7 +131,7 @@ change since the last "verify"). You should get text spit at you over the
 serial monitor right after the program is uploaded. Shout back! We can hear
 you!
 
-<h3>9. Go forth exuberantly!</h3>
+<h3>7. Go forth exuberantly!</h3>
 
 We really hope you got this far and didn't frown or make a bitter lemon face
 too often getting here. Where you go now is up to you: perhaps you've got some

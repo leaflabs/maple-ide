@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head><title>Maple Reference Documentation</title>
+<link rel="stylesheet" href="minimal.css" type="text/css">
+</head><body> 
+<!-- minimalist html; this is designed to be copy/pasted into a website -->
+<!-- STARTDOC -->
+<h1>Maple Development Reference: Installation</h1>
+<i>If you still can't get the IDE installed after reading this page, check the <a
+href="troubleshooting.html">troubleshooting</a> page for help with some common
+problems. If all else fails try <a
+href="http://google.com/?q=maple+help">google</a>, our <a
+href="http://forum.leaflabs.com">forum</a>, or <a
+href="http://leaflabs.com/contact">contact us directly</a>!</i>
+
+<ul>
+  <li><a href="#download">Download</a>
+  <li><a href="#java">Java</a>
+  <li><a href="#linux">Linux Directions</a>
+  <li><a href="#windows">Windows Directions</a>
+  <li><a href="#macosx">Mac OSX Directions</a>
+</ul>
+
+<h2><a name="download">Download</a></h2>
+The latest binary release of the Maple IDE for popular platforms can be
+downloaded straight from LeafLabs's server using the links below. The package
+bundles together a compiler, an upload utility, a software library, and a
+simple GUI text editor to tie it all together.
+
+<p>
+All this software is <a href="http://fsf.org">free and open</a>, feel free to
+redistribute, hack, and generally mess around with it! We're grateful to the
+<a href="http://arduino.cc">Arduino</a>, <a
+href="http://www.codesourcery.com">Codesourcery</a>, <a
+href="http://gnu.org">GNU</a>, and <a href="http://openmoko.com">OpenMoko</a>
+developers, as well as many others, who allow us to reuse their software.
+
+<table>
+<tr>
+  <td>Linux
+  <td>Tested on Ubuntu 9.10 (64bit) and 10.04 (32bit)
+  <td><a href="http://static.leaflabs.net/pub/leaflabs/maple-ide/LATEST-linux32.tgz">LATEST-linux32.tgz</a> (about 30mb)
+  <br><a href="http://static.leaflabs.net/pub/leaflabs/maple-ide/LATEST-linux64.tgz">LATEST-linux64.tgz</a> (about 30mb)
+<tr>
+  <td>Mac OSX
+  <td>Tested on 32-bit Intel Macs with Snow Leopard (10.6) 
+  <td><a href="http://static.leaflabs.net/pub/leaflabs/maple-ide/LATEST-macosx-10_6.dmg">LATEST-macosx-10_6.dmg</a> (about 55mb)
+<tr>
+  <td>Windows
+  <td>Tested on 32bit Windows XP
+  <td><a href="http://static.leaflabs.net/pub/leaflabs/maple-ide/LATEST-windows.zip">LATEST-windows.zip</a> (about 70mb)
+</table>
+
+<h2><a name="java">Java</a></h2>
+
+The IDE is written in Java and requires a compatible runtime (JRE). Our windows
+release includes runtime, Mac OSX has one installed already, and it's pretty
+easy to install one on Linux. If you already have a JRE setup you can skip to
+the next step; <a href="http://sun.com/java">Sun Java 1.6</a> and <a
+href="http://openjdk.java.net/">OpenJDK 1.6</a> are known to work, and
+runtimes mostly compatible with Sun Java 1.4+ should probably get the job
+done. 
+
+<p>
+To install Java on a linux/unix system, try using your distribution's software
+packaging tool and search for "JRE" or "java". On modern Debian-based systems
+(including Ubuntu) you can try to install the OpenJDK 1.6 JRE with:
+
+<pre class="code">
+$ sudo aptitude install openjdk-6-jre
+</pre>
+
+<h2><a name="linux">Linux Directions</a></h2>
+
+Once it's downloaded, you need to chose a place to unzip the IDE. Unless
+you've got a special place of honor in mind just plop it on your desktop or in
+your home folder. Your system should have a tool to deal with the file time of
+the archive (gzipped tar files on Linux, .dmg archives on Mac OSX, and classic
+.zip files on Windows); make sure you actually extract the contents out of the
+archive instead of running it live out of the archive file.
+
+<p>
+On Linux the tar tool can be used from the command line a la:
+<pre class="code">
+$ tar -xvf maple-ide-SOMETHING.tgz
+</pre>
+
+<p>
+In the long run you might want to move the extracted program around; that's
+fine, your programs (sketches) and configuration options will be stored in your
+home folder (changeable in the Preferences menu).
+
+<h4>Install udev rules</h4>
+
+As a security precaution, new USB devices like the Maple are accessible only by
+the root user on Linux systems. It's thrilling to run around with root
+permissions every now and then but in the long run it's safer to configure the
+operating system to allow regular users access to the Maple when it's plugged
+in.
+
+<p>
+Enter the unzipped maple-ide folder and run the install-udev-rules.sh script to
+configure the system so that members of the "plugdev" group can access the
+maple device automatically; it will ask for root permissions (via "sudo"). Or
+you can manually copy the <code>45-maple.rules</code> file into
+<code>/etc/udev/rules.d</code> and set the appropriate permissions.
+
+<p>
+If this doesn't work out for you (eg, an error gets thrown or later on you
+can't upload your program or connect to the serial port), as a temporary or
+last resort measure you can run the entire IDE as root (<code>sudo
+maple-ide</code>).
+
+<h2><a name="macosx">Mac OS X Directions</a></h2>
+
+Once it's downloaded, you need to chose a place to unzip the IDE. Unless
+you've got a special place of honor in mind just plop it on your desktop or in
+your home folder. Your system should have a tool to deal with the file time of
+the archive (.dmg archives on Mac OSX); once the archive is open, you can
+either drag the Maple IDE folder into the link to your Applications folder for
+a permanent installation, or drag it to you desktop for now. You'll also need
+to install the bundled serial port drivers; double click on that archive and
+follow the directions. 
+
+<p>
+In the long run you might want to move the extracted program around; that's
+fine, your programs (sketches) and configuration options will be stored in your
+home folder (changeable in the Preferences menu).
+
+<h2><a name="windows">Windows Directions</a></h2>
+
+Once the IDE is downloaded, you need to chose a place to unzip the IDE. Unless
+you've got a special place of honor in mind just plop it on your desktop or in
+your home folder. Your system should have a tool to deal with the file time of
+the archive (classic .zip files on Windows); make sure you actually extract the
+contents out of the archive instead of running it live out of the archive file.
+
+<p>
+In the long run you might want to move the extracted program around; that's
+fine, your programs (sketches) and configuration options will be stored in your
+home folder (changeable in the Preferences menu).
+
+<div class="box">
+<h3><i>About this Document</i></h3>
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<img alt="Creative Commons License" style="border-width:0" 
+    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+<br /><i>This documentation is released under a 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+Creative Commons Attribution-Share Alike 3.0</a> license.</i>
+
+<p>
+Translations are welcomed; give us a ping to make sure we aren't in the
+process of revising or editing first.
+
+<p>
+Changelog:
+<ul>
+    <li>28 April 2010 [bnewbold]: initial writeup
+</u>
+</div>
+<!-- ENDDOC -->
+</body></html>
