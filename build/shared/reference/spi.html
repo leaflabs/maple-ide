@@ -7,20 +7,50 @@
 <!-- minimalist html; this is designed to be copy/pasted into a website -->
 <!-- STARTDOC -->
 <h1>Maple Reference Documentation: SPI</h1>
-<div class="warningbox">
-<h3>Note:</h3>
-SPI is in the software library but this document hasn't been written yet!
-</div>
 
 <ul>
-  <li><a href="#overview">Overview</a>
   <li><a href="#functions">Function Reference</a>
   <li><a href="#links">Recommended Reading</a>
 </ul>
 
-<h2><a name="overview">Overview</a></h2>
+<p>
+The Maple has two SPI ports. The first has NSS on D10, MOSI on D11, MISO on D12,
+and SCK on D13. The second has NSS on D31, SCK on D32, MISO on D33, and MOSI on
+D34.
+
+<p>
+Each port can be configured at one of the following speeds:
+<ul>
+  <li>SPI_18MHZ
+  <li>SPI_9MHZ
+  <li>SPI_4_5MHZ
+  <li>SPI_2_25MHZ
+  <li>SPI_1_125MHZ
+  <li>SPI_562_500KHZ
+  <li>SPI_281_250KHZ
+  <li>SPI_140_625KHZ
+</ul>
 
 <h2><a name="functions">Funtion Reference</a></h2>
+
+<dl>
+  <dt><code>#include "HardwareSPI.h"</code><br>
+      <code>HardwareSPI Spi(port)</code><br>
+  <dd> This include and declaration must be included at the start of any sketch
+  or program that uses the SPI interface. The argument <code>number</code> is
+  either 1 or 2 and specifies which port to use. 
+
+  <dt><code>Spi.begin(freq, endianness, mode)</code><br>
+  <dd><code>begin()</code> is usually called in <code>setup()</code> to
+  configure the baudrate of the given SPI port and to set up the header pins
+  appropriately. <code>freq</code> is one of the set listed above; 
+  <code>endianness</code> is either <code>LSBFIRST</code> or 
+  <code>MSBFIRST</code>; for now <code>mode</code> is always 0.
+  
+  <dt><code>Spi.send(data, size()</code><br>
+  <dd> Writes data into the port buffer to be transmitted as soon as possible.
+  <code>data</code> should be an array of type <code>byte</code>; <code>size</code> should be the result of <code>sizeof(data)</code>.
+</dl>
 
 <h2><a name="links">Recommended Reading</a></h2>
 
