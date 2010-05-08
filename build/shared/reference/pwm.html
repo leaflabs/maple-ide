@@ -1,7 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml"> 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head><title>Maple Reference Documentation</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 <link rel="stylesheet" href="minimal.css" type="text/css">
 </head><body> 
 <!-- minimalist html; this is designed to be copy/pasted into a website -->
@@ -31,7 +32,7 @@ timers. Some configuration, such as the clock rate or prescaling, must be
 common to the entire timer. 
 <p>
 Note that unlike the Arduino, the Maple does not have PWM functionality on
-pin D10; all other pins are <a href="compatability.html">compatible</a>. 
+pin D10; all other pins are <a href="./compatability.html">compatible</a>. 
 
 <table>
   <tr><th>Timer <th>PWM Headers
@@ -69,7 +70,7 @@ by the duty variable set by the user.
 Here are some commonly used PWM configurations (note: double check our math!):
 
 <table>
-  <tr><th>Purpose<th>Period (ms)<th>High (ms)<th>Prescaler<th>Period<th>Value
+  <tr><th>Purpose<th>Period (ms)<th>High (ms)<th>Prescaler<th>Period
   <tr><td>LED Throb
       <td>0.020ms
       <td>0 to 0.020ms
@@ -80,7 +81,7 @@ Here are some commonly used PWM configurations (note: double check our math!):
       <td>1.25 (0deg) <br>1.50ms (90deg) <br>1.75 (180deg)
       <td>21 <br>21 <br>21
       <td>4096 <br>4915 <br>5734
-
+</table>
 
 <h2><a name="functions">Function Reference</a></h2>
 <dl>
@@ -96,7 +97,7 @@ Here are some commonly used PWM configurations (note: double check our math!):
   "reinitialized" with a new prescaler at any time. The default prescaler is
   1 (eg, no prescaling). 
 
-  <td><code>pwmWrite()</code>
+  <dt><code>pwmWrite()</code>
   <dd>This command sets the first (lower) PWM variable. Usercode must manage
   the appropriate maximum accepted value (based on the configured duty) on it's
   own.
