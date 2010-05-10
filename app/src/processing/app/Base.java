@@ -1754,26 +1754,18 @@ public class Base {
   }
 
   static public void showGettingStarted() {
-    if (Base.isMacOS()) {
-      Base.openURL("http://www.leaflabs.com/docs/maple/quickstart/");
-      //Base.showReference("Guide_MacOSX.html");
-    } else if (Base.isWindows()) {
-      Base.openURL("http://www.leaflabs.com/docs/maple/quickstart/");
-      //Base.showReference("Guide_Windows.html");
-    } else {
-      Base.openURL("http://www.leaflabs.com/docs/maple/quickstart/");
-    }
+    Base.showReference("quickstart.html");
   }
 
   static public void showReference() {
-    Base.openURL("http://www.leaflabs.com/docs/maple-ide/language/");
-    //showReference("index.html");
+    //Base.openURL("http://www.leaflabs.com/docs/maple-ide/language/");
+    showReference("language.html");
   }
 
 
   static public void showEnvironment() {
-    Base.openURL("http://www.leaflabs.com/docs/maple-ide/");
-    //showReference("Guide_Environment.html");
+    //Base.openURL("http://www.leaflabs.com/docs/maple-ide/");
+    showReference("index.html");
   }
 
 
@@ -1784,14 +1776,14 @@ public class Base {
 
 
   static public void showTroubleshooting() {
-    Base.openURL("http://www.leaflabs.com/docs/maple-ide/troubleshooting/");
-    //showReference("Guide_Troubleshooting.html");
+    //Base.openURL("http://www.leaflabs.com/docs/maple-ide/troubleshooting/");
+    showReference("troubleshooting.html");
   }
 
 
   static public void showFAQ() {
-    Base.openURL("http://www.leaflabs.com/docs/");
-    //showReference("faq.html");
+    //Base.openURL("http://www.leaflabs.com/docs/");
+    showReference("troubleshooting.html");
   }
   
 

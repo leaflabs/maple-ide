@@ -84,7 +84,10 @@ little bit: if you change the '<code>delay(1000);</code>' numbers to a
 different value the speed of the blink will change. The value is a time in
 milliseconds to pause before continuing with the program, so by default the
 LED will be on for 1 second, then off for 1 second, etc.
-
+<p>
+<div class="centerimg">
+<img src="./img/select_board.png" style="border: 2px black solid;">
+</div>
 <p>
 Next select the Maple board from the Tools pull-down under Board. You have the
 option between RAM and FLASH programming: FLASH saves the program into
@@ -94,11 +97,12 @@ Programming to RAM is faster to upload and a buggy program can be wiped away
 with a simple reset, while FLASH memory is larger and is the only option for
 permanently uploading a program.
 
-
 <p>
+<img src="./img/verify_button.png" style="border: 2px black solid; float:right; margin-left: 8px;">
 Press the "verify" button (furthest to the left with a "play" arrow) to compile
 the code. Unless you've got a persnickety typo you should eventually get back 
 a confirmation message in the bottom pane.
+<br>
 
 <h3>5. Upload that program!</h3>
 
@@ -109,6 +113,7 @@ reprogrammed, just to let you know it's there. If it ever starts throbbing in a
 slow, smooth pattern that means you've got a problem: see the <a href="./troubleshooting.html">troubleshooting page</a>.
 
 <p>
+<img src="./img/upload_button.png" style="border: 2px black solid; float:left; margin-right: 8px;">
 If all systems are go press the "upload" button (right arrow to a bunch of
 dots) to upload your program to the maple. You should see some text and a
 progress bar flash by in the status window of the IDE, then some blinky
@@ -116,7 +121,7 @@ patterns on the maple, and then a constant blink with whatever time period you
 programmed in above.
 
 <h3>6. Use the serial port monitor!</h3>
-
+<p>
 As a last step to make sure everything has been configured correctly, let's
 upload a hello world program that will send text from the Maple back to the IDE
 over the USB connection. From File select Examples, Maple, HelloWorld, and make
@@ -125,6 +130,7 @@ pull-down. And of course you could change the text to be printed out; make sure
 you leave the double quotes around it though or you'll get a compile error.
 
 <p>
+<img src="./img/serial_button.png" style="border: 2px black solid; float:right; margin-left: 8px;">
 Open the serial monitor window (button on the far right) and make sure the 9600
 baud speed is selected. Then go back to the code editing window and upload your
 program (upload will recompile your code automatically if there's been any
