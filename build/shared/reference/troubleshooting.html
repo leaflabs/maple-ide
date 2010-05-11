@@ -21,13 +21,20 @@
     <li>I don't have root/administrator access!
     <li>[Linux] I don't use udev!
     </ul>
+  <li><a href="#ide">IDE Problems</a>
+    <ul>
+    <li>[Mac OSX] The "Board" and "Serial Port" menu items are missing!
+    </ul>
   <li><a href="#compiler">Common Compiler Problems</a>
     <ul>
     <li><code>NullPointerException</code>
+    <li><code>undefined reference to `setup()'</code>
+    <li><code>error: 'Serial' was not declared in this scope</code>
     </ul>
   <li><a href="#upload">Common Upload Problems</a>
     <ul>
     <li>My program is too large!
+    <li>I have multiple Maples installed; how do I know which one will get flashed?
     </ul>
   <li><a href="#cli">Command Line Issues</a>
     <ul>
@@ -74,17 +81,47 @@
   devfs; in the meanwhile you could try running the entire IDE as root.  </dl>
 </dl>
 
+<h2><a name="ide">IDE Problems</a></h2>
+<dl>
+  <dt><a name="ide">[Mac OSX] The "Board" and "Serial Port" menu items are missing!</a>
+  <dd>Sometimes this happens if you try to compile or upload without having a
+  board selected; the work-around is to restart the IDE. Mysterious!
+</dl>
+
 <h2><a name="compiler">Common Compiler Problems</a></h2>
 <dl>
   <dt><a name="compile1"><code>NullPointerException</code></a>
   <dd>A classic! Make sure you have selected a board from the pulldown menu.
+  <dt><a name="compile2"><code>undefined reference to `setup()'</code></a>
+  <dd>Your sketch/program either does not include a setup function or it is
+  not found by the compiler. Your program must include both  
+  <code>void setup()</code> and <code>void loop()</code> functions; they don't
+  have to do anything, but they have to be there. You can start with an example
+  program (such as Examples &gt; Stubs &gt; BareMinimum) to get the basic 
+  structure. See also the <a href="/docs/maple-ide/language/">language docs</a>.
+  <br>This is a common error when your entire sketch is blank.  
+  <dt><a name="compile3"><code>error: 'Serial' was not declared in this scope</code></a>
+  <dd>The classic Arduino has only one USART device and uses the unique name
+  "Serial" to control it. Larger devices like the Arduino Mega and the Maple
+  have multiple USARTS refered to as Serial1, Serial2, etc. You probably want
+  Serial2 on the Maple; that's the one connected to pins D0 and D1. See also
+  the <a href="/docs/maple/usart/">USART docs</a>.
 </dl>
 
 <h2><a name="upload">Common Upload Problems</a></h2>
 <dl>
   <dt><a name="up1">My program is too large!</a>
   <dd>First, make sure you're using the FLASH target instead of RAM; there is
-  serveral times more FLASH memory available for user programs.  </dl>
+  serveral times more FLASH memory available for user programs. 
+  <dt><a name="up2"><code>No DFU capable USB device found</code>
+  <dd>This probably means you don't have a Maple plugged in or powered on!
+  <dt><a name="up3">I have multiple Maples installed; how do I know which one will get flashed?</a>
+  <dd>Because the Maple IDE uses DFU to upload programs, you can't select a
+  particular Maple from the Serial Port menu to upload to a particular board.
+  There's no solution to this problem for now: you'll have to just plug in 
+  the Maples one at a time. If this is a real problem let us know and we'll
+  see if we can come up with a quick solution.
+</dl>
 
 <h2><a name="cli">Command Line Issues</a></h2>
 <dl>
