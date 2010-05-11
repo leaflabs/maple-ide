@@ -49,7 +49,7 @@ else
   cp ../../app/lib/ecj.jar work/lib/
   cp ../../app/lib/jna.jar work/lib/
   cp ../../app/lib/oro.jar work/lib/
-  cp ../../app/lib/RXTXcomm.jar work/lib/
+  #cp ../../app/lib/RXTXcomm.jar work/lib/
 
   echo Copying examples...
   cp -r ../shared/examples work/
@@ -73,10 +73,12 @@ else
   if [ $ARCH = "i686" ]
   then
     echo Using 32-bit librxtxSerial.so
-    cp dist/lib/librxtxSerial.so work/lib/librxtxSerial.so
+    cp dist/lib/librxtxSerial.so.i386 work/lib/librxtxSerial.so
+    cp dist/lib/RXTXcomm.jar.i386 work/lib/RXTXcomm.jar
   else 
     echo Using 64-bit librxtxSerial.so
     cp dist/lib/librxtxSerial.so.x86_64 work/lib/librxtxSerial.so
+    cp dist/lib/RXTXcomm.jar.x86_64 work/lib/RXTXcomm.jar
   fi
 fi
 
