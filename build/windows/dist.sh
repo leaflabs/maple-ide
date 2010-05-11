@@ -69,7 +69,7 @@ cp dist/dfu-util.exe arduino/ # TODO: both places?
 cp -r dist/java arduino/java
 
 # get platform-specific goodies from the dist dir
-cp launcher/arduino.exe arduino/maple-ide.exe
+cp launcher/maple-ide.exe arduino/maple-ide.exe
 
 # grab pde.jar and export from the working dir
 cp work/lib/pde.jar arduino/lib/
