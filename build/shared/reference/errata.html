@@ -26,11 +26,12 @@ silkscreen and the "infinity-leaf" logo.
 <p>Known design errors:
 <ul>
   <li><span style="color:red;">Resistors on D0, D1: </span> these header pins,
-  which are RX/TX on USART2 ("Serial2"), have (TODO) Ohm in-line. These 
-  resistors increase the immpedence of the lines for ADC reads and affect the
-  open drain GPIO functionality of the pins. These resistors were accidentally
-  copied over from older Arduino USB designs, where they appear to protect the
-  USB-Serial converter from TTL voltage on the headers.
+  which are RX/TX on USART2 ("Serial2"), have resistors in-line between the
+  STM32 and the headers. These resistors increase the immpedence of the lines
+  for ADC reads and affect the open drain GPIO functionality of the pins. These
+  resistors were accidentally copied over from older Arduino USB designs, where
+  they appear to protect the USB-Serial converter from TTL voltage on the
+  headers.
 
 </ul>
 <p>Potential failure modes:
