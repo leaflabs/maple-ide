@@ -32,7 +32,6 @@ cp ../../app/lib/antlr.jar arduino/lib/
 cp ../../app/lib/ecj.jar arduino/lib/
 cp ../../app/lib/jna.jar arduino/lib/
 cp ../../app/lib/oro.jar arduino/lib/
-cp ../../app/lib/RXTXcomm.jar.x86_64 arduino/lib/RXTXcomm.jar
 cp ../../readme-arduino.txt arduino/
 cp ../../README-dist arduino/README.txt
 
@@ -40,7 +39,6 @@ cp -r ../../hardware arduino/
 cp -r ../../libraries arduino/
 
 cp -r dist/tools arduino/hardware
-cp work/lib/librxtxSerial.so.x86_64 arduino/lib/librxtxSerial.so
 cp work/tools/45-maple.rules arduino/tools
 
 if [ $1 ]
@@ -86,6 +84,9 @@ find arduino -name ".svn" -exec rm -rf {} 2> /dev/null ';'
 echo Creating tarball and finishing...
 P5=maple-ide-$RELEASE
 mv arduino $P5
+echo Using 64-bit librxtxSerial.so
+cp dist/lib/librxtxSerial.so.x86_64 $P5/lib/librxtxSerial.so
+cp dist/lib/RXTXcomm.jar.x86_64 $P5/lib/RXTXcomm.jar
 
 tar cfz $P5-linux64.tgz $P5
 # nah, keep the new directory around
