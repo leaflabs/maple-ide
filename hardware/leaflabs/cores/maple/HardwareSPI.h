@@ -23,22 +23,36 @@
  * ****************************************************************************/
 
 /**
- *  @file wiring_analog.c
- *
- *  @brief 
+ * @brief HardwareSPI definitions
  */
 
-#include "libmaple.h"
-#include "wiring.h"
-#include "io.h"
+#ifndef _HARDWARESPI_H_
+#define _HARDWARESPI_H_
 
-extern const PinMapping PIN_MAP[NR_MAPLE_PINS];
+typedef enum SPIFrequency {
+   SPI_18MHZ       = 0,
+   SPI_9MHZ        = 1,
+   SPI_4_5MHZ      = 2,
+   SPI_2_25MHZ     = 3,
+   SPI_1_125MHZ    = 4,
+   SPI_562_500KHZ  = 5,
+   SPI_281_250KHZ  = 6,
+   SPI_140_625KHZ  = 7,
+   MAX_SPI_FREQS   = 8,
+} SPIFrequency;
 
-/* Assumes that the ADC has been initialized and
- * that the pin is set to ANALOG_INPUT */
-uint32 analogRead(uint8 pin) {
-    if (pin >= NR_ANALOG_PINS)
-        return 0;
+class HardwareSPI {
+   private:
+      uint32 spi_num;
 
-    return adc_read(PIN_MAP[pin].adc);
-}
+   public:
+      HardwareSPI(uint32 spi_num);
+      void begin(void);
+      void begin(SPIFrequency freq, uint32 endianness, uint32 mode);
+      uint8 send(uint8 data);
+      uint8 send(uint8 *data, uint32 length);
+      uint8 recv(void);
+};
+
+#endif
+

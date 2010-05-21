@@ -1,7 +1,7 @@
 /* *****************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 LeafLabs LLC.
+ * Copyright (c) 2010 Perry Hung.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,21 @@
  * THE SOFTWARE.
  * ****************************************************************************/
 
-#include "wirish.h"
-#include "HardwareSerial.h"
-#include "math.h"
+/**
+ *  @brief 
+ */
 
-void setup();
-void loop();
+#include "libmaple.h"
+#include "wirish.h"
+#include "io.h"
+
+extern const PinMapping PIN_MAP[NR_MAPLE_PINS];
+
+/* Assumes that the ADC has been initialized and
+ * that the pin is set to ANALOG_INPUT */
+uint32 analogRead(uint8 pin) {
+    if (pin >= NR_ANALOG_PINS)
+        return 0;
+
+    return adc_read(PIN_MAP[pin].adc);
+}

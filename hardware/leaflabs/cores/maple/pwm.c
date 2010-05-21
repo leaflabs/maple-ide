@@ -23,12 +23,10 @@
  * ****************************************************************************/
 
 /**
- *  @file pwm.c
- *
  *  @brief 
  */
 
-#include "wiring.h"
+#include "wirish.h"
 #include "timers.h"
 #include "io.h"
 #include "pwm.h"

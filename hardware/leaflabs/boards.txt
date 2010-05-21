@@ -1,12 +1,12 @@
 ##############################################################
 
-maple.name=LeafLabs Maple to FLASH
+maple.name=LeafLabs Maple R3 to FLASH
 
 maple.upload.file_type=bin
 maple.upload.maximum_size=100000
 maple.upload.ram.maximum_size=17000
 maple.upload.flash.maximum_size=100000
-maple.upload.usbID=0110:1001
+maple.upload.usbID=1EAF:0003
 maple.upload.altID=1
 maple.upload.uploader=dfu-util
 maple.upload.auto_reset=true
@@ -21,13 +21,13 @@ maple.build.core=maple
 maple.build.using=make
 
 ##############################################################
-mapleRAM.name=LeafLabs Maple to RAM
+mapleRAM.name=LeafLabs R3 Maple to RAM
 
 mapleRAM.upload.file_type=bin
 mapleRAM.upload.maximum_size=17000
 mapleRAM.upload.ram.maximum_size=17000
 mapleRAM.upload.flash.maximum_size=100000
-mapleRAM.upload.usbID=0110:1001
+mapleRAM.upload.usbID=1EAF:0003
 mapleRAM.upload.altID=0
 mapleRAM.upload.uploader=dfu-util
 mapleRAM.upload.auto_reset=true
