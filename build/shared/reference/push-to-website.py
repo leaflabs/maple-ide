@@ -26,7 +26,7 @@ for f in originals:
                 state = 2
                 break
             l = r1.sub(r'href="../\1/"',l)
-            l = r2.sub(r'src="http://static.leaflabs.net/img/docs/\1"',l)
+            l = r2.sub(r'src="http://static.leaflabs.com/img/docs/\1"',l)
             l = r3.sub('',l)
             cache.append(l)
 
@@ -42,11 +42,11 @@ for f in originals:
 
 #print processed
 
-cmd1 = "scp " + t + "/* leaf:www/leaflabs-net/STATIC_DOCS"
+cmd1 = "scp " + t + "/* leaf:STATIC_DOCS/"
 print "Uploading html..."
 print cmd1
 os.system(cmd1)
-cmd2 = "scp ./img/* leaf:www/static/img/docs/"
+cmd2 = "scp ./img/* leaf:static/img/docs/"
 print "Uploading img..."
 print cmd2
 os.system(cmd2)
