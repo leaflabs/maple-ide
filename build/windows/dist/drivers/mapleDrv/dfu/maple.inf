@@ -119,13 +119,13 @@ ServiceBinary  = %12%\libusb0.sys
 ;--------------------------------------------------------------------------
 
 [Devices]
-"Maple Rev1"=LIBUSB_DEV, USB\VID_0110&PID_1001
+"Maple 003"=LIBUSB_DEV, USB\VID_1EAF&PID_0003
 
 [Devices.NT]
-"Maple Rev1"=LIBUSB_DEV, USB\VID_0110&PID_1001
+"Maple 003"=LIBUSB_DEV, USB\VID_1EAF&PID_0003
 
 [Devices.NTAMD64]
-"Maple Rev1"=LIBUSB_DEV, USB\VID_0110&PID_1001
+"Maple 003"=LIBUSB_DEV, USB\VID_1EAF&PID_0003
 
 
 ;--------------------------------------------------------------------------

@@ -17,12 +17,12 @@ LayoutFile=layout.inf
 DefaultDestDir = 12
 
 [VirComDevice.NT]
-%DESCRIPTION%=DriverInstall,USB\VID_0110&PID_1003
-%DESCRIPTION%=DriverInstall,USB\VID_0110&PID_1003
+%DESCRIPTION%=DriverInstall,USB\VID_1EAF&PID_1004
+%DESCRIPTION%=DriverInstall,USB\VID_1EAF&PID_1004
 
 [VirComDevice.NTamd64]
-%DESCRIPTION%=DriverInstall,USB\VID_0110&PID_1001
-%DESCRIPTION%=DriverInstall,USB\VID_0110&PID_1001
+%DESCRIPTION%=DriverInstall,USB\VID_1EAF&PID_1004
+%DESCRIPTION%=DriverInstall,USB\VID_1EAF&PID_1004
 
 [DriverInstall.NT]
 Include=mdmcpq.inf
@@ -52,5 +52,5 @@ ServiceBinary=%12%\usbser.sys
 [Strings] 
 STM         = "LeafLabs"
 MFGNAME     = "LeafLabs"
-DESCRIPTION = "Maple COM"
+DESCRIPTION = "Maple R3"
 SERVICE     = "USB Virtual COM port"
