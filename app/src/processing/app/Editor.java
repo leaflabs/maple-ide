@@ -144,7 +144,7 @@ public class Editor extends JFrame implements RunnerListener {
 
 
   public Editor(Base ibase, String path, int[] location) {
-    super("Arduino");
+    super("Maple IDE (Arduino)");
     this.base = ibase;
 
     //Base.setIcon(this);
@@ -1049,7 +1049,7 @@ public class Editor extends JFrame implements RunnerListener {
       });
     menu.add(item);
 
-    item = new JMenuItem("Environment");
+    item = new JMenuItem("Development Environment");
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           Base.showEnvironment();
@@ -1065,28 +1065,10 @@ public class Editor extends JFrame implements RunnerListener {
       });
     menu.add(item);
 
-    item = new JMenuItem("Reference");
+    item = new JMenuItem("Language Reference");
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           Base.showReference();
-        }
-      });
-    menu.add(item);
-
-    item = newJMenuItemShift("Find in Reference", 'F');
-    item.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          if (textarea.isSelectionActive()) {
-            handleFindReference();
-          }
-        }
-      });
-    menu.add(item);
-
-    item = new JMenuItem("Frequently Asked Questions");
-    item.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          Base.showFAQ();
         }
       });
     menu.add(item);
@@ -1099,10 +1081,18 @@ public class Editor extends JFrame implements RunnerListener {
       });
     menu.add(item);
 
+    item = new JMenuItem("Visit LeafLabs.com");
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL("http://LeafLabs.com/");
+        }
+      });
+    menu.add(item);
+
     // macosx already has its own about menu
     if (!Base.isMacOS()) {
       menu.addSeparator();
-      item = new JMenuItem("About Arduino");
+      item = new JMenuItem("About Arduino/Maple-IDE");
       item.addActionListener(new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             base.handleAbout();
@@ -2071,7 +2061,7 @@ public class Editor extends JFrame implements RunnerListener {
     }
     header.rebuild();
     // Set the title of the window to "sketch_070752a - Processing 0126"
-    setTitle(sketch.getName() + " | Arduino " + Base.VERSION_NAME);
+    setTitle(sketch.getName() + " | Maple IDE (Arduino " + Base.VERSION_NAME + ")");
     // Disable untitled setting from previous document, if any
     untitled = false;
 

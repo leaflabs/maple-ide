@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>Maple Reference Documentation</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<link rel="stylesheet" href="minimal.css" type="text/css">
+</head><body> 
+<!-- minimalist html; this is designed to be copy/pasted into a website -->
+<!-- STARTDOC -->
+<h1>Maple Reference Documentation: USB</h1>
+
+<ul>
+  <li><a href="#functions">Function Reference</a>
+  <li><a href="#links">Recommended Reading</a>
+</ul>
+
+<p>
+The Maple stm32 microprocessor includes a dedicated USB peripheral which can be
+configured to act as a general USB slave device with transfer rates up to
+12mbps (it unfortunately can not be configured as a host or on-the-go device).
+By default the peripheral is configured for two uses: first to recieve sketch/program uploads from the IDE, and second to emulate a regular serial port for use
+as a terminal (text read/write). 
+
+<p>
+The emulated terminal is relatively slow and inefficient; it is best for 
+transfering data at regulat serial speeds (kilobaud). Users requiring faster
+data transfer should consider implementing a different communications protocol;
+the Maple could be reprogrammed to appear as a mass storage device (thumb
+drive), human interface device (mouse or keyboard), microphone, or any other
+USB device. 
+
+<h2><a name="functions">Function Reference</a></h2>
+
+<dl>
+  <dt><code>#include "HardwareUsb.h"</code><br>
+      <code>HardwareUsb Usb</code><br>
+  <dd> This include and declaration must be included at the start of any sketch
+  or program that uses the USB-serial interface.
+
+  <dt><code>Usb.begin(baudrate)</code><br>
+  <dd><code>begin()</code> is usually called in <code>setup()</code> to
+  configure the baudrate of the given serial port and to set up the header pins
+  appropriately. It can be called at any time to reconfigure a port or to
+  change the baudrate. 9600 baud is the generic speed most widely supported by
+  other devices and terminals.
+
+  <dt><code>SerialN.print(...)</code><br>
+      <code>SerialN.println(...)</code><br>
+  <dd> Writes data into the port buffer to be transmitted as soon as possible.
+  Accepts strings (character arrays). If a raw integer is passed the
+  corresponding ASCII character will be transmitted; to print out a number in
+  human readable form add a second parameter with the base system. Eg, to print
+  out the decimal number '1234' use <code>print(1234,DEC)</code>; to print out
+  the binary numner '1001' use <code>print(9,BIN)</code>. 
+    
+  <dt><code>SerialN.available()</code><br> <code>SerialN.read()</code><br>
+  <dd><code>read()</code> will return any data that has been recieved over the
+  port and <code>available()</code> will tell if any such data acutally exists,
+  and if so how many bytes. If there is no data <code>read()</code> will
+  block/fail, so the usual program structure is to poll with
+  <code>available()</code> and only <code>read()</code> if there's something
+  ready.  
+</dl>
+
+<h2><a name="links">Recommended Reading</a></h2>
+<ul>
+  <li><a href="http://www.beyondlogic.org/usbnutshell/usb1.htm">USB in a NutShell</a> overview from Beyond Logic
+  <li><a href="http://en.wikipedia.org/wiki/Universal_Serial_Bus">Wikipedia article on Universal Serial Bus (USB)</a>
+  <li>Linux Kernel documentation for <a href="http://www.kernel.org/doc/Documentation/usb/acm.txt">USB ACM</a> and <a href="http://www.kernel.org/doc/Documentation/usb/usb-serial.txt">USB Serial</a>
+  <li>STMicro documentation for STM32F103RB microcontroller:<ul>
+    <li><a href="http://www.st.com/mcu/devicedocs-STM32F103RB-110.html">All</a>
+    <li><a href="http://www.st.com/stonline/products/literature/ds/13587.pdf">Datasheet (pdf)</a>
+    <li><a href="http://www.st.com/stonline/products/literature/rm/13902.pdf">Reference Manual (pdf)</a>
+    </ul>
+</ul>
+
+
+<div class="box">
+<h3><i>About this Document</i></h3>
+A more recent version of this document may be available from the 
+<a href="http://leaflabs.com">LeafLabs website</a>. Our documentation is
+versioned on <a href="http://github.com">github</a>; you can track changes
+to the master branch at <a href="http://github.com/leaflabs/maple-ide/tree/master/build/shared/reference/">this link</a>.
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<img alt="Creative Commons License" style="border-width:0" 
+    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+<br /><i>This documentation is released under a 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+Creative Commons Attribution-Share Alike 3.0</a> license.</i>
+<p>
+Translations are welcomed; give us a ping to make sure we aren't in the
+process of revising or editing first.
+</div>
+<!-- ENDDOC -->
+</body></html>

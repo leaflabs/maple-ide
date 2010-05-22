@@ -10,12 +10,6 @@
  
  */
 
-#include "wiring.h"
-#include "HardwareSerial.h"
-#include "HardwareUsb.h"
-#include <math.h>
-#include "usb.h"
-
 #define LED_PIN 13
 #define PWM_PIN  2
 

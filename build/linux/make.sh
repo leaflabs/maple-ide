@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DIST_ARCHIVE=maple-ide-deps-linux-0018.tar.gz
-DIST_URL=http://static.leaflabs.net/pub/leaflabs/maple-ide-deps/
+DIST_URL=http://static.leaflabs.com/pub/leaflabs/maple-ide-deps/
 
 ### -- SETUP DIST FILES ----------------------------------------
 
@@ -49,13 +49,15 @@ else
   cp ../../app/lib/ecj.jar work/lib/
   cp ../../app/lib/jna.jar work/lib/
   cp ../../app/lib/oro.jar work/lib/
-  cp ../../app/lib/RXTXcomm.jar work/lib/
+  #cp ../../app/lib/RXTXcomm.jar work/lib/
 
   echo Copying examples...
   cp -r ../shared/examples work/
 
   #echo Extracting reference...
   #unzip -q -d work/ ../shared/reference.zip
+  echo Copying reference...
+  cp -r ../shared/reference work/
 
   cp -r dist/tools work/hardware/
 
@@ -71,10 +73,12 @@ else
   if [ $ARCH = "i686" ]
   then
     echo Using 32-bit librxtxSerial.so
-    cp dist/lib/librxtxSerial.so work/lib/librxtxSerial.so
+    cp dist/lib/librxtxSerial.so.i386 work/lib/librxtxSerial.so
+    cp dist/lib/RXTXcomm.jar.i386 work/lib/RXTXcomm.jar
   else 
     echo Using 64-bit librxtxSerial.so
     cp dist/lib/librxtxSerial.so.x86_64 work/lib/librxtxSerial.so
+    cp dist/lib/RXTXcomm.jar.x86_64 work/lib/RXTXcomm.jar
   fi
 fi
 

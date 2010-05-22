@@ -62,6 +62,15 @@ Windows build requirements:
  - a cygwin build environment (see the arduino build docs)
  - TODO
 
+Notes on RXTX
+------------------------------------------------------------------------------
+We have recompiled the RXTX Java libraries for linux so that they will detect
+ACM devices. We took the rxtx-2.2pre2 source code and simply added a "ttyACM"
+prefix entry everywhere we found a "ttyUSB" entry. We also disabled printer
+port support (this reduces the jar file size?):
+
+    $ ./configure  --disable-PRINTER
+    $ make
 
 Changes from stock arduino codebase
 ------------------------------------------------------------------------------

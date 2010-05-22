@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>Maple Reference Documentation</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<link rel="stylesheet" href="minimal.css" type="text/css">
+</head><body> 
+<!-- minimalist html; this is designed to be copy/pasted into a website -->
+<!-- STARTDOC -->
+<h1>Maple Hardware Errata and Failure Modes</h1>
+<p>
+This page is a collection of known issues and warnings for each revision of
+the Maple board. The failure modes aren't design errors, but are easy ways
+to break or damage your board permanently. For a list of differences between
+the Maple and Arduinos, see the page on <a
+href="./compatability.html">compatability</a>.
+
+<ul>
+  <li><a href="#rev3">Maple Board rev3</a>
+  <li><a href="#rev1">Maple Board rev1</a>
+</ul>
+
+<h2><a name="rev3">Maple Board rev3</a></h2>
+<p>This batch of boards went on sale in May 2010. They have a darker red
+silkscreen and the "infinity-leaf" logo.
+<p>Known design errors:
+<ul>
+  <li><span style="color:red;">Resistors on D0, D1: </span> these header pins,
+  which are RX/TX on USART2 ("Serial2"), have resistors in-line between the
+  STM32 and the headers. These resistors increase the immpedence of the lines
+  for ADC reads and affect the open drain GPIO functionality of the pins. These
+  resistors were accidentally copied over from older Arduino USB designs, where
+  they appear to protect the USB-Serial converter from TTL voltage on the
+  headers.
+
+</ul>
+<p>Potential failure modes:
+<ul>
+  <li><span style="color:orange;">TTL voltage on non-tolerant pins: </span> 
+  not all header pins are 5v compatible; connecting certain serial devices
+  in the wrong way could over voltage the pins.
+</ul>
+<h2><a name="rev1">Maple Board rev1</a></h2>
+<p>
+This batch of 100 boards shipped in later 2009. They have a red silkscreen and
+the logo is a single pixelated leaf.
+
+<p>Issues:
+<ul>
+  <li><span style="color:red;">ADC noise: </span> generally very high, in
+  particular when the USB port is being used for communications (including
+  keep-alive pings when connected to a computer).  This issue was resolved in
+  rev3 with a 4-layer design and a geometricaly isolated ADC Vref plane.
+
+  <li><span style="color:red;">Resistors on D0, D1: </span> these header pins,
+  which are RX/TX on USART2 ("Serial2"), have (TODO) Ohm in-line. These 
+  resistors increase the immpedence of the lines for ADC reads and affect the
+  open drain GPIO functionality of the pins. These resistors were accidentally
+  copied over from older Arduino USB designs, where they appear to protect the
+  USB-Serial converter from TTL voltage on the headers.
+</ul>
+
+<div class="box">
+<h3><i>About this Document</i></h3>
+A more recent version of this document may be available from the 
+<a href="http://leaflabs.com">LeafLabs website</a>. Our documentation is
+versioned on <a href="http://github.com">github</a>; you can track changes
+to the master branch at <a href="http://github.com/leaflabs/maple-ide/tree/master/build/shared/reference/">this link</a>.
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<img alt="Creative Commons License" style="border-width:0" 
+    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+<br /><i>This documentation is released under a 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+Creative Commons Attribution-Share Alike 3.0</a> license.</i>
+<p>
+Translations are welcomed; give us a ping to make sure we aren't in the
+process of revising or editing first.
+</div>
+<!-- ENDDOC -->
+</body></html>

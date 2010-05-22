@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>Maple Reference Documentation</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<link rel="stylesheet" href="minimal.css" type="text/css">
+</head><body> 
+<!-- minimalist html; this is designed to be copy/pasted into a website -->
+<!-- STARTDOC -->
+<h1>Maple Reference Documentation: PWM</h1>
+<p>
+Pulse Width Modulatiom is a basic technique to create repeated square waves
+(digital high/low voltage transitions) of user defined length and duty cycle.
+It can be used as a way to encode an "analog" signal on a single 
+digital (high/low) line using the time between transitions ("pulse width") 
+as the variable; this technique is commonly used to send servo position 
+and motor speed commands. Another use is to use to the ratio of "high" and
+"low" time to approximate a voltage output; this technique can be used to
+dim an LED or even (with careful filtering) generate audio waveforms. 
+
+<ul>
+  <li><a href="#overview">Overview</a>
+  <li><a href="#background">Background</a>
+  <li><a href="#functions">Function Reference</a>
+  <li><a href="#links">Recommended Reading</a>
+</ul>
+
+<h2><a name="overview">Overview</a></h2>
+<p>
+The Maple has a large number of 16-bit PWM outputs, each connected to one of 4
+timers. Some configuration, such as the clock rate or prescaling, must be
+common to the entire timer. 
+<p>
+Note that unlike the Arduino, the Maple does not have PWM functionality on
+pin D10; all other pins are <a href="./compatability.html">compatible</a>. 
+
+<table>
+  <tr><th>Timer <th>PWM Headers
+  <tr><td>1     <td>D6,D7,D8,D31,D32,D33,D34
+  <tr><td>2     <td>D0,D1,D2,D3
+  <tr><td>3     <td>D11,D12,D25,D27,D28
+  <tr><td>4     <td>D5,D9,D14,D24
+</table>
+
+<h2><a name="background">Background</a></h2>
+<p>
+In it's simplest form the device is a single counter with two variables. The
+counter starts at zero and the output starts at "high". The counter increments
+every clock cycle until it reaches the first variable number, at which point
+the output goes "low". The counter continues incrementing until it reaches the
+second variable at which point the output goes "high" again and the counter
+resets to zero. 
+
+<p>
+This simple functionality could be approximated in software by setting a GPIO
+high or low, but the beauty of PWM is that the usercode simply has to configure
+the device and set the two variables and the device will function on it's own;
+no further microprocessor cycles will be consumed. 
+
+<p>
+The Maple has 16-bit PWM resolution, which means that the counter and variables
+can go up to 65535, as opposed to 255 with 8-bit resolution. With a 72MHz 
+clock rate, a PWM output would have maximum duty cycle of about one millisecond;
+using a prescaler acts as a clock divider in front of the counter and can
+increase this maximum duty cycle (eg, an 8x prescaler would result in around an
+8ms maximum duty cycle). Note that the resolution is also effectively limited
+by the duty variable set by the user. 
+
+<p>
+Here are some commonly used PWM configurations (note: double check our math!):
+
+<table>
+  <tr><th>Purpose<th>Period (ms)<th>High (ms)<th>Prescaler<th>Period
+  <tr><td>LED Throb
+      <td>0.020ms
+      <td>0 to 0.020ms
+      <td>1 (none)
+      <td>0 to 767
+  <tr><td>Servo Control
+      <td>20ms
+      <td>1.25 (0deg) <br>1.50ms (90deg) <br>1.75 (180deg)
+      <td>21 <br>21 <br>21
+      <td>4096 <br>4915 <br>5734
+</table>
+
+<h2><a name="functions">Function Reference</a></h2>
+<dl>
+  <dt><code>setMode(pin_num, PWM)</code>
+  <dd>This command is usually called from <code>setup()</code> to tell the
+  microcontroller that <code>pin_num</code> should be configured to PWM output.
+
+  <dt><code>timer_init(port, prescaler)</code>
+  <dd>Currently this low level libmaple function is the only way to change
+  the prescaler for a timer. Find the appropriate timer for a given PWM 
+  header using the table above, then set the prescaler. This function would
+  normally be called once from <code>setup()</code>, but the time can be
+  "reinitialized" with a new prescaler at any time. The default prescaler is
+  1 (eg, no prescaling). 
+
+  <dt><code>pwmWrite()</code>
+  <dd>This command sets the first (lower) PWM variable. Usercode must manage
+  the appropriate maximum accepted value (based on the configured duty) on it's
+  own.
+</dl>
+
+<h2><a name="links">Recommended Reading</a></h2>
+
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/Pulse-width_modulation">
+      Wikipedia Article on Pulse-width modulation</a>
+  <li><a href="http://www.arduino.cc/en/Tutorial/PWM">
+      Arduino tutorial on PWM</a>
+  <li>"<a href="http://www.arcfn.com/2009/07/secrets-of-arduino-pwm.html">
+     Secrets of Arduino PWM</a>" by Ken Shirriff
+  <li>STMicro documentation for STM32F103RB microcontroller:<ul>
+    <li><a href="http://www.st.com/mcu/devicedocs-STM32F103RB-110.html">All</a>
+    <li><a href="http://www.st.com/stonline/products/literature/ds/13587.pdf">Datasheet (pdf)</a>
+    <li><a href="http://www.st.com/stonline/products/literature/rm/13902.pdf">Reference Manual (pdf)</a>
+    </ul>
+</ul>
+
+<div class="box">
+<h3><i>About this Document</i></h3>
+A more recent version of this document may be available from the 
+<a href="http://leaflabs.com">LeafLabs website</a>. Our documentation is
+versioned on <a href="http://github.com">github</a>; you can track changes
+to the master branch at <a href="http://github.com/leaflabs/maple-ide/tree/master/build/shared/reference/">this link</a>.
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<img alt="Creative Commons License" style="border-width:0" 
+    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+<br /><i>This documentation is released under a 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+Creative Commons Attribution-Share Alike 3.0</a> license.</i>
+<p>
+Translations are welcomed; give us a ping to make sure we aren't in the
+process of revising or editing first.
+</div>
+<!-- ENDDOC -->
+</body></html>

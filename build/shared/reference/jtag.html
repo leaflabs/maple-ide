@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>Maple Reference Documentation</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<link rel="stylesheet" href="minimal.css" type="text/css">
+</head><body> 
+<!-- minimalist html; this is designed to be copy/pasted into a website -->
+<!-- STARTDOC -->
+<h1>Maple Reference Documentation: JTAG</h1>
+<p>
+JTAG is an interface for low-level debugging of digital devices. It gives 
+instruction by instruction control over the microprocessor and allows data
+to be read and written to arbitrary memory and register locations. It is 
+typically used with a debugging tool like gdb when hacking low level routines
+and hardware peripherals (we use it when working on libmaple) or to flash
+a new bootloader.
+
+<p>
+Note that the stm32 on the Maple has a built-in low level serial debugger which
+could also be used to flash bootloaders, and that the ASSERT framework allows
+basic debugging over a USART serial channel; we expect only advanced users
+who already have a JTAG device would want to use this feature.
+
+<ul>
+  <li><a href="#wiring">Wiring Diagram</a>
+  <li><a href="#devices">Compatible Devices</a>
+  <li><a href="#links">Recommended Reading</a>
+</ul>
+
+
+<h2><a name="wiring">Wiring Diagram</a></h2>
+<div class="centerimg">
+<img src="./img/jtag-wiring.png" style="border: 2px black solid;"><p>
+JTAG wiring diagram to connect a standard 20-pin ARM JTAG device to the 8-pin
+JTAG port on the Maple.
+</div>
+<p>
+The Maple has holes for a 8-pin JTAG header but that header is not soldered on
+by default. If you know ahead of time that you'll be needing it, and you order
+straight from LeafLabs, add a comment to your order and we can probably
+solder one on for no charge. Otherwise you can simply attach standard 0.1"
+pitch male header pins (either the exact 4x2 block or two 4-pin pieces of 
+breakaway straight header). For one-off usage hack the header can be jammed in
+the holes and twisted to ensure electrical contact: this is what we do to flash
+our bootloader. 
+
+<p>
+The following schematic assumes that the header has been soldered on to the
+<i>bottom</i> of the board, not the top; most ribbon cable connectors will
+interfere with the power header. If you don't want a header comming off the
+bottom you can use a slim connector and invert this diagram appropriately.
+
+<h2><a name="devices">Compatable Devices</a></h2>
+<p>
+We have had good experience with the Olimex ARM-USB-OCD device, which costs
+about 55 euro plus shipping (<a
+href="http://www.olimex.com/dev/arm-usb-ocd.html">
+http://www.olimex.com/dev/arm-usb-ocd.html</a>).
+
+<p>
+If you have success with something else let us know!
+
+<h2><a name="links">Recommended Reading</a></h2>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/Joint_Test_Action_Group">Wikipedia
+  Article on Joint Test Action Group (JTAG)</a>
+  <li><a href="http://fun-tech.se/stm32/OpenOCD/gdb.php">STM32/gdb/OpenOCD HOWTO</a>
+  <li>STMicro documentation for STM32F103RB microcontroller:<ul>
+    <li><a href="http://www.st.com/mcu/devicedocs-STM32F103RB-110.html">All</a>
+    <li><a href="http://www.st.com/stonline/products/literature/ds/13587.pdf">Datasheet (pdf)</a>
+    <li><a href="http://www.st.com/stonline/products/literature/rm/13902.pdf">Reference Manual (pdf)</a>
+    </ul>
+</ul>
+
+<div class="box">
+<h3><i>About this Document</i></h3>
+A more recent version of this document may be available from the 
+<a href="http://leaflabs.com">LeafLabs website</a>. Our documentation is
+versioned on <a href="http://github.com">github</a>; you can track changes
+to the master branch at <a href="http://github.com/leaflabs/maple-ide/tree/master/build/shared/reference/">this link</a>.
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<img alt="Creative Commons License" style="border-width:0" 
+    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+<br /><i>This documentation is released under a 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+Creative Commons Attribution-Share Alike 3.0</a> license.</i>
+<p>
+Translations are welcomed; give us a ping to make sure we aren't in the
+process of revising or editing first.
+</div>
+<!-- ENDDOC -->
+</body></html>

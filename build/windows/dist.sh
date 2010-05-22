@@ -58,7 +58,7 @@ cp -r ../shared/examples arduino/
 #echo Extracting reference...
 #unzip -q -d arduino/ ../shared/reference.zip
 
-cp -r dist/tools/avr arduino/hardware/tools/avr
+#cp -r dist/tools/avr arduino/hardware/tools/avr
 cp -r dist/tools/arm arduino/hardware/tools/arm
 #unzip -q -d arduino/hardware/tools/arm arm.zip
 cp dist/dfu-util.exe arduino/hardware/tools/arm/bin
@@ -69,7 +69,7 @@ cp dist/dfu-util.exe arduino/ # TODO: both places?
 cp -r dist/java arduino/java
 
 # get platform-specific goodies from the dist dir
-cp launcher/arduino.exe arduino/maple-ide.exe
+cp launcher/maple-ide.exe arduino/maple-ide.exe
 
 # grab pde.jar and export from the working dir
 cp work/lib/pde.jar arduino/lib/
@@ -102,7 +102,7 @@ find arduino -name ".svn" -exec rm -rf {} ';' 2> /dev/null
 # zip it all up for release
 echo Packaging standard release...
 echo
-P5=arduino-$RELEASE
+P5=maple-ide-$RELEASE
 mv arduino $P5
 zip -rq $P5.zip $P5
 # nah, keep the new directory around
@@ -110,12 +110,12 @@ zip -rq $P5.zip $P5
 
 # zip up another for experts
 #echo Expert release is disabled until further notice.
-echo Packaging expert release...
-echo
-cp -a $P5 $P5-expert
+#echo Packaging expert release...
+#echo
+#cp -a $P5 $P5-expert
 # remove enormous java runtime
-rm -rf $P5-expert/java
-zip -rq $P5-expert.zip $P5-expert
+#rm -rf $P5-expert/java
+#zip -rq $P5-expert.zip $P5-expert
 
 echo Done.
 

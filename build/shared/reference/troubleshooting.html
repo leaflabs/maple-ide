@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>Maple Reference Documentation</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<link rel="stylesheet" href="minimal.css" type="text/css">
+</head><body> 
+<!-- minimalist html; this is designed to be copy/pasted into a website -->
+<!-- STARTDOC -->
+<h1>Maple Reference Documentation: Troubleshooting</h1>
+
+<ul>
+  <li><a href="#hardware">Hardware Problems</a>
+    <ul>
+    <li>The status LED is throbing and I can't upload my program!
+    <li>My board is bricked! I can't upload via the bootloader no matter what!
+    <li>My 5v peripheral doesn't work! (I2C, SPI, USART, etc)</li>
+    </ul>
+  <li><a href="#installation">Installation Problems</a>
+    <ul>
+    <li>I don't have root/administrator access!
+    <li>[Linux] I don't use udev!
+    </ul>
+  <li><a href="#ide">IDE Problems</a>
+    <ul>
+    <li>[Mac OSX] The "Board" and "Serial Port" menu items are missing!
+    </ul>
+  <li><a href="#compiler">Common Compiler Problems</a>
+    <ul>
+    <li><code>NullPointerException</code>
+    <li><code>undefined reference to `setup()'</code>
+    <li><code>error: 'Serial' was not declared in this scope</code>
+    </ul>
+  <li><a href="#upload">Common Upload Problems</a>
+    <ul>
+    <li>My program is too large!
+    <li>I have multiple Maples installed; how do I know which one will get flashed?
+    </ul>
+  <li><a href="#cli">Command Line Issues</a>
+    <ul>
+    <li>My flash programs don't seem to stick; they behave like they are RAM!
+    </ul>
+</ul>
+
+
+<h2><a name="hardware">Hardware Problems</a></h2>
+<dl>
+  <dt><a name="hw1">The status LED is throbing and I can't upload my
+      program!</a> 
+  <dd>The LED throbs when there has been a failed software assertion.  You can
+  still reprogram by resetting the board and uploading during the short window
+  when the bootloader waits for a program. To make this window longer (it can
+  be hard to get the timing right), hit the reset and then tap the bootloader
+  button (make sure you aren't holding the bootloader button when the reset
+  button is released or it will enter serial bootloader mode; if you tap
+  afterwards it will stay in the USB bootloader window indefinately).
+
+  <dt><a name="hw2">My board is bricked! I can't upload via the bootloader no matter what!</a>
+  <dd> Use the hardcoded serial stm32 serial bootloader to reflash the
+  bootloader.  
+  <dd>If it really is bricked and you think it's our fault contact us!
+
+  <dt><a name="hw3">My 5v peripheral doesn't work! (I2C, SPI, USART, etc)</a>
+  <dd>Yup, the Maple is a 3.3v board. You may need to use a level converter.
+  See the <a href="./compatability.html">compatability</a>, <a
+  href="./gpio.html">GPIO</a>, or other feature specific documentation for more
+  information.
+</dl>
+
+<h2><a name="installation">Installation Problems</a></h2>
+<dl>
+  <dt><a name="in1">I don't have root/administrator access!</a>
+  <dd> There are probably hacks or work-arounds to getting programs uploaded
+  without higher level system permissions. If you can access usb character
+  devices (ACM or ttyUSB style) you should be able to communicate with the
+  Maple and reprogram using an FTDI converter and the serial bootloader, but we
+  haven' tried and don't have a guide written up. 
+
+  <dt><a name="in2">[Linux] I don't use udev!</a>
+  <dd>There is probably a simple way to get autoconfiguration working with
+  devfs; in the meanwhile you could try running the entire IDE as root.  </dl>
+</dl>
+
+<h2><a name="ide">IDE Problems</a></h2>
+<dl>
+  <dt><a name="ide">[Mac OSX] The "Board" and "Serial Port" menu items are missing!</a>
+  <dd>Sometimes this happens if you try to compile or upload without having a
+  board selected; the work-around is to restart the IDE. Mysterious!
+</dl>
+
+<h2><a name="compiler">Common Compiler Problems</a></h2>
+<dl>
+  <dt><a name="compile1"><code>NullPointerException</code></a>
+  <dd>A classic! Make sure you have selected a board from the pulldown menu.
+  <dt><a name="compile2"><code>undefined reference to `setup()'</code></a>
+  <dd>Your sketch/program either does not include a setup function or it is
+  not found by the compiler. Your program must include both  
+  <code>void setup()</code> and <code>void loop()</code> functions; they don't
+  have to do anything, but they have to be there. You can start with an example
+  program (such as Examples &gt; Stubs &gt; BareMinimum) to get the basic 
+  structure. See also the <a href="/docs/maple-ide/language/">language docs</a>.
+  <br>This is a common error when your entire sketch is blank.  
+  <dt><a name="compile3"><code>error: 'Serial' was not declared in this scope</code></a>
+  <dd>The classic Arduino has only one USART device and uses the unique name
+  "Serial" to control it. Larger devices like the Arduino Mega and the Maple
+  have multiple USARTS refered to as Serial1, Serial2, etc. You probably want
+  Serial2 on the Maple; that's the one connected to pins D0 and D1. See also
+  the <a href="/docs/maple/usart/">USART docs</a>.
+</dl>
+
+<h2><a name="upload">Common Upload Problems</a></h2>
+<dl>
+  <dt><a name="up1">My program is too large!</a>
+  <dd>First, make sure you're using the FLASH target instead of RAM; there is
+  serveral times more FLASH memory available for user programs. 
+  <dt><a name="up2"><code>No DFU capable USB device found</code>
+  <dd>This probably means you don't have a Maple plugged in or powered on!
+  <dt><a name="up3">I have multiple Maples installed; how do I know which one will get flashed?</a>
+  <dd>Because the Maple IDE uses DFU to upload programs, you can't select a
+  particular Maple from the Serial Port menu to upload to a particular board.
+  There's no solution to this problem for now: you'll have to just plug in 
+  the Maples one at a time. If this is a real problem let us know and we'll
+  see if we can come up with a quick solution.
+</dl>
+
+<h2><a name="cli">Command Line Issues</a></h2>
+<dl>
+  <dt><a name="cli1">My flash programs don't seem to stick; they behave like they are RAM!</a>
+  <dd> Make sure you "<code>make clean</code>" when switching between FLASH and
+  RAM targets; make isn't smart enough to rebuild everything that needs to be
+  for the new target.
+</dl>
+
+<div class="box">
+<h3><i>About this Document</i></h3>
+A more recent version of this document may be available from the 
+<a href="http://leaflabs.com">LeafLabs website</a>. Our documentation is
+versioned on <a href="http://github.com">github</a>; you can track changes
+to the master branch at <a href="http://github.com/leaflabs/maple-ide/tree/master/build/shared/reference/">this link</a>.
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<img alt="Creative Commons License" style="border-width:0" 
+    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+<br /><i>This documentation is released under a 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+Creative Commons Attribution-Share Alike 3.0</a> license.</i>
+<p>
+Translations are welcomed; give us a ping to make sure we aren't in the
+process of revising or editing first.
+</div>
+<!-- ENDDOC -->
+</body></html>

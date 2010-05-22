@@ -1754,37 +1754,36 @@ public class Base {
   }
 
   static public void showGettingStarted() {
-    if (Base.isMacOS()) {
-      Base.showReference("Guide_MacOSX.html");
-    } else if (Base.isWindows()) {
-      Base.showReference("Guide_Windows.html");
-    } else {
-      Base.openURL("http://www.arduino.cc/playground/Learning/Linux");
-    }
+    Base.showReference("quickstart.html");
   }
 
   static public void showReference() {
-    showReference("index.html");
+    //Base.openURL("http://www.leaflabs.com/docs/maple-ide/language/");
+    showReference("language.html");
   }
 
 
   static public void showEnvironment() {
-    showReference("Guide_Environment.html");
+    //Base.openURL("http://www.leaflabs.com/docs/maple-ide/");
+    showReference("index.html");
   }
 
 
   static public void showPlatforms() {
-    showReference("environment" + File.separator + "platforms.html");
+    Base.openURL("http://www.leaflabs.com/docs/maple-ide/");
+    //showReference("environment" + File.separator + "platforms.html");
   }
 
 
   static public void showTroubleshooting() {
-    showReference("Guide_Troubleshooting.html");
+    //Base.openURL("http://www.leaflabs.com/docs/maple-ide/troubleshooting/");
+    showReference("troubleshooting.html");
   }
 
 
   static public void showFAQ() {
-    showReference("faq.html");
+    //Base.openURL("http://www.leaflabs.com/docs/");
+    showReference("troubleshooting.html");
   }
   
 

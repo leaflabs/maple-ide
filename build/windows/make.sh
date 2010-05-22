@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DIST_ARCHIVE=maple-ide-deps-windows-0018.tar.gz
-DIST_URL=http://static.leaflabs.net/pub/leaflabs/maple-ide-deps/
+DIST_URL=http://static.leaflabs.com/pub/leaflabs/maple-ide-deps/
 
 ### -- SETUP DIST FILES ----------------------------------------
 
@@ -61,8 +61,8 @@ else
   #echo Extracting reference...
   #unzip -q -d work/ ../shared/reference.zip
 
-  echo Copying avr tools...
-  cp -r dist/tools/avr work/hardware/tools/avr
+  #echo Copying avr tools...
+  #cp -r dist/tools/avr work/hardware/tools/avr
   #unzip -q -d work/hardware/ avr_tools.zip
 
   echo Copying arm tools...
@@ -83,7 +83,7 @@ else
   # cd head_src/gui_head && make -f Makefile.win
   cd launcher
   USERPROFILE=../work/ ../work/java/bin/java -jar launch4j/launch4j.jar config.xml
-  cp arduino.exe ../work/maple-ide.exe
+  cp maple-ide.exe ../work/maple-ide.exe
   cd ..
 
   # chmod +x the crew

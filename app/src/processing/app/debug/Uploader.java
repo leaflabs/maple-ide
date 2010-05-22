@@ -45,7 +45,7 @@ import gnu.io.*;
 
 public abstract class Uploader implements MessageConsumer  {
   static final String BUGS_URL =
-    "https://developer.berlios.de/bugs/?group_id=3590";
+    "https://github.com/leaflabs/maple-ide/issues";
   static final String SUPER_BADNESS =
     "Compiler error, please submit this code to " + BUGS_URL;
 
@@ -209,7 +209,7 @@ public abstract class Uploader implements MessageConsumer  {
     if (s.indexOf("Programmer is not responding") != -1 ||
         s.indexOf("programmer is not responding") != -1 ||
         s.indexOf("protocol error") != -1) {
-      exception = new RunnerException("Problem uploading to board.  See http://www.arduino.cc/en/Guide/Troubleshooting#upload for suggestions.");
+      exception = new RunnerException("Problem uploading to board.  See http://www.leaflabs.com/docs/maple-ide/troubleshooting/ for suggestions.");
       return;
     }
     if (s.indexOf("Expected signature") != -1) {

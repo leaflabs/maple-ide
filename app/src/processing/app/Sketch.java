@@ -1411,7 +1411,12 @@ public class Sketch {
     // compile the program. errors will happen as a RunnerException
     // that will bubble up to whomever called build().
     Compiler compiler;
-    String buildUsing = Base.getBoardPreferences().get("build.using");
+    String buildUsing;
+    try {
+        buildUsing = Base.getBoardPreferences().get("build.using");
+    } catch (NullPointerException npe) {
+        throw new RunnerException("No board selected, please choose one from the Tools menu.");
+    }
     if (buildUsing == null) {
       // fall back on global prefs
       buildUsing = Preferences.get("build.using");
@@ -1486,7 +1491,13 @@ public class Sketch {
   protected void size(String buildPath, String suggestedClassName)
     throws RunnerException {
     long size = 0;
-    long maxsize = Integer.parseInt(Base.getBoardPreferences().get("upload.maximum_size"));
+    long maxsize;
+
+    try {
+        maxsize = Integer.parseInt(Base.getBoardPreferences().get("upload.maximum_size"));
+    } catch (NullPointerException npe) {
+        throw new RunnerException("No board selected, please choose one from the Tools menu.");
+    }
 
     String buildUsing = Base.getBoardPreferences().get("build.using");
     if (buildUsing == null) {
@@ -1518,8 +1529,12 @@ public class Sketch {
     Uploader uploader;
 
     // download the program
-    //
-    String uploadProgram = Base.getBoardPreferences().get("upload.uploader");
+    String uploadProgram;
+    try {
+      uploadProgram = Base.getBoardPreferences().get("upload.uploader");
+    } catch (NullPointerException npe) {
+      throw new RunnerException("No board selected, please choose one from the Tools menu.");
+    }
 
     if (uploadProgram == null) {
       uploadProgram = Preferences.get("upload.uploader");

@@ -45,7 +45,12 @@ public class AvrdudeUploader extends Uploader  {
   public boolean uploadUsingPreferences(String buildPath, String className, boolean verbose)
   throws RunnerException {
     this.verbose = verbose;
-    Map<String, String> boardPreferences = Base.getBoardPreferences();
+    Map<String, String> boardPreferences;
+    try {
+        boardPreferences = Base.getBoardPreferences();
+    } catch (NullPointerException npe) {
+        throw new RunnerException("No board selected, please choose one from the Tools menu.");
+    }
     String uploadUsing = boardPreferences.get("upload.using");
     if (uploadUsing == null) {
       // fall back on global preference
@@ -63,7 +68,12 @@ public class AvrdudeUploader extends Uploader  {
   
   private boolean uploadViaBootloader(String buildPath, String className)
   throws RunnerException {
-    Map<String, String> boardPreferences = Base.getBoardPreferences();
+    Map<String, String> boardPreferences;
+    try {
+        boardPreferences = Base.getBoardPreferences();
+    } catch (NullPointerException npe) {
+        throw new RunnerException("No board selected, please choose one from the Tools menu.");
+    }
     List commandDownloader = new ArrayList();
     String protocol = boardPreferences.get("upload.protocol");
     
@@ -119,7 +129,12 @@ public class AvrdudeUploader extends Uploader  {
   
   protected boolean burnBootloader(Collection params)
   throws RunnerException {
-    Map<String, String> boardPreferences = Base.getBoardPreferences();
+    Map<String, String> boardPreferences;
+    try {
+        boardPreferences = Base.getBoardPreferences();
+    } catch (NullPointerException npe) {
+        throw new RunnerException("No board selected, please choose one from the Tools menu.");
+    }
     List fuses = new ArrayList();
     fuses.add("-e"); // erase the chip
     fuses.add("-Ulock:w:" + boardPreferences.get("bootloader.unlock_bits") + ":m");
@@ -168,6 +183,13 @@ public class AvrdudeUploader extends Uploader  {
     List commandDownloader = new ArrayList();
     commandDownloader.add("avrdude");
 
+    Map<String, String> boardPreferences;
+    try {
+        boardPreferences = Base.getBoardPreferences();
+    } catch (NullPointerException npe) {
+        throw new RunnerException("No board selected, please choose one from the Tools menu.");
+    }
+
     // Point avrdude at its config file since it's in a non-standard location.
     if (Base.isLinux()) {
       // ???: is it better to have Linux users install avrdude themselves, in
@@ -186,7 +208,7 @@ public class AvrdudeUploader extends Uploader  {
       commandDownloader.add("-q");
       commandDownloader.add("-q");
     }
-    commandDownloader.add("-p" + Base.getBoardPreferences().get("build.mcu"));
+    commandDownloader.add("-p" + boardPreferences.get("build.mcu"));
     commandDownloader.addAll(params);
 
     return executeUploadCommand(commandDownloader);

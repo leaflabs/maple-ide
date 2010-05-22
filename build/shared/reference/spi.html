@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>Maple Reference Documentation</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<link rel="stylesheet" href="minimal.css" type="text/css">
+</head><body> 
+<!-- minimalist html; this is designed to be copy/pasted into a website -->
+<!-- STARTDOC -->
+<h1>Maple Reference Documentation: SPI</h1>
+
+<ul>
+  <li><a href="#functions">Function Reference</a>
+  <li><a href="#links">Recommended Reading</a>
+</ul>
+
+<p>
+The Maple has two SPI ports. The first has NSS on D10, MOSI on D11, MISO on D12,
+and SCK on D13. The second has NSS on D31, SCK on D32, MISO on D33, and MOSI on
+D34.
+
+<p>
+Each port can be configured at one of the following speeds:
+<ul>
+  <li>SPI_18MHZ
+  <li>SPI_9MHZ
+  <li>SPI_4_5MHZ
+  <li>SPI_2_25MHZ
+  <li>SPI_1_125MHZ
+  <li>SPI_562_500KHZ
+  <li>SPI_281_250KHZ
+  <li>SPI_140_625KHZ
+</ul>
+
+<h2><a name="functions">Funtion Reference</a></h2>
+
+<dl>
+  <dt><code>#include "HardwareSPI.h"</code><br>
+      <code>HardwareSPI Spi(port)</code><br>
+  <dd> This include and declaration must be included at the start of any sketch
+  or program that uses the SPI interface. The argument <code>number</code> is
+  either 1 or 2 and specifies which port to use. 
+
+  <dt><code>Spi.begin(freq, endianness, mode)</code><br>
+  <dd><code>begin()</code> is usually called in <code>setup()</code> to
+  configure the baudrate of the given SPI port and to set up the header pins
+  appropriately. <code>freq</code> is one of the set listed above; 
+  <code>endianness</code> is either <code>LSBFIRST</code> or 
+  <code>MSBFIRST</code>; for now <code>mode</code> is always 0.
+  
+  <dt><code>Spi.send(data, size()</code><br>
+  <dd> Writes data into the port buffer to be transmitted as soon as possible.
+  <code>data</code> should be an array of type <code>byte</code>; <code>size</code> should be the result of <code>sizeof(data)</code>.
+</dl>
+
+<h2><a name="links">Recommended Reading</a></h2>
+
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus">
+      Wikipedia Article on Serial Peripheral Interface Bus (SPI)</a>
+  <li><a href="http://www.arduino.cc/playground/Code/Spi">
+      Arduino reference on SPI</a>
+  <li><a href="http://klk64.com/arduino-spi/">Hardcore SPI on Arduino</a> by kik64
+  <li>STMicro documentation for STM32F103RB microcontroller:<ul>
+    <li><a href="http://www.st.com/mcu/devicedocs-STM32F103RB-110.html">All</a>
+    <li><a href="http://www.st.com/stonline/products/literature/ds/13587.pdf">Datasheet (pdf)</a>
+    <li><a href="http://www.st.com/stonline/products/literature/rm/13902.pdf">Reference Manual (pdf)</a>
+    </ul>
+</ul>
+
+<div class="box">
+<h3><i>About this Document</i></h3>
+A more recent version of this document may be available from the 
+<a href="http://leaflabs.com">LeafLabs website</a>. Our documentation is
+versioned on <a href="http://github.com">github</a>; you can track changes
+to the master branch at <a href="http://github.com/leaflabs/maple-ide/tree/master/build/shared/reference/">this link</a>.
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<img alt="Creative Commons License" style="border-width:0" 
+    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+<br /><i>This documentation is released under a 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+Creative Commons Attribution-Share Alike 3.0</a> license.</i>
+<p>
+Translations are welcomed; give us a ping to make sure we aren't in the
+process of revising or editing first.
+</div>
+<!-- ENDDOC -->
+</body></html>

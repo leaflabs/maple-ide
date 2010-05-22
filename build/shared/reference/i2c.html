@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>Maple Reference Documentation</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<link rel="stylesheet" href="minimal.css" type="text/css">
+</head><body> 
+<!-- minimalist html; this is designed to be copy/pasted into a website -->
+<!-- STARTDOC -->
+<h1>Maple Reference Documentation: i2c</h1>
+<div class="warningbox">
+<h3>Note</h3>
+The i2c interface is currently only available from the 'i2c' branch of libmaple
+in our <a href="http://github.com/leaflabs">github repositories</a>.
+</div>
+
+i2c is a crude and easy-to-hack serial protocol that requires only two 
+wires/channels for communication between many devices. Every message passed
+on the bus is between a Master (who initiates the message) and a Slave 
+device. Slaves are addressed using 7-bit addresses (up to 127 unique devices);
+10-bit addressing is possible but currently unimplented.  Every message 
+consists of an arbitrary combination of 8-bit reads and writes as requested by
+the Master; higher level functionality, such as reading a particular register
+value, is achieved by writing to set the memory location then reading to pull
+out the data. 
+
+<p>
+Note that the Master/Slave designation is on a message-by-message basis. The
+Maple can act as both a Master (messages initiated by user code) and Slave
+device (responding to requests via configurable interrupt handlers) at the same
+time. 
+
+<ul>
+  <li><a href="#hardware">Hardware/Circuit Design</a>
+  <li><a href="#functions">Function Reference</a>
+  <li><a href="#links">Recommended Reading</a>
+</ul>
+
+<h2><a name="hardware">Hardware/Circuit Design</a></h2>
+
+
+<p>
+The Maple has two i2c ports. Port 1 (i2c1) has SDA on header D9 and SCL on D5; 
+Port 2 (i2c2) has SDA on D30 and SCL on D29.
+
+<p>
+The Maple reliably communicates with up to a 400khz clock speed; this doesn't
+translate into a 400kilobit data rate except in extreme cases because of 
+addressing and protocol overhead. We have tested clock speeds up to a megahertz
+and have had mixed results; in theory it could be possible to achieve even 
+higher rates but signal quality degrades rapidly and the bus becomes 
+unreliable. 
+
+<p>
+Proper wiring and pullup resistor selection are essential when incorporating
+i2c into a circuit, especially with datarates above 100khz. In the lab we 
+usually use ~5k ohm resistors with Vcc (3.3v) as the high voltage and try to
+connect the pullup voltage as close to the SDA and SCL pins as possible. We
+recommend looking at the reference website listed below, starting with a slow
+clock rate (10khz), and if possible using an oscilloscope to debug any issues. 
+
+<h2><a name="functions">Function Reference</a></h2>
+
+<p>
+The function API for i2c is not finished! See the source code for now. 
+
+<h2><a name="smbus">SMBus</a></h2>
+
+<p>
+The stm32 microcontroller has hardware support for SMBus, we simply have not
+writen software for it. The SMBAL line for i2c1 is on header D4 and for i2c2 is
+on D31. 
+
+<h2><a name="links">Recommended Reading</a></h2>
+<ul>
+  <li><a href="http://www.i2c-bus.org/">i2c-bus.org</a>
+  <li><a href="http://en.wikipedia.org/wiki/I²C">Wikipedia Article on i2c</a>
+  <li><a href="http://www.arduino.cc/playground/Learning/I2C">Arduino i2c/TWI reference</a>
+  <li>STMicro documentation for STM32F103RB microcontroller:<ul>
+    <li><a href="http://www.st.com/mcu/devicedocs-STM32F103RB-110.html">All</a>
+    <li><a href="http://www.st.com/stonline/products/literature/ds/13587.pdf">Datasheet (pdf)</a>
+    <li><a href="http://www.st.com/stonline/products/literature/rm/13902.pdf">Reference Manual (pdf)</a>
+    <li><a href="http://www.st.com/stonline/products/literature/an/15021.pdf">Application Note on Advanced i2c Usage</a>
+  </ul>
+</ul>
+
+<div class="box">
+<h3><i>About this Document</i></h3>
+A more recent version of this document may be available from the 
+<a href="http://leaflabs.com">LeafLabs website</a>. Our documentation is
+versioned on <a href="http://github.com">github</a>; you can track changes
+to the master branch at <a href="http://github.com/leaflabs/maple-ide/tree/master/build/shared/reference/">this link</a>.
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<img alt="Creative Commons License" style="border-width:0" 
+    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+<br /><i>This documentation is released under a 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+Creative Commons Attribution-Share Alike 3.0</a> license.</i>
+<p>
+Translations are welcomed; give us a ping to make sure we aren't in the
+process of revising or editing first.
+</div>
+<!-- ENDDOC -->
+</body></html>

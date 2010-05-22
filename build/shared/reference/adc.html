@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>Maple Reference Documentation</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<link rel="stylesheet" href="minimal.css" type="text/css">
+</head><body> 
+<!-- minimalist html; this is designed to be copy/pasted into a website -->
+<!-- STARTDOC -->
+<h1>Maple Reference Documentation: ADC</h1>
+<p>
+Analog-Digital Conversion is the process of reading a physical voltage as a
+number. The Maple has a large number of pins which are capable of taking
+12-bit ADC measurements, which means that voltages from ground to +3.3v are
+read as numbers from 0 to 4095; this corresponds to a theoretical 
+sensitivity of just under 1 milivolt. In reality, a number of factors
+introduce noise and bias into this reading and a number of techniques must
+be used to get good precision and accuracy.
+<p>
+Header pins with ADC functionality (marked as "AIN" on the silkscreen):
+<pre>
+D0,D1,D2,D3,D10,D11,D12,D13,D15,D16,D17,D18,D19,D20,D27,D28
+</pre>
+
+<ul>
+  <li><a href="#noise">Noise and Bias</a>
+  <li><a href="#functions">Function Reference</a>
+  <li><a href="#links">Recommended Reading</a>
+</ul>
+
+<h2><a name="noise">Noise and Bias</a></h2>
+
+<p>
+The biggest issues with analog-digital conversion are noise and bias. With the
+Maple we have tried to isolate the ADC pins and traces from strong noise 
+sources but there are always tradeoffs between noise, additional functionality,
+cost, and package size. 
+
+<p>
+The 6 ADC pins in a bank (D15-D20) generally have the least noise and should
+be used for fine measurements. If the input voltage is relatively slow to 
+change, a number of samples can be taken in succession and averaged together,
+or the same voltage can even be sampled by multiple ADC pins at the same time. 
+
+<p>
+An important factor when taking a voltage reading is the reference voltages
+that the sample is being compared against. In the case of the Maple, the
+high reference is Vcc and the low reverence is ground: this means that noise
+or fluctations on either Vcc or ground will effect the measurement. It also
+means that the voltage you are trying to sample must be between ground and
+3.3v. In the case of a variable reading, it is best if the voltage varies
+over the entire range of 0-3.3v; otherwise only a fraction of the sensitivity
+is being leveraged. Resistor dividers and consant voltage diodes are basic
+tools which can help bring a given voltage signal into the appropriate range;
+opamps and other powered components can also be used. 
+
+<h2><a name="functions">Funtion Reference</a></h2>
+
+<dl>
+  <dt><code>pinMode(pin_num, INPUT_ANALOG)</code>
+  <dd>This function is usually called from <code>setup()</code> to configure
+  the pin hardware for analog sampling.
+
+  <dt><code>analogRead(pin_num)</code>
+  <dd>Returns the voltage read as a number with 4095 corresponding to Vref
+  (about 3.3v) and 0 corresponding to ground.
+</dl>
+
+<h2><a name="links">Recommended Reading</a></h2>
+
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/Analog-to-digital_converter">Wikipedia article on Analog-to-digital converter</a>
+  <li><a href="http://arduino.cc/en/Tutorial/AnalogInputPins">Arduino Analog Input Tutorial</a> 
+  <li>STMicro documentation for STM32F103RB microcontroller:<ul>
+    <li><a href="http://www.st.com/mcu/devicedocs-STM32F103RB-110.html">All</a>
+    <li><a href="http://www.st.com/stonline/products/literature/ds/13587.pdf">Datasheet (pdf)</a>
+    <li><a href="http://www.st.com/stonline/products/literature/rm/13902.pdf">Reference Manual (pdf)</a>
+    <li><a href="http://www.st.com/stonline/products/literature/an/16840.pdf">Application Note on ADC Modes (pdf)</a>
+    <li><a href="http://www.st.com/stonline/products/literature/an/14183.pdf">Application Note on ADC Oversampling (pdf)</a>
+  </ul>
+</ul>
+
+<div class="box">
+<h3><i>About this Document</i></h3>
+A more recent version of this document may be available from the 
+<a href="http://leaflabs.com">LeafLabs website</a>. Our documentation is
+versioned on <a href="http://github.com">github</a>; you can track changes
+to the master branch at <a href="http://github.com/leaflabs/maple-ide/tree/master/build/shared/reference/">this link</a>.
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<img alt="Creative Commons License" style="border-width:0" 
+    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+<br /><i>This documentation is released under a 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+Creative Commons Attribution-Share Alike 3.0</a> license.</i>
+<p>
+Translations are welcomed; give us a ping to make sure we aren't in the
+process of revising or editing first.
+</div>
+<!-- ENDDOC -->
+</body></html>

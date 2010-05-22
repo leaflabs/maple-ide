@@ -43,7 +43,12 @@ public class Sizer implements MessageConsumer {
   }
   
   public long computeSize() throws RunnerException {
-    String buildUsing = Base.getBoardPreferences().get("build.using");
+    String buildUsing;
+    try {
+        buildUsing = Base.getBoardPreferences().get("build.using");
+    } catch (NullPointerException npe) {
+        throw new RunnerException("No board selected, please choose one from the Tools menu.");
+    }
     if (buildUsing == null) {
       // fall back on global preference
       buildUsing = Preferences.get("build.using");
