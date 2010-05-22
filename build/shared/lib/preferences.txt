@@ -224,13 +224,15 @@ serial.port=COM1
 serial.databits=8
 serial.stopbits=1
 serial.parity=N
-serial.debug_rate=9600
+serial.debug_rate=115200
 
 # LeafLabs modifications
 upload.protocol=dfu-util
 upload.file_type=bin
-upload.usbID=1001:0110
+upload.usbID=1EAF:0003
 upload.altIf=0
-upload.uploader=avrdude
+programDelay=600
+
 # For the ARM toolchain use: make
 build.using=avr-gcc
+upload.uploader=avrdude

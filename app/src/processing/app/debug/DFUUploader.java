@@ -128,20 +128,22 @@ public class DFUUploader extends Uploader  {
       serialPort.setRTS(false);
 
       try {
-        Thread.sleep(100);
+        Thread.sleep(50);
       } catch (InterruptedException e) {}
 
       serialPort.setDTR(true);
    
       try {
-        Thread.sleep(100);
+        Thread.sleep(50);
       } catch (InterruptedException e) {}
       
       serialPort.setDTR(false);
 
       /* wait a while for the device to reboot */
+      int programDelay = Integer.parseInt(Preferences.get("programDelay").trim());
+      
       try {
-          Thread.sleep(800);
+        Thread.sleep(programDelay);
       } catch (InterruptedException e) {}
 
       serialPort.dispose();
@@ -168,7 +170,7 @@ public class DFUUploader extends Uploader  {
       
       String armBasePath;
       
-      armBasePath = new String(Base.getHardwarePath() + "/tools/"); 
+      armBasePath = new String(Base.getHardwarePath() + "/tools/arm/bin/"); 
       
       commandArray[0] = armBasePath + commandArray[0];
       

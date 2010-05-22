@@ -79,6 +79,8 @@ Changes from stock arduino codebase
  * build/*/dist/*: dist files broken out into external zip downloads
  * build/*/*sh: make files are heavily modified
  * build/shared/examples/Maple: Maple-specific examples
+ * added a "program delay" to the preferences, delay between reset and dfu-util
+   app/src/processing/app/Preferences.java
 
 TODO
 ------------------------------------------------------------------------------

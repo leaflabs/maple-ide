@@ -119,6 +119,7 @@ public class Preferences {
   JTextField memoryField;
   JCheckBox checkUpdatesBox;
   JTextField fontSizeField;
+  JTextField delayLenField;
   JCheckBox autoAssociateBox;
 
 
@@ -269,15 +270,28 @@ public class Preferences {
     box.add(label);
     fontSizeField = new JTextField(4);
     box.add(fontSizeField);
-    label = new JLabel("  (requires restart of Arduino)");
-    box.add(label);
-    pain.add(box);
+    //    pain.add(box);
     d = box.getPreferredSize();
     box.setBounds(left, top, d.width, d.height);
     Font editorFont = Preferences.getFont("editor.font");
     fontSizeField.setText(String.valueOf(editorFont.getSize()));
     top += d.height + GUI_BETWEEN;
 
+    // Serial Delay After Reset
+    label = new JLabel("  Delay after reset (ms): ");
+    box.add(label);
+    delayLenField = new JTextField(4);
+    box.add(delayLenField);
+    label = new JLabel("  (requires restart of Arduino)");
+    box.add(label);
+    pain.add(box);
+    d = box.getPreferredSize();
+    box.setBounds(left, top, d.width, d.height);
+
+    String delayText = Preferences.get("programDelay");
+    delayLenField.setText(delayText);
+
+    top += d.height + GUI_BETWEEN;
 
     // [ ] Delete previous applet or application folder on export
 
@@ -502,6 +516,16 @@ public class Preferences {
     } catch (Exception e) {
       System.err.println("ignoring invalid font size " + newSizeText);
     }
+
+    String newDelayLen = delayLenField.getText();
+    try {
+      int newDelay = Integer.parseInt(newDelayLen.trim());
+      set("programDelay", String.valueOf(newDelay));
+
+    } catch (Exception e) {
+      System.err.println("ignoring invalid delay length " + newDelayLen);
+    }
+
 
     if (autoAssociateBox != null) {
       setBoolean("platform.auto_file_type_associations",
