@@ -17,12 +17,12 @@ LayoutFile=layout.inf
 DefaultDestDir = 12
 
 [VirComDevice.NT]
-%DESCRIPTION%=DriverInstall,USB\VID_1EAF&PID_1004
-%DESCRIPTION%=DriverInstall,USB\VID_1EAF&PID_1004
+%DESCRIPTION%=DriverInstall,USB\VID_1EAF&PID_0004
+%DESCRIPTION%=DriverInstall,USB\VID_1EAF&PID_0004
 
 [VirComDevice.NTamd64]
-%DESCRIPTION%=DriverInstall,USB\VID_1EAF&PID_1004
-%DESCRIPTION%=DriverInstall,USB\VID_1EAF&PID_1004
+%DESCRIPTION%=DriverInstall,USB\VID_1EAF&PID_0004
+%DESCRIPTION%=DriverInstall,USB\VID_1EAF&PID_0004
 
 [DriverInstall.NT]
 Include=mdmcpq.inf

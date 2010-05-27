@@ -49,7 +49,6 @@ else
   cp ../../app/lib/ecj.jar work/lib/
   cp ../../app/lib/jna.jar work/lib/
   cp ../../app/lib/oro.jar work/lib/
-  #cp ../../app/lib/RXTXcomm.jar work/lib/
 
   echo Copying examples...
   cp -r ../shared/examples work/

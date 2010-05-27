@@ -158,8 +158,7 @@ public class DFUUploader extends Uploader  {
 
       serialPort.dispose();
     } catch(Exception e) {
-      e.printStackTrace();
-      throw new RunnerException(e.getMessage());
+      System.err.println("Reset via USB Serial Failed! Did you select the serial right serial port? Or perhaps youre in perpetual bootload mode, continuing to attempt dfu programming anyway...");
     }
   }
 
