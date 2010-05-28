@@ -41,8 +41,8 @@ developers, as well as many others, who allow us to reuse their software.
 <tr>
   <td>Linux
   <td>Tested on Ubuntu 9.10 (64bit) and 10.04 (32bit)
-  <td><a href="http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.2-linux64.tgz">maple-ide-0.0.2-linux64.tgz</a> (about 30mb)
-  <br><a href="http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.2-linux64.tgz">maple-ide-0.0.2-linux64.tgz</a> (about 30mb)
+  <td><a href="http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-LATEST-linux64.tgz">maple-ide-LATEST-linux64.tgz</a> (about 30mb)
+  <br><a href="http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-LATEST-linux64.tgz">maple-ide-LATEST-linux64.tgz</a> (about 30mb)
 <tr>
   <td>Mac OSX
   <td>Coming soon!
@@ -50,7 +50,7 @@ developers, as well as many others, who allow us to reuse their software.
 <tr>
   <td>Windows
   <td>Tested on 32bit Windows XP
-  <td><a href="http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.1-windowsxp32.zip">maple-ide-0.0.1-windowsxp32.zip</a> (about 70mb)
+  <td><a href="http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-LATEST-windowsxp32.zip">maple-ide-LATEST-windowsxp32.zip</a> (about 70mb)
 </table>
 
 <h2><a name="java">Java</a></h2>
@@ -141,6 +141,46 @@ contents out of the archive instead of running it live out of the archive file.
 In the long run you might want to move the extracted program around; that's
 fine, your programs (sketches) and configuration options will be stored in your
 home folder (changeable in the Preferences menu).
+
+<p>
+The Maple runs in one of two modes, and requires drivers for each. After reset,
+it runs in bootloader mode for about 6 seconds. In this mode, the Maple is
+configured to act as a DFU (device firmware upgrade) device; this is how 
+it receives code from the host computer. Windows does not come bundled with DFU
+drivers, so we have provided them using libusb. After the 6 second timeout,
+Maple will exit DFU mode and jump to whatever code you have uploaded to it.
+While running your code, another set of drivers are needed to implement the
+serial over USB (virtual COM) port.
+
+To install the DFU drivers do following:
+<ol>
+  <li>Plug your maple into the usb port
+
+  <li>Hit reset a few times and notice the 6 fast blinks followed by some
+  number of slower ones.
+
+  <li>Hit reset again, and this time push and hold the boot button during the 6
+  fast blinks. You can release it once the slow blinks start
+
+  <li>Maple should now be in perpetual bootloader mode. In this mode, Maple
+  stays a DFU device and does not jump to user code until the next reset. This
+  should give you a chance to install the DFU drivers.
+
+  <li>Windows should now prompt you for some drivers. In the top level
+  directory of the Maple IDE, point windows to
+  <code>drivers/mapleDrv/dfu/</code>.
+</ol>
+
+To install the serial drivers do the following:
+<ol>
+  <li>Reset Maple and allow it to exit the bootloader (the slow blinking should
+  stop and transition to something else). If there is no user code currently in
+  memory (there should have been when you got it), then flash some on there
+  using the instruction elsewhere in this document.
+
+  <li>Once Maple is running some user code, windows should prompt you for more
+  drivers. Point windows to <code>driver/mapleDrv/serial</code>.
+</ol>
 
 <div class="box">
 <h3><i>About this Document</i></h3>
