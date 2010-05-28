@@ -49,37 +49,43 @@ counter starts at zero and the output starts at "high". The counter increments
 every clock cycle until it reaches the first variable number, at which point
 the output goes "low". The counter continues incrementing until it reaches the
 second variable at which point the output goes "high" again and the counter
-resets to zero. 
+resets to zero. The time spent with output high is called the pulse duration or
+duty; the total time before repeat is the period.
 
 <p>
 This simple functionality could be approximated in software by setting a GPIO
 high or low, but the beauty of PWM is that the usercode simply has to configure
 the device and set the two variables and the device will function on it's own;
-no further microprocessor cycles will be consumed. 
+no further microprocessor cycles will be consumed and a repeated HIGH/LOW
+waveform will spew out.
 
 <p>
 The Maple has 16-bit PWM resolution, which means that the counter and variables
-can go up to 65535, as opposed to 255 with 8-bit resolution. With a 72MHz 
-clock rate, a PWM output would have maximum duty cycle of about one millisecond;
-using a prescaler acts as a clock divider in front of the counter and can
-increase this maximum duty cycle (eg, an 8x prescaler would result in around an
-8ms maximum duty cycle). Note that the resolution is also effectively limited
-by the duty variable set by the user. 
+can be as large as 65535, as opposed to 255 with 8-bit resolution. With a 72MHz
+clock rate, a PWM output could have maximum period of about one millisecond;
+using a prescaler (clock divider) in front of the counter and can increase this
+maximum period (eg, an 8x prescaler would result in around an 8ms maximum duty
+cycle). The setting the period variable to something other than the maximum 
+value gives further control over the total length of the waveform, but 
+effectively limits the resolution with which the duty can be modified: the duty
+must be lower than or equal to the period.
 
 <p>
 Here are some commonly used PWM configurations (note: double check our math!):
 
 <table>
-  <tr><th>Purpose<th>Period (ms)<th>High (ms)<th>Prescaler<th>Period
+  <tr><th>Purpose<th>Period (ms)<th>Duty (ms)<th>Prescaler<th>Period<th>Duty
   <tr><td>LED Throb
       <td>0.020ms
       <td>0 to 0.020ms
       <td>1 (none)
+      <td>65536
       <td>0 to 767
   <tr><td>Servo Control
       <td>20ms
       <td>1.25 (0deg) <br>1.50ms (90deg) <br>1.75 (180deg)
       <td>21 <br>21 <br>21
+      <td>65536 <br>65536 <br>65536
       <td>4096 <br>4915 <br>5734
 </table>
 
@@ -88,19 +94,26 @@ Here are some commonly used PWM configurations (note: double check our math!):
   <dt><code>setMode(pin_num, PWM)</code>
   <dd>This command is usually called from <code>setup()</code> to tell the
   microcontroller that <code>pin_num</code> should be configured to PWM output.
-
-  <dt><code>timer_init(port, prescaler)</code>
-  <dd>Currently this low level libmaple function is the only way to change
-  the prescaler for a timer. Find the appropriate timer for a given PWM 
-  header using the table above, then set the prescaler. This function would
-  normally be called once from <code>setup()</code>, but the time can be
-  "reinitialized" with a new prescaler at any time. The default prescaler is
-  1 (eg, no prescaling). 
+  PWM implies regular driven OUTPUT (not open drain etc).
 
   <dt><code>pwmWrite()</code>
-  <dd>This command sets the first (lower) PWM variable. Usercode must manage
-  the appropriate maximum accepted value (based on the configured duty) on it's
-  own.
+  <dd>This command sets the PWM duty. User code is expected to determine and
+  honor the maximum value (based on the configured period). As a convenience,
+  <code>analogWrite</code> is an alias of <code>pwmWrite</code> to ease porting
+  Arduino code, though period and duty will have to be reconfigured (see
+  <a href="./compatability.html">compatability.html</a>
+
+  <dt><code>timers_set_prescaler(port, prescaler)</code>
+  <dd>Find the appropriate timer for a given PWM header using the table above,
+  then set the prescaler. This function is normally called once from
+  <code>setup()</code>, but the timer can be reconfigured with a new prescaler
+  at any time. The default prescaler is 1 (eg, no prescaling). 
+
+  <dt><code>timers_set_reload(port, reload)</code>
+  <dd>This function sets the period ("reload") value for an entire PWM 
+  timer bank. The value is 16bit (0 to 65536) and determines the maximum 
+  duty cycle that can be writen with <code>pwmWrite()</code>.
+
 </dl>
 
 <h2><a name="links">Recommended Reading</a></h2>
