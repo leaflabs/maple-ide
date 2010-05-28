@@ -231,7 +231,7 @@ upload.protocol=dfu-util
 upload.file_type=bin
 upload.usbID=1EAF:0003
 upload.altIf=0
-programDelay=600
+programDelay=1000
 
 # For the ARM toolchain use: make
 build.using=avr-gcc
