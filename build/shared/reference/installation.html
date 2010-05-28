@@ -108,6 +108,15 @@ you can manually copy the <code>45-maple.rules</code> file into
 <code>/etc/udev/rules.d</code> and set the appropriate permissions.
 
 <p>
+If the 'plugdev' group doesn't exist or you are not a member of it, you can
+create it and add <code>ben_bitdiddle</code> a la:
+<pre class="code">
+$ sudo addgroup plugdev
+$ sudo usermod -G plugdev ben_bitdiddle
+$ sudo /etc/init.d/udev restart
+</pre>
+
+<p>
 If this doesn't work out for you (eg, an error gets thrown or later on you
 can't upload your program or connect to the serial port), as a temporary or
 last resort measure you can run the entire IDE as root (<code>sudo
