@@ -57,7 +57,10 @@ cp -r ../shared/examples arduino/
 
 #echo Extracting reference...
 #unzip -q -d arduino/ ../shared/reference.zip
+echo Copying reference...
+cp -r ../shared/reference arduino/
 
+echo Copying binaries...
 #cp -r dist/tools/avr arduino/hardware/tools/avr
 cp -r dist/tools/arm arduino/hardware/tools/arm
 #unzip -q -d arduino/hardware/tools/arm arm.zip
@@ -75,6 +78,7 @@ cp launcher/maple-ide.exe arduino/maple-ide.exe
 cp work/lib/pde.jar arduino/lib/
 cp work/lib/core.jar arduino/lib/
 
+echo Converting and renaming and cleaning...
 # convert revisions.txt to windows LFs
 # the 2> is because the app is a little chatty
 unix2dos arduino/readme.txt 2> /dev/null

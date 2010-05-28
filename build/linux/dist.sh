@@ -52,10 +52,13 @@ cp -r ../shared/examples arduino/
 
 #echo Extracting reference...
 #unzip -q -d arduino/ ../shared/reference.zip
+echo Copying reference...
+cp -r ../shared/reference arduino/
 
 # add java (jre) files
 #tar --extract --file=jre.tgz --ungzip --directory=arduino
 
+echo Copying and renaming other stuff...
 # grab pde.jar and export from the working dir
 cp work/lib/pde.jar arduino/lib/
 cp work/lib/core.jar arduino/lib/
