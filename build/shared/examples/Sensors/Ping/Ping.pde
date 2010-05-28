@@ -18,15 +18,17 @@
    modified 30 Jun 2009
    by Tom Igoe
 
+   Ported to the Maple 27 May 2010 by Bryan Newbold
+
  */
 
 // this constant won't change.  It's the pin number
 // of the sensor's output:
 const int pingPin = 7;
 
+HardwareUsb Serial;
+
 void setup() {
-  // initialize serial communication:
-  Serial.begin(9600);
 }
 
 void loop()

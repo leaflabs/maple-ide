@@ -15,11 +15,14 @@
  by Tom Igoe
  
  <http://www.zambetti.com> 
+
+ Ported to the Maple 27 May 2010 by Bryan Newbold
  */
+
+HardwareUsb Serial;
+
 void setup() 
 { 
-  Serial.begin(9600); 
-
   // prints title with ending line break 
   Serial.println("ASCII Table ~ Character Map"); 
 } 

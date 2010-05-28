@@ -6,7 +6,7 @@
  the value obtained by analogRead(). 
  
  The circuit:
- * Potentiometer attached to analog input 0
+ * Potentiometer attached to analog input 15
  * center pin of the potentiometer to the analog pin
  * one side pin (either one) to ground
  * the other side pin to +5V
@@ -23,9 +23,11 @@
  
  http://arduino.cc/en/Tutorial/AnalogInput
  
+ Ported to Maple 27 May, 2010 by Bryan Newbold
+
  */
 
-int sensorPin = 0;    // select the input pin for the potentiometer
+int sensorPin = 15;    // select the input pin for the potentiometer
 int ledPin = 13;      // select the pin for the LED
 int sensorValue = 0;  // variable to store the value coming from the sensor
 

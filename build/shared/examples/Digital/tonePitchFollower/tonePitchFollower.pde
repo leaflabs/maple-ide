@@ -12,13 +12,13 @@
  by Tom Igoe 
  
  http://arduino.cc/en/Tutorial/Tone2
- 
+
+ Ported to the Maple 27 May 2010 by Bryan Newbold
+
  */
 
 
 void setup() {
-  // initialize serial communications (for debugging only):
-  Serial.begin(9600);
 }
 
 void loop() {

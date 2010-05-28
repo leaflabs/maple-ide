@@ -16,15 +16,18 @@
  by Tom Igoe 
  
  http://www.arduino.cc/en/Tutorial/SwitchCase2
+
+ Ported to the Maple 27 May 2010 by Bryan Newbold
+
  */
 
+HardwareUsb Serial;
+
 void setup() {
-  // initialize serial communication:
-  Serial.begin(9600); 
-   // initialize the LED pins:
-      for (int thisPin = 2; thisPin < 7; thisPin++) {
-        pinMode(thisPin, OUTPUT);
-      } 
+  // initialize the LED pins:
+  for (int thisPin = 2; thisPin < 7; thisPin++) {
+    pinMode(thisPin, OUTPUT);
+  } 
 }
 
 void loop() {

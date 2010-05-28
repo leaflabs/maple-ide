@@ -21,6 +21,8 @@
  	
  http://arduino.cc/en/Tutorial/ButtonStateChange
  
+ Ported to the Maple 27 May 2010 by Bryan Newbold
+
  */
 
 // this constant won't change:
@@ -32,13 +34,13 @@ int buttonPushCounter = 0;   // counter for the number of button presses
 int buttonState = 0;         // current state of the button
 int lastButtonState = 0;     // previous state of the button
 
+HardwareUsb Serial;
+
 void setup() {
   // initialize the button pin as a input:
   pinMode(buttonPin, INPUT);
   // initialize the LED as an output:
   pinMode(ledPin, OUTPUT);
-  // initialize serial communication:
-  Serial.begin(9600);
 }
 
 

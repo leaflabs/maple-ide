@@ -17,6 +17,9 @@
  by Tom Igoe 
  
  http://www.arduino.cc/en/Tutorial/SwitchCase
+
+ Ported to the Maple 27 May 2010 by Bryan Newbold
+
  */
 
 // these constants won't change:
@@ -24,8 +27,6 @@ const int sensorMin = 0;      // sensor minimum, discovered through experiment
 const int sensorMax = 600;    // sensor maximum, discovered through experiment
 
 void setup() {
-  // initialize serial communication:
-  Serial.begin(9600);  
 }
 
 void loop() {

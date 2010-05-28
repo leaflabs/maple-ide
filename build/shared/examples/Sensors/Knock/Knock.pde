@@ -16,6 +16,8 @@
    by David Cuartielles <http://www.0j0.org>
    modified 30 Jun 2009
    by Tom Igoe
+  
+   Ported to the Maple 27 May 2010 by Bryan Newbold
 
  */
  
@@ -30,9 +32,10 @@ const int threshold = 100;  // threshold value to decide when the detected sound
 int sensorReading = 0;      // variable to store the value read from the sensor pin
 int ledState = LOW;         // variable used to store the last LED status, to toggle the light
 
+HardwareUsb Serial;
+
 void setup() {
  pinMode(ledPin, OUTPUT); // declare the ledPin as as OUTPUT
- Serial.begin(9600);       // use the serial port
 }
 
 void loop() {

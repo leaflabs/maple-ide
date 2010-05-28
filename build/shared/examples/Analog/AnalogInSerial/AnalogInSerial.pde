@@ -11,11 +11,15 @@
  
  created over and over again
  by Tom Igoe and everyone who's ever used Arduino
+
+ Ported to Maple 27 May, 2010 by Bryan Newbold
  
  */
- 
+
+HardwareUsb Serial;
+
  void setup() {
-  Serial.begin(9600); 
+    // USB communications already initialized...
  }
  
  void loop() {

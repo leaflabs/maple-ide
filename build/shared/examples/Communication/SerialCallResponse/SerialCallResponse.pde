@@ -20,6 +20,8 @@
  by Tom Igoe
  Modified 14 April 2009
  by Tom Igoe and Scott Fitzgerald
+
+ Ported to the Maple 27 May 2010 by Bryan Newbold
  */
 
 int firstSensor = 0;    // first analog sensor
@@ -27,11 +29,11 @@ int secondSensor = 0;   // second analog sensor
 int thirdSensor = 0;    // digital sensor
 int inByte = 0;         // incoming serial byte
 
+HardwareUsb Serial; 
+
 void setup()
 {
-  // start serial port at 9600 bps:
-  Serial.begin(9600);
-  pinMode(2, INPUT);   // digital sensor is on digital pin 2
+  pinMode(thirdSensor, INPUT);   // digital sensor is on digital pin 2
   establishContact();  // send a byte to establish contact until receiver responds 
 }
 

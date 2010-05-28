@@ -19,15 +19,17 @@
    modified 30 Jun 2009
    by Tom Igoe
 
+   Ported to the Maple 27 May 2010 by Bryan Newbold   
+
  */
 
 // these constants won't change:
 const int xPin = 2;		// X output of the accelerometer
 const int yPin = 3;		// Y output of the accelerometer
 
+HardwareUsb Serial;
+
 void setup() {
-  // initialize serial communications:
-  Serial.begin(9600);
   // initialize the pins connected to the accelerometer
   // as inputs:
   pinMode(xPin, INPUT);

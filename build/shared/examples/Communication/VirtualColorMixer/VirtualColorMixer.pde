@@ -12,6 +12,8 @@
  by David A. Mellis
  modified 14 Apr 2009 
  by Tom Igoe and Scott Fitzgerald
+
+ Ported to the Maple 27 May 2010 by Bryan Newbold
  
  */
 
@@ -19,9 +21,11 @@ const int redPin = 0;		// sensor to control red color
 const int greenPin = 1;		// sensor to control green color
 const int bluePin = 2;		// sensor to control blue color
 
+HardwareUsb Serial;
+
 void setup()
 {
-  Serial.begin(9600);
+  // USB communications already estabilished
 }
 
 void loop()

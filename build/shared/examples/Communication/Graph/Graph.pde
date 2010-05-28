@@ -26,9 +26,10 @@
  http://www.arduino.cc/en/Tutorial/Graph
  */
 
+HardwareUsb Serial;
+
 void setup() {
-  // initialize the serial communication:
-  Serial.begin(9600);
+
 }
 
 void loop() {

@@ -22,6 +22,7 @@
  modified 26 Jun 2009
  by Tom Igoe 
 
+ Ported to the Maple 27 May 2010 by Bryan Newbold
 */
 
 // these constants describe the pins. They won't change:
@@ -31,11 +32,10 @@ const int xpin = 3;                   // x-axis of the accelerometer
 const int ypin = 2;                   // y-axis
 const int zpin = 1;                   // z-axis (only on 3-axis models)
 
+HardwareUsb Serial;
+
 void setup()
 {
-  // initialize the serial communications:
-  Serial.begin(9600);
-  
   // Provide ground and power by using the analog inputs as normal
   // digital pins.  This makes it possible to directly connect the
   // breakout board to the Arduino.  If you use the normal 5V and

@@ -14,6 +14,7 @@
 
   http://www.arduino.cc/en/Tutorial/Smoothing
 
+  Ported to Maple 27 May, 2010 by Bryan Newbold
 
 */
 
@@ -31,10 +32,12 @@ int average = 0;                // the average
 
 int inputPin = 0;
 
+HardwareUsb Serial;
+
 void setup()
 {
-  // initialize serial communication with computer:
-  Serial.begin(9600);                   
+  // USB communications already initialized
+
   // initialize all the readings to 0: 
   for (int thisReading = 0; thisReading < numReadings; thisReading++)
     readings[thisReading] = 0;          

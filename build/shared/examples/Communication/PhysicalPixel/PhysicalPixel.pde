@@ -19,14 +19,17 @@
  by Tom Igoe and Scott Fitzgerald
  
  http://www.arduino.cc/en/Tutorial/PhysicalPixel
+
+ Ported to the Maple 27 May 2010 by Bryan Newbold
+
  */
 
 const int ledPin = 13; // the pin that the LED is attached to
 int incomingByte;      // a variable to read incoming serial data into
 
+HardwareUsb Serial;
+
 void setup() {
-  // initialize serial communication:
-  Serial.begin(9600);
   // initialize the LED pin as an output:
   pinMode(ledPin, OUTPUT);
 }

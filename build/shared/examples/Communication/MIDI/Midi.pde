@@ -17,12 +17,14 @@
  by Tom Igoe 
  
  http://www.arduino.cc/en/Tutorial/MIDI
+
+ Ported to the Maple 27 May 2010 by Bryan Newbold
  
  */
 
 void setup() {
   //  Set MIDI baud rate:
-  Serial.begin(31250);
+  Serial1.begin(31250);
 }
 
 void loop() {
@@ -40,8 +42,8 @@ void loop() {
 //  plays a MIDI note.  Doesn't check to see that
 //  cmd is greater than 127, or that data values are  less than 127:
 void noteOn(int cmd, int pitch, int velocity) {
-  Serial.print(cmd, BYTE);
-  Serial.print(pitch, BYTE);
-  Serial.print(velocity, BYTE);
+  Serial1.print(cmd, BYTE);
+  Serial1.print(pitch, BYTE);
+  Serial1.print(velocity, BYTE);
 }
 

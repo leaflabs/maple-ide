@@ -12,20 +12,22 @@
  
  created 30 Dec. 2008
  by Tom Igoe
- 
+
+ Ported to the Maple 27 May 2010 by Bryan Newbold
+
  */
 
 
 void setup() {
   // initialize both serial ports:
-  Serial.begin(9600);
   Serial1.begin(9600);
+  Serial2.begin(9600);
 }
 
 void loop() {
   // read from port 1, send to port 0:
-  if (Serial1.available()) {
+  if (Serial2.available()) {
     int inByte = Serial1.read();
-    Serial.print(inByte, BYTE); 
+    Serial1print(inByte, BYTE); 
   }
 }
