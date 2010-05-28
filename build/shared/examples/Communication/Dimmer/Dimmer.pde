@@ -16,14 +16,16 @@
  by Tom Igoe and Scott Fitzgerald
  
  http://www.arduino.cc/en/Tutorial/Dimmer
+
+ Ported to the Maple 28 May 2010
  */
 
 const int ledPin = 9;      // the pin that the LED is attached to
 
+HardwareUsb Serial;
+
 void setup()
 {
-  // initialize the serial communication:
-  Serial.begin(9600);
   // initialize the ledPin as an output:
   pinMode(ledPin, OUTPUT);
 }

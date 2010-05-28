@@ -28,6 +28,6 @@ void loop() {
   // read from port 1, send to port 0:
   if (Serial2.available()) {
     int inByte = Serial1.read();
-    Serial1print(inByte, BYTE); 
+    Serial1.print(inByte, BYTE); 
   }
 }

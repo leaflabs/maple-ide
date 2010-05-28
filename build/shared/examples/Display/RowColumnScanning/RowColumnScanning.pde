@@ -29,6 +29,8 @@
  http://www.arduino.cc/en/Tutorial/RowColumnScanning
  
  see also http://www.tigoe.net/pcomp/code/category/arduinowiring/514 for more
+
+ Ported to the Maple 28 May 2010 by Bryan Newbold
  */
 
 
@@ -47,8 +49,9 @@ int pixels[8][8];
 int x = 5;
 int y = 5;
 
+HardwareUsb Serial;
+
 void setup() {
-  Serial.begin(9600);
   // initialize the I/O pins as outputs:
 
   // iterate over the pins:

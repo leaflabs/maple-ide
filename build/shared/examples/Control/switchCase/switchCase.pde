@@ -26,6 +26,8 @@
 const int sensorMin = 0;      // sensor minimum, discovered through experiment
 const int sensorMax = 600;    // sensor maximum, discovered through experiment
 
+HardwareUsb Serial;
+
 void setup() {
 }
 

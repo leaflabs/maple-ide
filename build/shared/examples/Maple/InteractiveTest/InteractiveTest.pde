@@ -13,8 +13,6 @@
 #define LED_PIN 13
 #define PWM_PIN  2
 
-HardwareUsb Usb;
-
 uint8 input = 0;
 uint8 tiddle = 0;
 int toggle = 0;
