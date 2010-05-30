@@ -1,4 +1,4 @@
-0.0.3 maple-ide
+05302010a maple-ide
 
 Fix Linux make.sh, etc. scripts
 Test on Linux.
