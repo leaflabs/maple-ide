@@ -74,6 +74,8 @@ else
   cp -X ../../app/lib/jna.jar "$RESOURCES/"
   cp -X ../../app/lib/oro.jar "$RESOURCES/"
   cp -X ../../app/lib/RXTXcomm.jar "$RESOURCES/"
+  cp -X ../../README-dist "$RESOURCES/README.txt"
+  cp -X ../../readme-arduino.txt "$RESOURCES/"
 
   echo Copying examples...
   cp -rX ../shared/examples "$RESOURCES/"

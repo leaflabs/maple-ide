@@ -49,6 +49,7 @@ else
   cp ../../app/lib/ecj.jar work/lib/
   cp ../../app/lib/jna.jar work/lib/
   cp ../../app/lib/oro.jar work/lib/
+  cp ../../README-dist work/README.txt
 
   echo Copying examples...
   cp -r ../shared/examples work/

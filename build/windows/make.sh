@@ -54,6 +54,7 @@ else
   cp ../../app/lib/jna.jar work/lib/
   cp ../../app/lib/oro.jar work/lib/
   cp ../../app/lib/RXTXcomm.jar work/lib/
+  cp ../../README-dist work/README.txt
 
   echo Copying examples...
   cp -r ../shared/examples work/
