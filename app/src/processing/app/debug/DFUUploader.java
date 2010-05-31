@@ -130,6 +130,9 @@ public class DFUUploader extends Uploader  {
      maple responds to
   */
   private void emitResetPulse() throws RunnerException {
+    /* wait a while for the device to reboot */
+    int programDelay = Integer.parseInt(Preferences.get("programDelay").trim());
+      
     try {
       Serial serialPort = new Serial();
      
@@ -147,16 +150,14 @@ public class DFUUploader extends Uploader  {
         Thread.sleep(50);
       } catch (InterruptedException e) {}
       
-      serialPort.setDTR(false);
+      //  serialPort.setDTR(false);
 
-      /* wait a while for the device to reboot */
-      int programDelay = Integer.parseInt(Preferences.get("programDelay").trim());
-      
+      serialPort.dispose();
+
       try {
         Thread.sleep(programDelay);
       } catch (InterruptedException e) {}
 
-      serialPort.dispose();
     } catch(Exception e) {
       System.err.println("Reset via USB Serial Failed! Did you select the serial right serial port? Or perhaps youre in perpetual bootload mode, continuing to attempt dfu programming anyway...");
     }
