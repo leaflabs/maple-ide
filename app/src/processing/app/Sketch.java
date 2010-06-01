@@ -1506,7 +1506,7 @@ public class Sketch {
     }
 
     if (buildUsing.equals("make")) {
-      System.out.println("Binary sketch size is reported above. Check it against a "+  maxsize + " byte maximum)");      
+      System.out.println("Binary sketch size is reported above. Check it against a "+  maxsize + " byte maximum.");      
     } else {
       Sizer sizer = new Sizer(buildPath, suggestedClassName);
       try {
@@ -1540,7 +1540,7 @@ public class Sketch {
       uploadProgram = Preferences.get("upload.uploader");
     }
 
-    System.err.println("Loading via " + uploadProgram);
+    System.out.println("Loading via " + uploadProgram);
 
     if (uploadProgram.equals("dfu-util")) {
       uploader = new DFUUploader();

@@ -117,14 +117,6 @@ public class DFUUploader extends Uploader  {
     return false;
   }
       
-  public boolean dfu(Collection params) throws RunnerException {
-    List commandDownloader = new ArrayList();
-    commandDownloader.add("dfu-util");
-    commandDownloader.addAll(params);
-
-    return executeUploadCommand(commandDownloader);
-  }
-
   /* we need to ensure both RTS and DTR are low to start, 
      then pulse DTR on its own. This is the reset signal
      maple responds to
@@ -159,7 +151,7 @@ public class DFUUploader extends Uploader  {
       } catch (InterruptedException e) {}
 
     } catch(Exception e) {
-      System.err.println("Reset via USB Serial Failed! Did you select the serial right serial port? Or perhaps youre in perpetual bootload mode, continuing to attempt dfu programming anyway...");
+      System.err.println("Reset via USB Serial Failed! Did you select the serial right serial port?\nAssuming the board is in perpetual bootloader mode and continuing to attempt dfu programming...\n");
     }
   }
 
@@ -213,20 +205,7 @@ public class DFUUploader extends Uploader  {
       if(result!=0)
         return false;
     } catch (Exception e) {
-      String msg = e.getMessage();
-      if ((msg != null) && (msg.indexOf("uisp: not found") != -1) && (msg.indexOf("avrdude: not found") != -1)) {
-        //System.err.println("uisp is missing");
-        //JOptionPane.showMessageDialog(editor.base,
-        //                              "Could not find the compiler.\n" +
-        //                              "uisp is missing from your PATH,\n" +
-        //                              "see readme.txt for help.",
-        //                              "Compiler error",
-        //                              JOptionPane.ERROR_MESSAGE);
-        return false;
-      } else {
-        e.printStackTrace();
-        result = -1;
-      }
+      e.printStackTrace();
     }
     //System.out.println("result2 is "+result);
     // if the result isn't a known, expected value it means that something
@@ -243,5 +222,27 @@ public class DFUUploader extends Uploader  {
 
     return (result == 0); // ? true : false;      
 
+  }
+
+  // deal with messages from dfu-util...
+  public void message(String s) {
+
+    if(s.indexOf("dfu-util - (C) ") != -1) { return; }
+    if(s.indexOf("This program is Free Software and has ABSOLUTELY NO WARRANTY") != -1) { return; }
+
+    if(s.indexOf("No DFU capable USB device found") != -1) {
+      System.err.print(s);
+      exception = new RunnerException("Problem uploading via dfu-util: No Maple found");
+      return;
+    }
+
+    if(s.indexOf("Operation not perimitted") != -1) {
+      System.err.print(s);
+      exception = new RunnerException("Problem uploading via dfu-util: Insufficient privilages");
+      return;
+    }
+
+    // else just print everything...
+    System.out.print(s);
   }
 }

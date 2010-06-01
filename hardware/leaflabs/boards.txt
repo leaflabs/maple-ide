@@ -15,8 +15,8 @@ maple.build.mcu=cortex-m3
 maple.build.f_cpu=72000000L
 maple.build.core=maple
 maple.build.submdl=stm32f103
-maple.build.vect=VECT_TAB_ROM
-maple.build.linker=lanchon-stm32-user-rom.ld
+maple.build.vect=VECT_TAB_FLASH
+maple.build.linker=flash.ld
 maple.build.core=maple
 maple.build.using=make
 
@@ -37,7 +37,7 @@ mapleRAM.build.f_cpu=72000000L
 mapleRAM.build.core=maple
 mapleRAM.build.submdl=stm32f103
 mapleRAM.build.vect=VECT_TAB_RAM
-mapleRAM.build.linker=lanchon-stm32-user-ram.ld
+mapleRAM.build.linker=ram.ld
 mapleRAM.build.core=maple
 mapleRAM.build.using=make
 
