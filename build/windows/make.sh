@@ -1,17 +1,20 @@
 #!/bin/sh
 
-DIST_ARCHIVE=maple-ide-deps-windows-0018.tar.gz
-DIST_URL=http://static.leaflabs.com/pub/leaflabs/maple-ide-deps/
+DIST_ARCHIVE=arm-2009q3-68-arm-none-eabi-toolchain-win32.tar.gz
+DIST_URL=http://static.leaflabs.com/pub/codesourcery
+
+JAVA_ARCHIVE=sun-java6-jre-win32.tar.gz
+JAVA_URL=http://static.leaflabs.com/pub/java
 
 ### -- SETUP DIST FILES ----------------------------------------
 
-# Have we extracted the dist files yet?
+# Have we extracted the arm files yet?
 if test ! -d dist/tools/arm
 then 
-  # Have we downloaded the dist files yet? 
+  # Have we downloaded the arm files yet? 
   if test ! -f $DIST_ARCHIVE
   then
-    echo "Downloading distribution files for windows platform: " $DIST_ARCHIVE
+    echo "Downloading arm toolchain files for windows platform: " $DIST_ARCHIVE
     wget $DIST_URL/$DIST_ARCHIVE
     if test ! -f $DIST_ARCHIVE
     then 
@@ -21,10 +24,34 @@ then
     fi
   fi  
   echo "Extracting distribution files for windows platform: " $DIST_ARCHIVE
-  tar --extract --file=$DIST_ARCHIVE --ungzip --directory=dist
+  tar --extract --file=$DIST_ARCHIVE --ungzip --directory=dist/tools
   if test ! -d dist/tools/arm
   then
-    echo "!!! Problem extracting dist file, please fix it."
+    echo "!!! Problem extracting arm toolchain file, please fix it."
+    exit 1
+  fi
+fi 
+
+# Have we extracted the javafiles yet?
+if test ! -d dist/java
+then 
+  # Have we downloaded the java files yet? 
+  if test ! -f $JAVA_ARCHIVE
+  then
+    echo "Downloading java toolchain files for windows platform: " $JAVA_ARCHIVE
+    wget $JAVA_URL/$JAVA_ARCHIVE
+    if test ! -f $JAVA_ARCHIVE
+    then 
+      echo "!!! Problem downloading distribution files; please fetch zip file manually and put it here: "
+      echo `pwd`
+      exit 1
+    fi
+  fi  
+  echo "Extracting distribution files for windows platform: " $DIST_ARCHIVE
+  tar --extract --file=$JAVA_ARCHIVE --ungzip --directory=dist
+  if test ! -d dist/java
+  then
+    echo "!!! Problem extracting java JRE file, please fix it."
     exit 1
   fi
 fi 
