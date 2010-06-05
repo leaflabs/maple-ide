@@ -11,8 +11,8 @@ then
   exit
 fi
 
-DIST_ARCHIVE=maple-ide-deps-macosx-0018.tar.gz
-DIST_URL=http://static.leaflabs.com/pub/leaflabs/maple-ide-deps/
+DIST_ARCHIVE=arm-2010q1-188-arm-none-eabi-toolchain-macosx32.tar.gz
+DIST_URL=http://static.leaflabs.com/pub/codesourcery
 
 ### -- SETUP DIST FILES ----------------------------------------
 
@@ -32,7 +32,7 @@ then
     fi
   fi
   echo "Extracting distribution files for macosx platform: " $DIST_ARCHIVE
-  tar --extract --file=$DIST_ARCHIVE --ungzip --directory=dist 
+  tar --extract --file=$DIST_ARCHIVE --ungzip --directory=dist/tools
   if test ! -d dist/tools/arm
   then
     echo "!!! Problem extracting dist file, please fix it."
@@ -85,27 +85,13 @@ else
   echo Copying reference...
   cp -r ../shared/reference "$RESOURCES/"
 
-  echo Copying avr tools...
-  #unzip -q -d "$RESOURCES/hardware" dist/tools-universal.zip
-  mkdir -p "$RESOURCES/hardware/tools"
-  cp -rX dist/tools/avr "$RESOURCES/hardware/tools/" 
-
   echo Copying arm tools...
-  #unzip -q -d "$RESOURCES/hardware/tools" dist/arm.zip
   cp -rX dist/tools/arm "$RESOURCES/hardware/tools/" 
 
-  echo Move dfu-util
-  mkdir -p  work/Arduino.app/Contents/Resources/Java/hardware/tools/avr/bin
-  mv work/Arduino.app/Contents/Resources/Java/hardware/tools/arm/bin/dfu-util work/Arduino.app/Contents/Resources/Java/hardware/tools/avr/bin
-  mv work/Arduino.app/Contents/Resources/Java/hardware/tools/arm/Resources work/Arduino.app/Contents/Resources/Java/hardware/tools/avr
-  if [ "$OSX_VERSION" = "10.6" ]
-  then
-      echo Adding OS X 10.6 Compatible Binaries
-      rm -rf work/Arduino.app/Contents/Resources/Java/hardware/tools/arm
-      rm -rf work/Arduino.app/Contents/Resources/Java/hardware/tools/__MACOSX
-      #unzip -q -d "$RESOURCES/hardware/tools/" dist/arm2.zip
-      cp -rX dist/tools/arm_snowleopard "$RESOURCES/hardware/tools/arm2" 
-  fi
+  echo Copying dfu-util...
+  cp work/Arduino.app/Contents/Resources/Java/hardware/tools/dfu-util work/Arduino.app/Contents/Resources/Java/hardware/tools/arm/bin
+  mkdir -p  work/Arduino.app/Contents/Resources/Java/hardware/tools/arm/Resources
+  cp work/Arduino.app/Contents/Resources/Java/hardware/tools/ work/Arduino.app/Contents/Resources/Java/hardware/tools/arm/Resources
 fi
 
 
