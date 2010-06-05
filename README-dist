@@ -53,3 +53,18 @@ infrastructure will be generalized so that boards like the Maple which require
 a non-AVR compiler can be developed for in the regular IDE by installing a
 plugin or library.
 
+Known Issues
+------------------------------------------------------------------------------
+Menus are often incorrectly rendered the first time you open them, missing
+certain drop-down containers like Serial Port, or Examples. They reappear after
+reloading the menu bar.
+
+Sometimes DFU reports "no DFU device present" or "Lost device after reset." If
+the device is indeed plugged in, then this issue is likely due to finicky
+timing between the autoreset and the programming operation. You can adjust this
+timing in the preferences panel (in miliseconds). What happens is that after
+reset, the programming operation either occurs too soon (dfu bootloader hasn't
+booted yet) or too late (bootloader has already begun exit procedure). The
+delay in the bootloader is already getting long, so its better to tweak the
+delay parameter to what best works on your system.
+

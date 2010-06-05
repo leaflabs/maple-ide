@@ -1,5 +1,0 @@
-Known issues with this version for linux on 32 bit are:
-
-- The very first time the program is run, gnu.io RXTXcomm throws a ton of garbage out of stderr, but this has no functional effect and it goes away after you close and restart the program
-- Menu's are often incorrectly rendered the first time you open them, missing certain drop down containers like Serial Port, or Examples. They reappear after reloading the menu bar.
-- Sometimes DFU reports "no DFU device present" or "Lost device after reset." If the device is indeed plugged in, then this issue is likely due to finicky timing between the autoreset and the programming operation. You can adjust this timing in the preferences panel (in ms). What happesn is that after reset, the programming operation either happens too soon (dfu bootloader hasnt booted yet) or too late (bootloader has already begun exit procedure). The delay in the bootloader is already getting long, so its better to tweak the delay parameter to what best works on your system. 
