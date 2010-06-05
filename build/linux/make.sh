@@ -1,7 +1,11 @@
 #!/bin/sh
 
-DIST_ARCHIVE=maple-ide-deps-linux-0018.tar.gz
-DIST_URL=http://static.leaflabs.com/pub/leaflabs/maple-ide-deps/
+DIST_ARCHIVE=arm-2009q3-68-arm-none-eabi-toolchain-linux32.tar.gz
+DIST_URL=http://static.leaflabs.com/pub/codesourcery/
+
+# Set JAVA_HOME only if it is blank
+# Modify this if you aren't using java-6-sun; needed for lib/tools.jar
+JAVA_HOME=${JAVA_HOME:="/usr/lib/jvm/java-6-sun/"}
 
 ### -- SETUP DIST FILES ----------------------------------------
 
@@ -21,7 +25,7 @@ then
     fi
   fi
   echo "Extracting distribution files for linux platform: " $DIST_ARCHIVE
-  tar --extract --file=$DIST_ARCHIVE --ungzip --directory=dist
+  tar --extract --file=$DIST_ARCHIVE --ungzip --directory=dist/tools/
   if test ! -d dist/tools/arm
   then
     echo "!!! Problem extracting dist file, please fix it."
@@ -59,15 +63,15 @@ else
   echo Copying reference...
   cp -r ../shared/reference work/
 
+  echo Copying tools...
   cp -r dist/tools work/hardware/
+  mv work/hardware/tools/dfu-util work/hardware/tools/arm/bin
 
   cp dist/45-maple.rules work/tools/
   install -m 755 dist/maple-ide work/maple-ide
   install -m 755 dist/install-udev-rules.sh work/install-udev-rules.sh
 
   echo NOT extracting full JRE... will attempt to use system-wide version
-  #echo Extracting JRE...
-  cp -r dist/java work/java
 
   ARCH=`uname -m`
   if [ $ARCH = "i686" ]
@@ -116,7 +120,7 @@ rm -rf ../build/linux/work/classes
 mkdir ../build/linux/work/classes
 
 javac -source 1.5 -target 1.5 \
-    -classpath ../build/linux/work/lib/core.jar:../build/linux/work/lib/antlr.jar:../build/linux/work/lib/ecj.jar:../build/linux/work/lib/jna.jar:../build/linux/work/lib/oro.jar:../build/linux/work/lib/RXTXcomm.jar:../build/linux/work/java/lib/tools.jar \
+    -classpath ../build/linux/work/lib/core.jar:../build/linux/work/lib/antlr.jar:../build/linux/work/lib/ecj.jar:../build/linux/work/lib/jna.jar:../build/linux/work/lib/oro.jar:../build/linux/work/lib/RXTXcomm.jar:$JAVA_HOME/lib/tools.jar \
     -d ../build/linux/work/classes \
     src/processing/app/*.java \
     src/processing/app/debug/*.java \

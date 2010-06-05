@@ -39,6 +39,7 @@ cp -r ../../hardware arduino/
 cp -r ../../libraries arduino/
 
 cp -r dist/tools arduino/hardware
+mv arduino/hardware/tools/dfu-util arduino/hardware/tools/arm/bin
 cp work/tools/45-maple.rules arduino/tools
 
 if [ $1 ]
