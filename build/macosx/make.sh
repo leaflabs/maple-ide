@@ -2,14 +2,6 @@
 
 # http://dev.processing.org/bugs/show_bug.cgi?id=1179
 OSX_VERSION=`sw_vers | grep ProductVersion | awk '{print $2}' | awk '{print substr($0,1,4)}'`
-if [ "$OSX_VERSION" = "10.4" ]
-then
-  echo "This script uses the -X option for cp (to disable resource forks),"
-  echo "which is not supported on OS X 10.4. Please either upgrade to 10.5,"
-  echo "or modify this script to remove use of the -X switch to continue."
-  # and you will also need to remove this error message
-  exit
-fi
 
 DIST_ARCHIVE=arm-2010q1-188-arm-none-eabi-toolchain-macosx32.tar.gz
 DIST_URL=http://static.leaflabs.com/pub/codesourcery
@@ -59,26 +51,26 @@ else
   echo Copying Arduino.app...
   #cp -a dist/Arduino.app work/   # #@$(* bsd switches
   #/sw/bin/cp -a dist/Arduino.app work/
-  cp -pRX dist/Arduino.app work/
+  cp -pR dist/Arduino.app work/
   # cvs doesn't seem to want to honor the +x bit 
   chmod +x work/Arduino.app/Contents/MacOS/JavaApplicationStub
 
-  cp -rX ../shared/lib "$RESOURCES/"
-  cp -rX ../../libraries "$RESOURCES/"
-  cp -rX ../shared/tools "$RESOURCES/"
+  cp -r ../shared/lib "$RESOURCES/"
+  cp -r ../../libraries "$RESOURCES/"
+  cp -r ../shared/tools "$RESOURCES/"
 
-  cp -rX ../../hardware "$RESOURCES/"
+  cp -r ../../hardware "$RESOURCES/"
 
-  cp -X ../../app/lib/antlr.jar "$RESOURCES/"
-  cp -X ../../app/lib/ecj.jar "$RESOURCES/"
-  cp -X ../../app/lib/jna.jar "$RESOURCES/"
-  cp -X ../../app/lib/oro.jar "$RESOURCES/"
-  cp -X ../../app/lib/RXTXcomm.jar "$RESOURCES/"
-  cp -X ../../README-dist "$RESOURCES/README.txt"
-  cp -X ../../readme-arduino.txt "$RESOURCES/"
+  cp ../../app/lib/antlr.jar "$RESOURCES/"
+  cp ../../app/lib/ecj.jar "$RESOURCES/"
+  cp ../../app/lib/jna.jar "$RESOURCES/"
+  cp ../../app/lib/oro.jar "$RESOURCES/"
+  cp ../../app/lib/RXTXcomm.jar "$RESOURCES/"
+  cp ../../README-dist "$RESOURCES/README.txt"
+  cp ../../readme-arduino.txt "$RESOURCES/"
 
   echo Copying examples...
-  cp -rX ../shared/examples "$RESOURCES/"
+  cp -r ../shared/examples "$RESOURCES/"
 
   #echo Extracting reference...
   #unzip -q -d "$RESOURCES/" ../shared/reference.zip
@@ -86,7 +78,7 @@ else
   cp -r ../shared/reference "$RESOURCES/"
 
   echo Copying arm tools...
-  cp -rX dist/tools/arm "$RESOURCES/hardware/tools/" 
+  cp -r dist/tools/arm "$RESOURCES/hardware/tools/" 
 
   echo Copying dfu-util...
   cp work/Arduino.app/Contents/Resources/Java/hardware/tools/dfu-util work/Arduino.app/Contents/Resources/Java/hardware/tools/arm/bin

@@ -19,12 +19,12 @@ else
   echo Creating Arduino distribution for revision $REVISION...
 fi
 
-VERSIONED=`cat ../../app/src/processing/app/Base.java | grep $REVISION`
-if [ -z "$VERSIONED" ]
-then
-  echo Fix the revision number in Base.java or todo.txt
-  exit
-fi
+#VERSIONED=`cat ../../app/src/processing/app/Base.java | grep $REVISION`
+#if [ -z "$VERSIONED" ]
+#then
+#  echo Fix the revision number in Base.java or todo.txt
+#  exit
+#fi
 
 # remove any unfinished builds or old builds
 rm -rf arduino
