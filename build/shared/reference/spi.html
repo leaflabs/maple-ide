@@ -22,6 +22,7 @@ D34.
 <p>
 Each port can be configured at one of the following speeds:
 <ul>
+  <code>
   <li>SPI_18MHZ
   <li>SPI_9MHZ
   <li>SPI_4_5MHZ
@@ -30,23 +31,27 @@ Each port can be configured at one of the following speeds:
   <li>SPI_562_500KHZ
   <li>SPI_281_250KHZ
   <li>SPI_140_625KHZ
+  </code>
 </ul>
 
 <h2><a name="functions">Funtion Reference</a></h2>
 
 <dl>
-  <dt><code>#include "HardwareSPI.h"</code><br>
-      <code>HardwareSPI Spi(port)</code><br>
-  <dd> This include and declaration must be included at the start of any sketch
+  <dt><code>HardwareSPI Spi(number)</code><br>
+  <dd>This declaration must be included at the start of any sketch
   or program that uses the SPI interface. The argument <code>number</code> is
   either 1 or 2 and specifies which port to use. 
 
   <dt><code>Spi.begin(freq, endianness, mode)</code><br>
+      <code>Spi.begin()</code><br>
   <dd><code>begin()</code> is usually called in <code>setup()</code> to
   configure the baudrate of the given SPI port and to set up the header pins
   appropriately. <code>freq</code> is one of the set listed above; 
   <code>endianness</code> is either <code>LSBFIRST</code> or 
-  <code>MSBFIRST</code>; for now <code>mode</code> is always 0.
+  <code>MSBFIRST</code>; <code>mode</code> is one of {0,1,2,3} and specifies
+  which "SPI Mode" is used (see specification docs linked below).
+  <br>A default constructor with no arguments is provided for the lazy and
+  has the arguments <code>(SPI_1_125MHZ, MSBFIRST, 0)</code>.
   
   <dt><code>Spi.send(data, size()</code><br>
   <dd> Writes data into the port buffer to be transmitted as soon as possible.
