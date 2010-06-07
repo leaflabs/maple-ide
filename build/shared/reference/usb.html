@@ -18,8 +18,9 @@
 The Maple stm32 microprocessor includes a dedicated USB peripheral which can be
 configured to act as a general USB slave device with transfer rates up to
 12mbps (it unfortunately can not be configured as a host or on-the-go device).
-By default the peripheral is configured for two uses: first to recieve sketch/program uploads from the IDE, and second to emulate a regular serial port for use
-as a terminal (text read/write). 
+By default the peripheral is configured for two uses: first to recieve
+sketch/program uploads from the IDE, and second to emulate a regular serial
+port for use as a terminal (text read/write). 
 
 <p>
 The emulated terminal is relatively slow and inefficient; it is best for 
@@ -32,20 +33,8 @@ USB device.
 <h2><a name="functions">Function Reference</a></h2>
 
 <dl>
-  <dt><code>#include "HardwareUsb.h"</code><br>
-      <code>HardwareUsb Usb</code><br>
-  <dd> This include and declaration must be included at the start of any sketch
-  or program that uses the USB-serial interface.
-
-  <dt><code>Usb.begin(baudrate)</code><br>
-  <dd><code>begin()</code> is usually called in <code>setup()</code> to
-  configure the baudrate of the given serial port and to set up the header pins
-  appropriately. It can be called at any time to reconfigure a port or to
-  change the baudrate. 9600 baud is the generic speed most widely supported by
-  other devices and terminals.
-
-  <dt><code>SerialN.print(...)</code><br>
-      <code>SerialN.println(...)</code><br>
+  <dt><code>SerialUsb.print(...)</code><br>
+      <code>SerialUsb.println(...)</code><br>
   <dd> Writes data into the port buffer to be transmitted as soon as possible.
   Accepts strings (character arrays). If a raw integer is passed the
   corresponding ASCII character will be transmitted; to print out a number in
@@ -53,7 +42,8 @@ USB device.
   out the decimal number '1234' use <code>print(1234,DEC)</code>; to print out
   the binary numner '1001' use <code>print(9,BIN)</code>. 
     
-  <dt><code>SerialN.available()</code><br> <code>SerialN.read()</code><br>
+  <dt><code>SerialUsb.available()</code><br> 
+      <code>SerialUsb.read()</code><br>
   <dd><code>read()</code> will return any data that has been recieved over the
   port and <code>available()</code> will tell if any such data acutally exists,
   and if so how many bytes. If there is no data <code>read()</code> will
