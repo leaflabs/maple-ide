@@ -8,7 +8,7 @@ then
   RELEASE=$1
   echo Creating Arduino release $RELEASE...
   INFO_SOUGHT="<string>$RELEASE,"
-  INFO_FOUND=`cat ./dist/Arduino.app/Contents/Info.plist | grep $INFO_SOUGHT`
+  INFO_FOUND=`cat ./dist/MapleIDE.app/Contents/Info.plist | grep $INFO_SOUGHT`
   if [ -z "$INFO_FOUND" ]
   then 
     echo Fix the version number in Info.plist
@@ -37,7 +37,7 @@ rm -rf work
 if [ $1 ]
 then
   # write the release version number into the output directory
-  echo $1 > work/Arduino.app/Contents/Resources/Java/lib/version.txt
+  echo $1 > work/MapleIDE.app/Contents/Resources/Java/lib/version.txt
 fi
 
 echo Cleaning file boogers...
@@ -61,8 +61,8 @@ find work -name ".svn" -exec rm -rf {} 2> /dev/null ';'
 echo Creating disk image...
 
 SOURCE_DIR="work"
-SOURCE_FILES="Arduino.app"
-OUTPUT_DMG="maple-ide-$RELEASE"
+SOURCE_FILES="MapleIDE.app"
+OUTPUT_DMG="maple-ide-$RELEASE-macosx-10_6"
 WORK_DMG="working.dmg"
 WORK_DIR="working_dir"
 

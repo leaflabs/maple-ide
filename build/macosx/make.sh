@@ -34,7 +34,7 @@ fi
 
 ### -- SETUP WORK DIR -------------------------------------------
 
-RESOURCES=`pwd`/work/Arduino.app/Contents/Resources/Java
+RESOURCES=`pwd`/work/MapleIDE.app/Contents/Resources/Java
 #echo $RESOURCES
 #exit
 
@@ -48,12 +48,12 @@ else
   mkdir work
 
   # to have a copy of this guy around for messing with
-  echo Copying Arduino.app...
-  #cp -a dist/Arduino.app work/   # #@$(* bsd switches
-  #/sw/bin/cp -a dist/Arduino.app work/
-  cp -pR dist/Arduino.app work/
+  echo Copying MapleIDE.app...
+  #cp -a dist/MapleIDE.app work/   # #@$(* bsd switches
+  #/sw/bin/cp -a dist/MapleIDE.app work/
+  cp -pR dist/MapleIDE.app work/
   # cvs doesn't seem to want to honor the +x bit 
-  chmod +x work/Arduino.app/Contents/MacOS/JavaApplicationStub
+  chmod +x work/MapleIDE.app/Contents/MacOS/JavaApplicationStub
 
   cp -r ../shared/lib "$RESOURCES/"
   cp -r ../../libraries "$RESOURCES/"
@@ -78,12 +78,13 @@ else
   cp -r ../shared/reference "$RESOURCES/"
 
   echo Copying arm tools...
+  mkdir -p "$RESOURCES/hardware/tools/arm"
   cp -r dist/tools/arm "$RESOURCES/hardware/tools/" 
 
   echo Copying dfu-util...
-  cp work/Arduino.app/Contents/Resources/Java/hardware/tools/dfu-util work/Arduino.app/Contents/Resources/Java/hardware/tools/arm/bin
-  mkdir -p  work/Arduino.app/Contents/Resources/Java/hardware/tools/arm/Resources
-  cp work/Arduino.app/Contents/Resources/Java/hardware/tools/ work/Arduino.app/Contents/Resources/Java/hardware/tools/arm/Resources
+  cp dist/tools/dfu-util work/MapleIDE.app/Contents/Resources/Java/hardware/tools/arm/bin
+  mkdir -p  work/MapleIDE.app/Contents/Resources/Java/hardware/tools/arm/Resources
+  cp -R dist/tools/libusb-0.1.4.dylib work/MapleIDE.app/Contents/Resources/Java/hardware/tools/arm/Resources
 fi
 
 
@@ -150,8 +151,8 @@ zip -0rq "$RESOURCES/pde.jar" .
 cd ../..
 
 # get updated core.jar and pde.jar; also antlr.jar and others
-#mkdir -p work/Arduino.app/Contents/Resources/Java/
-#cp work/lib/*.jar work/Arduino.app/Contents/Resources/Java/
+#mkdir -p work/MapleIDE.app/Contents/Resources/Java/
+#cp work/lib/*.jar work/MapleIDE.app/Contents/Resources/Java/
 
 
 echo
