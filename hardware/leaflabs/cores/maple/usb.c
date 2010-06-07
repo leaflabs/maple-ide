@@ -379,27 +379,20 @@ void usbWaitReset(void) {
    will block at every 64 byte packet
 */
 int16 usbSendBytes(uint8* sendBuf, uint16 len) {
-   /* Block for any pending writes */
-   while (countTx)
-      ;
-/*   while (countTx != 0) { */
-/*     if (reset_state == NDTR_NRTS) { */
-/*       return 0; */
-/*     } */
-/*   }/\* wait for pipe to be clear *\/ */
 
-  if (reset_state == NDTR_NRTS) {
+  if (reset_state != START || bDeviceState != CONFIGURED) {
     return -1; /* indicates to caller to stop trying, were not connected */
   }
 
-  /* ideally we should wait here, but it gets stuck
-     for some reason. countTx wont decrement when
-     theres no host side port reading the data, this is
-     known, but even if we add the check for NDTR_NRTS it
-     still gets stuck...*/
-  if (countTx != 0) {
-    return 0; /* indicated to caller to keep trying, were just busy */
+  /* This may be the correct behavior but it's undocumented
+  if (countTx >= VCOM_TX_EPSIZE) {
+    return 0; // indicates to caller that the buffer is full 
   }
+  */
+
+  /* Block for any pending writes */
+  while (countTx)
+     ;
 
   uint16 sent = len;
 

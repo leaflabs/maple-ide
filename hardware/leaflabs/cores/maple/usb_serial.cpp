@@ -65,6 +65,9 @@ uint32 USBSerial::read(void *buf, uint32 len) {
 
 uint8 USBSerial::read(void) {
    uint8 ch;
-   return usbReceiveBytes(&ch, 1);
+   usbReceiveBytes(&ch, 1);
+   return ch;
 }
+
+USBSerial SerialUSB;
 

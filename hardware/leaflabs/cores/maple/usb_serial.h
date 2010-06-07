@@ -46,7 +46,7 @@ class USBSerial : public Print {
       void   write(void *, uint32);
 };
 
-
+extern USBSerial SerialUSB;
 
 #endif
 
