@@ -39,6 +39,7 @@
   <li><a href="#cli">Command Line Issues</a>
     <ul>
     <li>My flash programs don't seem to stick; they behave like they are RAM!
+    <li><code>cdc_acm 3-1:1.0: no more free acm devices</code>
     </ul>
 </ul>
 
@@ -129,6 +130,23 @@
   <dd> Make sure you "<code>make clean</code>" when switching between FLASH and
   RAM targets; make isn't smart enough to rebuild everything that needs to be
   for the new target.
+  <dt><a name="cli2"><code>cdc_acm 3-1:1.0: no more free acm devices</code></a>
+  [Linux]
+  <dd>This is a nasty one! It means that all 32 possible CDC_ACM serial devices
+  (<code>/dev/ttyACM25</code> etc) have been used up. This usually happens when
+  you've been using a serial port monitor and didn't close the monitor before
+  restarting the Maple or uploading a new program: the operating system doesn't
+  like that and locks up that device. After reset the Maple comes back up as a
+  new device. If you develop heavily and don't restart you'll blow right 
+  through all 32 devices. The lazy solution is to always close the monitor 
+  before restarting, and if you get this error in dmesg after a dfu-util "Not
+  Found" error, restart you machine.<br>
+  The hacker solution is to restart your cdc_acm kernel module. On Ubuntu 
+  09.10, this goes a little something like:
+<pre class="code">
+$ sudo rmmod cdc-acm
+$ sudo insmod /lib/modules/2.6.31-20-generic/kernel/drivers/usb/class/cdc-acm.ko
+</pre>
 </dl>
 
 <div class="box">
