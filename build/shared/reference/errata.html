@@ -25,6 +25,21 @@ href="./compatability.html">compatability</a>.
 silkscreen and the "infinity-leaf" logo.
 <p>Known design errors:
 <ul>
+
+  <li><span style="color:orange;">Bad/Sticky Buttons:</span> a number of rev3
+  boards sold in May-June 2010 have questionable reset and "BUT" buttons. What
+  seems to have happened is that the flux removed we used to clean the boards
+  before shipping erroded the plastic internals which results in intermittant
+  functionality. All buttons on all shipped boards did function in testing, 
+  but some may have worked in testing but be unreliable in regular use. If you
+  have this problem we will be happy to ship you new buttons if you think you
+  can resolder them yourself, or you can ship us your board and we will swap
+  out that part. For reference, the button part number is KMR211GLFS and the
+  flux remover we used is "Precision Electronics Cleaner" from RadioShack,
+  which is "Safe on most plastics" and contains Dipropylene glycol monomethyl
+  ether, hydrotreated heavy naphtha, dipropylene glycol methyl ether acetate
+  (really?), and carbon dioxide. 
+
   <li><span style="color:red;">Resistors on D0, D1: </span> these header pins,
   which are RX/TX on USART2 ("Serial2"), have resistors in-line between the
   STM32 and the headers. These resistors increase the immpedence of the lines
@@ -33,6 +48,11 @@ silkscreen and the "infinity-leaf" logo.
   they appear to protect the USB-Serial converter from TTL voltage on the
   headers.
 
+  <li><span style="color:yellow;">Silkscreen Errors:</span> the silkscreen on
+  the bottom indicated PWM functionality on pin 25 and listen the external
+  header GND pin as number 38 (actually 38 is connected to the BUT button). 
+  We manually sharpied over both of these mistakes. 
+
 </ul>
 <p>Potential failure modes:
 <ul>
@@ -40,6 +60,7 @@ silkscreen and the "infinity-leaf" logo.
   not all header pins are 5v compatible; connecting certain serial devices
   in the wrong way could over voltage the pins.
 </ul>
+
 <h2><a name="rev1">Maple Board rev1</a></h2>
 <p>
 This batch of 100 boards shipped in later 2009. They have a red silkscreen and
@@ -58,6 +79,25 @@ the logo is a single pixelated leaf.
   open drain GPIO functionality of the pins. These resistors were accidentally
   copied over from older Arduino USB designs, where they appear to protect the
   USB-Serial converter from TTL voltage on the headers.
+
+  <li><span style="color:yellow;">Silkscreen Differences:</span> the pin 
+  numbering scheme on rev1 is different from rev3, and thus rev3 software is
+  difficult to use. Notably the analog input bank is labeled A0-A4 on rev1 but
+  15-20 on rev3, and the extra header bank does not have a pinout table on the
+  bottom.
+
+  <li><span style="color:yellow;">No BUT Button:</span> the BUT button, useful
+  for serial bootloading, was only added in rev3. As a workaround you can 
+  directly short the appropriate MCU pin to Vcc; see 
+  <a href="http://forums.leaflabs.com/topic.php?id=32#post-126">this forum
+  posting</a>.
+
+</ul>
+<p>Potential failure modes:
+<ul>
+  <li><span style="color:orange;">TTL voltage on non-tolerant pins: </span> 
+  not all header pins are 5v compatible; connecting certain serial devices
+  in the wrong way could over voltage the pins.
 </ul>
 
 <div class="box">

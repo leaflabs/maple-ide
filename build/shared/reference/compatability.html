@@ -64,6 +64,11 @@ The incompatible hardware differences are:
   We did our best! It may be possible to reroute this peripheral internally
   using low level configuration (but we haven't looked in to it). 
 
+  <li><b style="color:red;">No External Voltage Reference:</b> The Arduino has
+  an Aref pin which allows the use of an external ADC voltage reference; the
+  Maple has an extra GPIO pin (14) with PWM capability in this spot, and does
+  not allow an external voltage reference to be configured. 
+
   <li><b style="color:red;">EEPROM:</b> the Maple does not have any internal
   EEPROM. This functionality can be emulated with regular peristant flash
   memory, or with an external EEPROM chip. 
