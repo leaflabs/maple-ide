@@ -26,8 +26,6 @@
 const int sensorMin = 0;      // sensor minimum, discovered through experiment
 const int sensorMax = 600;    // sensor maximum, discovered through experiment
 
-HardwareUsb Serial;
-
 void setup() {
 }
 
@@ -41,16 +39,16 @@ void loop() {
   // range value:
   switch (range) {
   case 0:    // your hand is on the sensor
-    Serial.println("dark");
+    SerialUSB.println("dark");
     break;
   case 1:    // your hand is close to the sensor
-    Serial.println("dim");
+    SerialUSB.println("dim");
     break;
   case 2:    // your hand is a few inches from the sensor
-    Serial.println("medium");
+    SerialUSB.println("medium");
     break;
   case 3:    // your hand is nowhere near the sensor
-    Serial.println("bright");
+    SerialUSB.println("bright");
     break;
   } 
 

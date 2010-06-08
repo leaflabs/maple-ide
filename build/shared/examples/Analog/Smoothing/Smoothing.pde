@@ -32,8 +32,6 @@ int average = 0;                // the average
 
 int inputPin = 0;
 
-HardwareUsb Serial;
-
 void setup()
 {
   // USB communications already initialized
@@ -61,7 +59,7 @@ void loop() {
   // calculate the average:
   average = total / numReadings;         
   // send it to the computer (as ASCII digits) 
-  Serial.println(average, DEC);               
+  SerialUSB.println(average, DEC);               
 }
 
 

@@ -26,15 +26,13 @@
  http://www.arduino.cc/en/Tutorial/Graph
  */
 
-HardwareUsb Serial;
-
 void setup() {
 
 }
 
 void loop() {
   // send the value of analog input 0:
-  Serial.println(analogRead(0));
+  SerialUSB.println(analogRead(0));
   // wait a bit for the analog-to-digital converter 
   // to stabilize after the last reading:
   delay(10);

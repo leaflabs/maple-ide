@@ -21,8 +21,6 @@ const int redPin = 0;		// sensor to control red color
 const int greenPin = 1;		// sensor to control green color
 const int bluePin = 2;		// sensor to control blue color
 
-HardwareUsb Serial;
-
 void setup()
 {
   // USB communications already estabilished
@@ -30,11 +28,11 @@ void setup()
 
 void loop()
 {
-  Serial.print(analogRead(redPin));
-  Serial.print(",");
-  Serial.print(analogRead(greenPin));
-  Serial.print(",");
-  Serial.println(analogRead(bluePin));
+  SerialUSB.print(analogRead(redPin));
+  SerialUSB.print(",");
+  SerialUSB.print(analogRead(greenPin));
+  SerialUSB.print(",");
+  SerialUSB.println(analogRead(bluePin));
 }
 
 /* Processing code for this example

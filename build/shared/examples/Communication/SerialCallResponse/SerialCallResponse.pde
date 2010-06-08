@@ -29,8 +29,6 @@ int secondSensor = 0;   // second analog sensor
 int thirdSensor = 0;    // digital sensor
 int inByte = 0;         // incoming serial byte
 
-HardwareUsb Serial; 
-
 void setup()
 {
   pinMode(thirdSensor, INPUT);   // digital sensor is on digital pin 2
@@ -40,9 +38,9 @@ void setup()
 void loop()
 {
   // if we get a valid byte, read analog ins:
-  if (Serial.available() > 0) {
+  if (SerialUSB.available() > 0) {
     // get incoming byte:
-    inByte = Serial.read();
+    inByte = SerialUSB.read();
     // read first analog input, divide by 4 to make the range 0-255:
     firstSensor = analogRead(0)/4;
     // delay 10ms to let the ADC recover:
@@ -52,15 +50,15 @@ void loop()
     // read  switch, map it to 0 or 255L
     thirdSensor = map(digitalRead(2), 0, 1, 0, 255);  
     // send sensor values:
-    Serial.print(firstSensor, BYTE);
-    Serial.print(secondSensor, BYTE);
-    Serial.print(thirdSensor, BYTE);               
+    SerialUSB.print(firstSensor, BYTE);
+    SerialUSB.print(secondSensor, BYTE);
+    SerialUSB.print(thirdSensor, BYTE);               
   }
 }
 
 void establishContact() {
-  while (Serial.available() <= 0) {
-    Serial.print('A', BYTE);   // send a capital A
+  while (SerialUSB.available() <= 0) {
+    SerialUSB.print('A', BYTE);   // send a capital A
     delay(300);
   }
 }

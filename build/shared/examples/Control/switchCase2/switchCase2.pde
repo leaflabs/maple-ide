@@ -21,8 +21,6 @@
 
  */
 
-HardwareUsb Serial;
-
 void setup() {
   // initialize the LED pins:
   for (int thisPin = 2; thisPin < 7; thisPin++) {
@@ -32,8 +30,8 @@ void setup() {
 
 void loop() {
   // read the sensor:
-  if (Serial.available() > 0) {
-    int inByte = Serial.read();
+  if (SerialUSB.available() > 0) {
+    int inByte = SerialUSB.read();
     // do something different depending on the character received.  
     // The switch statement expects single number values for each case;
     // in this exmaple, though, you're using single quotes to tell

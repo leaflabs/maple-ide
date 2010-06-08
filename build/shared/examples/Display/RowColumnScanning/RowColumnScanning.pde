@@ -49,8 +49,6 @@ int pixels[8][8];
 int x = 5;
 int y = 5;
 
-HardwareUsb Serial;
-
 void setup() {
   // initialize the I/O pins as outputs:
 

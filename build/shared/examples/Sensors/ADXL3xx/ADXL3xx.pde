@@ -32,8 +32,6 @@ const int xpin = 3;                   // x-axis of the accelerometer
 const int ypin = 2;                   // y-axis
 const int zpin = 1;                   // z-axis (only on 3-axis models)
 
-HardwareUsb Serial;
-
 void setup()
 {
   // Provide ground and power by using the analog inputs as normal
@@ -49,14 +47,14 @@ void setup()
 void loop()
 {
   // print the sensor values:
-  Serial.print(analogRead(xpin));
+  SerialUSB.print(analogRead(xpin));
   // print a tab between values:
-  Serial.print("\t");
-  Serial.print(analogRead(ypin));
+  SerialUSB.print("\t");
+  SerialUSB.print(analogRead(ypin));
   // print a tab between values:
-  Serial.print("\t");
-  Serial.print(analogRead(zpin));
-  Serial.println();
+  SerialUSB.print("\t");
+  SerialUSB.print(analogRead(zpin));
+  SerialUSB.println();
   // delay before next reading:
   delay(100);
 }

@@ -19,12 +19,10 @@
  Ported to the Maple 27 May 2010 by Bryan Newbold
  */
 
-HardwareUsb Serial;
-
 void setup() 
 { 
   // prints title with ending line break 
-  Serial.println("ASCII Table ~ Character Map"); 
+  SerialUSB.println("ASCII Table ~ Character Map"); 
 } 
 
 // first visible ASCIIcharacter '!' is number 33:
@@ -38,31 +36,31 @@ void loop()
   // prints value unaltered, i.e. the raw binary version of the 
   // byte. The serial monitor interprets all bytes as 
   // ASCII, so 33, the first number,  will show up as '!' 
-  Serial.print(thisByte, BYTE);    
+  SerialUSB.print(thisByte, BYTE);    
 
-  Serial.print(", dec: "); 
+  SerialUSB.print(", dec: "); 
   // prints value as string as an ASCII-encoded decimal (base 10).
   // Decimal is the  default format for Serial.print() and Serial.println(),
   // so no modifier is needed:
-  Serial.print(thisByte);      
+  SerialUSB.print(thisByte);      
   // But you can declare the modifier for decimal if you want to.
   //this also works if you uncomment it:
 
-  // Serial.print(thisByte, DEC);  
+  // SerialUSB.print(thisByte, DEC);  
 
 
-  Serial.print(", hex: "); 
+  SerialUSB.print(", hex: "); 
   // prints value as string in hexadecimal (base 16):
-  Serial.print(thisByte, HEX);     
+  SerialUSB.print(thisByte, HEX);     
 
   Serial.print(", oct: "); 
   // prints value as string in octal (base 8);
-  Serial.print(thisByte, OCT);     
+  SerialUSB.print(thisByte, OCT);     
 
-  Serial.print(", bin: "); 
+  SerialUSB.print(", bin: "); 
   // prints value as string in binary (base 2) 
   // also prints ending line break:
-  Serial.println(thisByte, BIN);   
+  SerialUSB.println(thisByte, BIN);   
 
   // if printed last visible character '~' or 126, stop: 
   if(thisByte == 126) {     // you could also use if (thisByte == '~') {

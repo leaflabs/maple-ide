@@ -29,8 +29,6 @@ const int analogPin = 15;     // pin that the sensor is attached to
 const int ledPin = 13;       // pin that the LED is attached to
 const int threshold = 400;   // an arbitrary threshold level that's in the range of the analog input
 
-HardwareUsb Serial;
-
 void setup() {
   // initialize the LED pin as an output:
   pinMode(ledPin, OUTPUT);
@@ -49,7 +47,7 @@ void loop() {
   }
 
   // print the analog value:
-  Serial.println(analogValue, DEC);
+  SerialUSB.println(analogValue, DEC);
 
 }
 

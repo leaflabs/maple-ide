@@ -16,17 +16,14 @@
  
  */
 
-HardwareUsb Serial;
-
  void setup() {
-    // USB communications already initialized...
  }
  
  void loop() {
   // read the analog input into a variable:
    int analogValue = analogRead(0);
    // print the result:
-   Serial.println(analogValue);
+   SerialUSB.println(analogValue);
    // wait 10 milliseconds for the analog-to-digital converter
    // to settle after the last reading:
    delay(10);
