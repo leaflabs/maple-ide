@@ -91,17 +91,17 @@ Here are some commonly used PWM configurations (note: double check our math!):
 
 <h2><a name="functions">Function Reference</a></h2>
 <dl>
-  <dt><code>setMode(pin_num, PWM)</code>
+  <dt><code>pinMode(pin_num, PWM)</code>
   <dd>This command is usually called from <code>setup()</code> to tell the
   microcontroller that <code>pin_num</code> should be configured to PWM output.
   PWM implies regular driven OUTPUT (not open drain etc).
 
-  <dt><code>pwmWrite()</code>
+  <dt><code>pwmWrite(pin_num, value)</code>
   <dd>This command sets the PWM duty. User code is expected to determine and
   honor the maximum value (based on the configured period). As a convenience,
   <code>analogWrite</code> is an alias of <code>pwmWrite</code> to ease porting
-  Arduino code, though period and duty will have to be reconfigured (see
-  <a href="./compatability.html">compatability.html</a>
+  Arduino code, though period and duty will have to be recalibrated (see
+  <a href="./compatability.html">compatability.html</a>).
 
   <dt><code>timers_set_prescaler(port, prescaler)</code>
   <dd>Find the appropriate timer for a given PWM header using the table above,
@@ -110,9 +110,11 @@ Here are some commonly used PWM configurations (note: double check our math!):
   at any time. The default prescaler is 1 (eg, no prescaling). 
 
   <dt><code>timers_set_reload(port, reload)</code>
-  <dd>This function sets the period ("reload") value for an entire PWM 
-  timer bank. The value is 16bit (0 to 65536) and determines the maximum 
-  duty cycle that can be writen with <code>pwmWrite()</code>.
+  <dd>This function sets the period ("reload") value for an entire PWM timer
+  bank. The value is 16bit (0 to 65536) and determines the maximum value that
+  can be written with <code>pwmWrite()</code> corresponding to 100% duty cycle.
+  This also affects the PWM frequency: the higher reload is, the lower the PWM
+  frequency will be.
 
 </dl>
 
