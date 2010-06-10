@@ -100,6 +100,26 @@ public class DFUUploader extends Uploader  {
         emitResetPulse();          
       }
 
+      String dfuList = new String();
+      List commandCheck = new ArrayList();
+      commandCheck.add("dfu-util");
+      commandCheck.add("-l");
+      long startChecking = System.currentTimeMillis();
+      System.out.println("Searching for DFU device [" + usbID + "]...");
+      do {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {}
+        dfuList = executeCheckCommand(commandCheck);
+        //System.out.println(dfuList);
+      } while ((dfuList.toUpperCase().indexOf(("Found DFU: [0x"+usbID.substring(0,4)).toUpperCase()) == -1) && (System.currentTimeMillis() - startChecking < 7000));
+      if(dfuList.toUpperCase().indexOf(("Found DFU: [0x"+usbID.substring(0,4)).toUpperCase()) == -1) {
+        System.out.println(dfuList);
+        System.err.println("Couldn't find the DFU device: [" + usbID + "]");
+        return false;
+      }
+      System.out.println("Found it!");
+
       /* todo, add handle to let user choose altIf at upload time! */
       String altIf = Base.getBoardPreferences().get("upload.altID");
 
@@ -146,13 +166,84 @@ public class DFUUploader extends Uploader  {
 
       serialPort.dispose();
 
-      try {
-        Thread.sleep(programDelay);
-      } catch (InterruptedException e) {}
-
     } catch(Exception e) {
       System.err.println("Reset via USB Serial Failed! Did you select the serial right serial port?\nAssuming the board is in perpetual bootloader mode and continuing to attempt dfu programming...\n");
     }
+  }
+
+  protected String executeCheckCommand(Collection commandDownloader) 
+    throws RunnerException
+  {
+    firstErrorFound = false;  // haven't found any errors yet
+    secondErrorFound = false;
+    notFoundError = false;
+    int result=0; // pre-initialized to quiet a bogus warning from jikes
+    
+    String userdir = System.getProperty("user.dir") + File.separator;
+    String returnStr = new String();
+
+    try {
+      String[] commandArray = new String[commandDownloader.size()];
+      commandDownloader.toArray(commandArray);
+      
+      String armBasePath;
+      
+      armBasePath = new String(Base.getHardwarePath() + "/tools/arm/bin/"); 
+      
+      commandArray[0] = armBasePath + commandArray[0];
+     
+      if (verbose || Preferences.getBoolean("upload.verbose")) {
+        for(int i = 0; i < commandArray.length; i++) {
+          System.out.print(commandArray[i] + " ");
+        }
+        System.out.println();
+      }
+
+      Process process = Runtime.getRuntime().exec(commandArray);
+      BufferedReader stdInput = new BufferedReader(new 
+            InputStreamReader(process.getInputStream()));
+      BufferedReader stdError = new BufferedReader(new 
+            InputStreamReader(process.getErrorStream()));
+
+      // wait for the process to finish.  if interrupted
+      // before waitFor returns, continue waiting
+      //
+      boolean busy = true;
+      while (busy) {
+        try {
+          result = process.waitFor();
+          busy = false;
+        } catch (InterruptedException intExc) {
+        }
+      } 
+
+      String s;
+      while ((s = stdInput.readLine()) != null) {
+        returnStr += s + "\n";
+      }
+
+      process.destroy();
+
+      if(exception!=null) {
+        exception.hideStackTrace();
+        throw exception;   
+      }
+      if(result!=0) return "Error!";
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    //System.out.println("result2 is "+result);
+    // if the result isn't a known, expected value it means that something
+    // is fairly wrong, one possibility is that jikes has crashed.
+    //
+    if (exception != null) throw exception;
+
+    if ((result != 0) && (result != 1 )) {
+      exception = new RunnerException(SUPER_BADNESS);
+    }
+
+    return returnStr; // ? true : false;      
+
   }
 
   // Need to overload this from Uploader to use the system-wide dfu-util
