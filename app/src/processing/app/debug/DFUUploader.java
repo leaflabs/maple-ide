@@ -147,22 +147,18 @@ public class DFUUploader extends Uploader  {
       
     try {
       Serial serialPort = new Serial();
-     
+    
+      // try to toggle DTR/RTS (old scheme)
+      serialPort.setRTS(false);
+      serialPort.setDTR(false);
+      serialPort.setDTR(true);
       serialPort.setDTR(false);
 
-      serialPort.setRTS(false);
-
-      try {
-        Thread.sleep(50);
-      } catch (InterruptedException e) {}
-
+      // try magic number
+      serialPort.setRTS(true);
       serialPort.setDTR(true);
-   
-      try {
-        Thread.sleep(50);
-      } catch (InterruptedException e) {}
-      
-      //  serialPort.setDTR(false);
+      serialPort.setDTR(false);
+      serialPort.write("1EAF");
 
       serialPort.dispose();
 
