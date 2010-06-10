@@ -24,7 +24,7 @@ then
     fi
   fi
   echo "Extracting distribution files for macosx platform: " $DIST_ARCHIVE
-  tar --extract --file=$DIST_ARCHIVE --ungzip --directory=dist/tools
+  tar -xzf $DIST_ARCHIVE --directory=dist/tools
   if test ! -d dist/tools/arm
   then
     echo "!!! Problem extracting dist file, please fix it."
@@ -79,7 +79,7 @@ else
 
   echo Copying arm tools...
   mkdir -p "$RESOURCES/hardware/tools/arm"
-  cp -r dist/tools/arm "$RESOURCES/hardware/tools/" 
+  cp -r dist/tools/arm/* "$RESOURCES/hardware/tools/arm/" 
 
   echo Copying dfu-util...
   cp dist/tools/dfu-util work/MapleIDE.app/Contents/Resources/Java/hardware/tools/arm/bin
