@@ -152,14 +152,25 @@ public class DFUUploader extends Uploader  {
       serialPort.setRTS(false);
       serialPort.setDTR(false);
       serialPort.setDTR(true);
+      try {
+            Thread.sleep(50);
+      } catch (InterruptedException e) {}
       serialPort.setDTR(false);
 
       // try magic number
       serialPort.setRTS(true);
       serialPort.setDTR(true);
+      try {
+            Thread.sleep(50);
+      } catch (InterruptedException e) {}
       serialPort.setDTR(false);
+      try {
+            Thread.sleep(50);
+      } catch (InterruptedException e) {}
       serialPort.write("1EAF");
-
+      try {
+            Thread.sleep(50);
+      } catch (InterruptedException e) {}
       serialPort.dispose();
 
     } catch(Exception e) {
