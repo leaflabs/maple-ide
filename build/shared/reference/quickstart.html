@@ -60,8 +60,9 @@ archive instead of running it live out of the archive file.
 <p>
 On <b><i>Linux only</i></b>, you'll want to run the
 <code>install-udev-rules.sh</code> at this point; it will ask for root
-perimissions, then you need to restart udev. This will grant members of
-'plugdev' read/write access to Maple devices over USB.
+perimissions, then you need to restart udev (<code>sudo /etc/init.d/udev
+restart</code>). This will grant members of 'plugdev' read/write access to
+Maple devices over USB.
 
 <p>
 On <b><i>Windows only</i></b>, you'll have to install drivers; see the 
@@ -117,11 +118,11 @@ slow, smooth pattern that means you've got a problem: see the <a href="./trouble
 
 <p>
 <img src="./img/upload_button.png" style="border: 2px black solid; float:left; margin-right: 8px;">
-If all systems are go press the "upload" button (right arrow to a bunch of
-dots) to upload your program to the maple. You should see some text and a
-progress bar flash by in the status window of the IDE, then some blinky
-patterns on the maple, and then a constant blink with whatever time period you
-programmed in above.
+If all systems are go, select the Board type and Serial Port from the Tools
+menu, then press the "upload" button (right arrow to a bunch of dots) to upload
+your program to the maple. You should see some text and a progress bar flash by
+in the status window of the IDE, then some blinky patterns on the maple, and
+then a constant blink with whatever time period you programmed in above.
 
 <h3>6. Use the serial port monitor!</h3>
 <p>

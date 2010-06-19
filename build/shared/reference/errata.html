@@ -48,6 +48,13 @@ silkscreen and the "infinity-leaf" logo.
   they appear to protect the USB-Serial converter from TTL voltage on the
   headers.
 
+  <li><span style="color:yellow;">GPIO 39-43 Unconfigured:</span> this is 
+  really more of a software todo item; some of the JTAG header pins are 
+  numbered 39-43. These STM32 pins are indeed fully functional GPIO when the
+  a JTAG device is not connected, but we have not enabled them in software
+  and thus they can not be accessed with the regular <code>pinMode()</code>
+  or <code>digitalWrite()</code> functions.
+
   <li><span style="color:yellow;">Silkscreen Errors:</span> the silkscreen on
   the bottom indicated PWM functionality on pin 25 and listen the external
   header GND pin as number 38 (actually 38 is connected to the BUT button). 
