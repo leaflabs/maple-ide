@@ -4,7 +4,7 @@ speed and laziness"""
 
 import os,tempfile,re
 
-r1 = re.compile('href="./(.*?)\.html"')
+r1 = re.compile('href="./(.*?)\.html')
 r2 = re.compile('src="./img/(.*?)"')
 r3 = re.compile('(<h1>.*?</h1>)')
 
@@ -25,7 +25,7 @@ for f in originals:
             if l.find("<!-- ENDDOC -->") != -1:
                 state = 2
                 break
-            l = r1.sub(r'href="../\1/"',l)
+            l = r1.sub(r'href="../\1/',l)
             l = r2.sub(r'src="http://static.leaflabs.com/img/docs/\1"',l)
             l = r3.sub('',l)
             cache.append(l)
