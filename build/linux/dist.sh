@@ -32,7 +32,6 @@ cp ../../app/lib/antlr.jar arduino/lib/
 cp ../../app/lib/ecj.jar arduino/lib/
 cp ../../app/lib/jna.jar arduino/lib/
 cp ../../app/lib/oro.jar arduino/lib/
-cp ../../readme-arduino.txt arduino/
 cp ../../README-dist arduino/README.txt
 
 cp -r ../../hardware arduino/
@@ -55,6 +54,7 @@ cp -r ../shared/examples arduino/
 #unzip -q -d arduino/ ../shared/reference.zip
 echo Copying reference...
 cp -r ../shared/reference arduino/
+cp ../../readme-arduino.txt arduino/reference/
 
 # add java (jre) files
 #tar --extract --file=jre.tgz --ungzip --directory=arduino

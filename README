@@ -14,22 +14,29 @@ in the Maple; the regular arduino toolchain is only targeted towards the Atmel
 series of AVR microcontrollers. 
 
 This is the source code repository for the maple-ide; if you just want to
-program your Maple board you probably want to download a binary release 
-package for your particular platform. The latest version of this repository
-can be found at: http://github.com/leaflabs/maple-ide
+program your Maple board you probably want to download a binary release package
+for your particular platform. Binaries are linked from
+http://leaflabs.com/docs/maple-ide/install/; the latest version of this
+repository can be found at http://github.com/leaflabs/maple-ide/
 
 This IDE includes a full ARM compiler toolchain ("arm-none-eabi-gcc") and a low
-level library for the STM32 Cortex-M3 plaform called libmaple. libmaple is 
-developed seperately and can be used straight from the command line; it is
-available at: http://github.com/leaflabs/libmaple
+level library for the STM32 Cortex-M3 platform called libmaple. The toolchain
+binaries are fetched from the leaflabs server as a repackaged (and sometimes
+recompiled) .tar.gz of CodeSourcery's modifications to the GCC toolchain.
+libmaple is developed separately and can be used straight from the command
+line; it is available at: http://github.com/leaflabs/libmaple
 
+If you are a "power hacker" just looking to modify the Maple IDE compilation
+process or get at libmaple directly we strongly recommend that you check out
+the alternative workflow described at
+http://leaflabs.com/docs/libmaple/unix-toolchain/
  
-Disclaimer
+Arduino Compatibility Disclaimer
 ------------------------------------------------------------------------------
-We make no claims that we "preserve" any design or strategy behind arduino,
-which is why this being released as a separate branch of arduino and not as a
+We make no claims that we "preserve" any design or strategy behind Arduino,
+which is why this being released as a separate branch of Arduino and not as a
 patch. Arduino is clearly organized around compiling to AVR, and compiling to
-ARM is a hack. In the future we hope that the arduino compilation and upload
+ARM is a hack. In the future we hope that the Arduino compilation and upload
 infrastructure will be generalized so that boards like the Maple which require
 a non-AVR compiler can be developed for in the regular IDE by installing a
 plugin or library.
@@ -37,30 +44,24 @@ plugin or library.
 
 Build Requirements
 ------------------------------------------------------------------------------
-NOTE: there are seperate requirements to actually compile and upload
+NOTE: there are separate requirements to actually compile and upload
       sketches using the environment; these are just the tools needed
       to build the Java user interface.
 
-A number of file archives are not included in this repository and must be 
-downloaded and copied in seperately to build for a given platform:
-
-    avr_tools.zip           ./build/windows/avr_tools.zip
-    jre.tgz                 ./build/linux/jre.tgz
-    jre.zip                 ./build/windows/jre.zip
-    reference.zip           ./build/shared/reference.zip
-    template.dmg.gz         ./build/macosx/template.dmg.gz
-    tools-universal.zip     ./build/macosx/dist/tools-universal.zip
+The toolchain archives for each platform are quite large and don't change
+often so they are mirrored separately from this repository. The appropriate
+.tar.gz file will be downloaded as part of the make.sh/dist.sh process.
 
 Linux build requirements:
  - a reasonable development environment (tar, perl, gzip, etc)
  - A java 1.5+ environment with javac on the path 
 
 Mac OSX build requirements:
- - TODO
+ - Xcode? Might work without it...
 
 Windows build requirements:
- - a cygwin build environment (see the arduino build docs)
- - TODO
+ - a cygwin build environment (see the Arduino build docs)
+ - A java compiler on your PATH
 
 Notes on RXTX
 ------------------------------------------------------------------------------
@@ -72,7 +73,7 @@ port support (this reduces the jar file size?):
     $ ./configure  --disable-PRINTER
     $ make
 
-Changes from stock arduino codebase
+Changes from stock Arduino codebase (partial?)
 ------------------------------------------------------------------------------
  * removed all Eclipse project cruft
  * hardware/leaflabs directory, including bootloader/ and core/
@@ -87,15 +88,8 @@ Changes from stock arduino codebase
    build/shared/lib: UI skin and preferences
  * build/*/dist/*: dist files broken out into external zip downloads
  * build/*/*sh: make files are heavily modified
- * build/shared/examples/Maple: Maple-specific examples
+ * build/shared/examples/Maple: Maple-specific examples and porting
  * added a "program delay" to the preferences, delay between reset and dfu-util
    app/src/processing/app/Preferences.java
-
-TODO
-------------------------------------------------------------------------------
- * Entire compile/release/upload toolchain for windows and OSX
- * Port or replace extension libraries 
- * Include link to documentation for porting AVR sketches to ARM in the
-   compiler error output to minize confusion if a user tries to compile an
-   incompatible AVR sketch
+ * build/shared/reference: completely replaced for Maple
 

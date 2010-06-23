@@ -67,7 +67,6 @@ else
   cp ../../app/lib/oro.jar "$RESOURCES/"
   cp ../../app/lib/RXTXcomm.jar "$RESOURCES/"
   cp ../../README-dist "$RESOURCES/README.txt"
-  cp ../../readme-arduino.txt "$RESOURCES/"
 
   echo Copying examples...
   cp -r ../shared/examples "$RESOURCES/"
@@ -76,6 +75,7 @@ else
   #unzip -q -d "$RESOURCES/" ../shared/reference.zip
   echo Copying reference...
   cp -r ../shared/reference "$RESOURCES/"
+  cp ../../readme-arduino.txt "$RESOURCES/reference/"
 
   echo Copying arm tools...
   mkdir -p "$RESOURCES/hardware/tools/arm"

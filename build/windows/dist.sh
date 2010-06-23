@@ -50,7 +50,6 @@ cp ../../app/lib/jna.jar arduino/lib/
 cp ../../app/lib/oro.jar arduino/lib/
 cp ../../app/lib/RXTXcomm.jar arduino/lib/
 
-cp ../../readme-arduino.txt arduino/
 cp ../../README-dist arduino/README.txt
 
 echo Copying examples...
@@ -60,6 +59,7 @@ cp -r ../shared/examples arduino/
 #unzip -q -d arduino/ ../shared/reference.zip
 echo Copying reference...
 cp -r ../shared/reference arduino/
+cp ../../readme-arduino.txt arduino/reference/
 
 echo Copying binaries...
 #cp -r dist/tools/avr arduino/hardware/tools/avr
