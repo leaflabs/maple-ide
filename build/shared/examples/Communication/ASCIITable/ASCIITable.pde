@@ -53,7 +53,7 @@ void loop()
   // prints value as string in hexadecimal (base 16):
   SerialUSB.print(thisByte, HEX);     
 
-  Serial.print(", oct: "); 
+  SerialUSB.print(", oct: "); 
   // prints value as string in octal (base 8);
   SerialUSB.print(thisByte, OCT);     
 
