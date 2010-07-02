@@ -36,9 +36,9 @@ pin D10; all other pins are <a href="./compatability.html">compatible</a>.
 
 <table>
   <tr><th>Timer <th>PWM Headers
-  <tr><td>1     <td>D6,D7,D8,D31,D32,D33,D34
+  <tr><td>1     <td>D6,D7,D8
   <tr><td>2     <td>D0,D1,D2,D3
-  <tr><td>3     <td>D11,D12,D25,D27,D28
+  <tr><td>3     <td>D11,D12,D27,D28
   <tr><td>4     <td>D5,D9,D14,D24
 </table>
 
@@ -103,13 +103,13 @@ Here are some commonly used PWM configurations (note: double check our math!):
   Arduino code, though period and duty will have to be recalibrated (see
   <a href="./compatability.html">compatability.html</a>).
 
-  <dt><code>timers_set_prescaler(port, prescaler)</code>
+  <dt><code>timers_set_prescaler(timer_num, prescaler)</code>
   <dd>Find the appropriate timer for a given PWM header using the table above,
   then set the prescaler. This function is normally called once from
   <code>setup()</code>, but the timer can be reconfigured with a new prescaler
   at any time. The default prescaler is 1 (eg, no prescaling). 
 
-  <dt><code>timers_set_reload(port, reload)</code>
+  <dt><code>timers_set_reload(timer_num, reload)</code>
   <dd>This function sets the period ("reload") value for an entire PWM timer
   bank. The value is 16bit (0 to 65536) and determines the maximum value that
   can be written with <code>pwmWrite()</code> corresponding to 100% duty cycle.
