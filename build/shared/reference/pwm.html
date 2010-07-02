@@ -79,13 +79,13 @@ Here are some commonly used PWM configurations (note: double check our math!):
       <td>0.020ms
       <td>0 to 0.020ms
       <td>1 (none)
-      <td>65536
+      <td>65535 (default)
       <td>0 to 767
   <tr><td>Servo Control
       <td>20ms
       <td>1.25 (0deg) <br>1.50ms (90deg) <br>1.75 (180deg)
       <td>21 <br>21 <br>21
-      <td>65536 <br>65536 <br>65536
+      <td>65535 (default) <br>65535 (default) <br>65535 (default)
       <td>4096 <br>4915 <br>5734
 </table>
 
@@ -111,7 +111,7 @@ Here are some commonly used PWM configurations (note: double check our math!):
 
   <dt><code>timers_set_reload(timer_num, reload)</code>
   <dd>This function sets the period ("reload") value for an entire PWM timer
-  bank. The value is 16bit (0 to 65536) and determines the maximum value that
+  bank. The value is 16bit (0 to 65535) and determines the maximum value that
   can be written with <code>pwmWrite()</code> corresponding to 100% duty cycle.
   This also affects the PWM frequency: the higher reload is, the lower the PWM
   frequency will be.
