@@ -9,12 +9,22 @@
 <!-- STARTDOC -->
 <h1>Maple Development Quickstart</h1>
 
-You'll need a maple board, a mini-b USB cable, a functional computer, and
+You'll need a Maple board, a mini-b USB cable, a functional computer, and
 possibly root (or "administrator") access to that computer.
 If you have trouble along the way try the <a href="./install.html">install
 page</a> for more detailed download and installation instructions, and the
 <a href="./troubleshooting.html">troubleshooting</a> page for help with some
 common problems. if all else fails try <a href="http://google.com/?q=maple+help">google</a>, our <a href="http://forum.leaflabs.com">forum</a>, or <a href="http://leaflabs.com/contact">contact us directly</a>!
+
+<p>
+The major steps when starting fresh on a computer will be to:
+
+<ul>
+  <li>Download and install the IDE
+  <li>Plug in the Maple and resolve driver issues
+  <li>Load the IDE and upload a simple Blink program
+  <li>Test the USB serial connection with a HelloWorld
+</ul>
 
 <h3>1. Download the IDE</h3>
 
@@ -110,8 +120,18 @@ a confirmation message in the bottom pane.
 
 <h3>5. Upload that program!</h3>
 
+<div class="warningbox">
+<h3>This is where our palms sweat...</h3>
+This step was the hardest part for us to get working across several platforms
+and is where a number of users run in to difficulty (especially on the many
+flavors of Windows). We are working on a more robust software solution, but in
+the meanwhile if you have trouble you could try repeating steps a few times,
+power cycling the Maple, or restarting the IDE. Please let us know how
+everything goes in the forums, the more datapoints the better!  
+</div>
+
 Now it's (finally!) time to plug in your Maple. Use a mini-b cable, making sure
-that the power source jumper is on the USB header first. The maple should blink
+that the power source jumper is on the USB header first. The Maple should blink
 a short pattern on the blue status LED every time it is plugged in, reset, or
 reprogrammed, just to let you know it's there. If it ever starts throbbing in a
 slow, smooth pattern that means you've got a problem: see the <a href="./troubleshooting.html">troubleshooting page</a>.
@@ -120,17 +140,17 @@ slow, smooth pattern that means you've got a problem: see the <a href="./trouble
 <img src="./img/upload_button.png" style="border: 2px black solid; float:left; margin-right: 8px;">
 If all systems are go, select the Board type and Serial Port (something like
 <code>/dev/ttyACM0</code>, <code>/dev/cu.usbmodem5d21</code>, or
-<code>COM3</code> depending on your platform) from the Tools menu, then press
+<code>COM3</code> depending on your platform) from the Tools menu. Then press
 the "upload" button (right arrow to a bunch of dots) to upload your program to
-the maple. You should see some text and a progress bar flash by in the status
-window of the IDE, then some blinky patterns on the maple, and then a constant
+the Maple. You should see some text and a progress bar flash by in the status
+window of the IDE, then some blinky patterns on the Maple, and then a constant
 blink with whatever time period you programmed in above.
 
 <h3>6. Use the serial port monitor!</h3>
 <p>
 As a last step to make sure everything has been configured correctly, let's
 upload a hello world program that will send text from the Maple back to the IDE
-over the USB connection. From File select Examples, Maple, HelloWorld, and make
+over the USB connection. From File select Examples, Stubs, HelloWorld, and make
 sure the correct board and serial port targets are selected from the Tools
 pull-down. And of course you could change the text to be printed out; make sure
 you leave the double quotes around it though or you'll get a compile error.
