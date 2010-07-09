@@ -107,7 +107,7 @@ or power cycle any Maples connected to the computer.
 <pre class="code">
 cp main.cpp.example main.cpp
 make clean 
-make ram 
+make
 </pre>
 
 Ok, here's where things start to get interesting, because our repository setup
@@ -147,17 +147,19 @@ porting the entire library, through it can be educational to read through the
 interrupt jump table. 
 
 <p> 
-The <code>Makefile</code> specifies build and upload targets for RAM and FLASH;
-the RAM target is useful for rapid development because it uploads a little
-faster and doesn't burn up FLASH write cycles, but programs in RAM won't
-persist after a power cycle and there is significantly less memory available
-for more elaborate programs. Be sure to <code>make clean</code> first if you
-want to switch between RAM and FLASH targets, otherwise there will be crufty
-compiled object files with the wrong linker structure and your program won't
-run correctly.  The <code>make ram</code> and <code>make flash</code> targets
-just build .bin files for the respective memory schemes; choose just one. If
-you forget you can just <code>make</code>, which dumps a table of targets.  You
-might also find the <code>make cscope</code> or <code>make ctags</code> targets
+The <code>Makefile</code> can build and upload to RAM or FLASH; the RAM target
+is useful for rapid development because it uploads a little faster and doesn't
+burn up FLASH write cycles, but programs in RAM won't persist after a power
+cycle and there is significantly less memory available for more elaborate
+programs. The target is determined by an environment variable,
+<code>MAPLE_TARGET</code>) which defaults to FLASH. It can be modified by
+editing the Makefile, specifying in the comman (eg, <code>make
+MAPLE_TARGET=ram</code>), or with the <code>ram</code> and <code>flash</code>
+targets, which modify the environment variable locally.  The <code>make
+sketch</code> (or just <code>make</code>) target just builds .bin files;
+<code>make install</code> will build and upload the program. If you forget you
+can just <code>make help</code>, which dumps a table of targets.  You might
+also find the <code>make cscope</code> or <code>make ctags</code> targets
 helpful as well if you use those tools.
 
 <p> 
@@ -198,13 +200,13 @@ hardware management code and the main program itself are culprits.
 <pre class="code">
 cp examples/test-session.cpp main.cpp 
 make clean 
-make flash
-make program_flash 
+make
+make install
 </pre>
 
 Ok, let's blow away the little example program and upload the interactive test
-session. Before executing <code>make program_flash</code> you'll want to have
-the udev rules setup as described above and have the Maple plugged in.
+session. Before executing <code>make install</code> you'll want to have the
+udev rules setup as described above and have the Maple plugged in.
 
 <p> 
 A number of things can go wrong at this stage; simple debugging steps include
@@ -284,11 +286,13 @@ application" and without the Auto-generated filename prefixes or extensions.
 Set the Output filename to <code>support/codeblocks/program_flash.sh</code> and
 <code>support/codeblocks/program_ram.sh</code> respectively; these scripts just
 call the program_ram/program_flash make targets and are a hack to get the "run"
-button to upload code to the Maple. The IDE will warn that it will these files
+button to upload code to the Maple. The IDE will warn that these files
 will be overwritten, but they won't be. For both the "flash" and "ram" targets,
 click the "Build options..." button button (below "Virtual targets..." etc) and
-go to the far right tab ("'Make' commands"), and edit the Clean project/target
-line so it's just "clean" (not "clean$target"). 
+go to the far right tab ("'Make' commands"). Edit the Clean project/target line
+so it's just "clean" (not "clean$target"), and set the "Build project/target"
+and "Compile single file" commands to <code>$make -f $makefile MAPLE_TARGET=$target</code>
+and <code>$make -f $makefile MAPLE_TARGET=$target $file</code> respectively.
 
 <br><br>
 <div class="centerimg"> 
@@ -300,9 +304,7 @@ Save all these changes, go back to the main IDE window, and try to build/run.
 "Build" will compile everything, "Run" will run the upload script in a terminal
 window (if there are problems they will flash by very quickly; you can start
 Code::Blocks in a terminal window and check the output in that base window if
-necessary), and "Rebuild" will clean before rebuilding. Note that you must
-manually Rebuild everytime you switch build targets (flash vs. ram), just like
-when you call <code>make</code> from the command line.
+necessary), and "Rebuild" will clean before rebuilding. 
 
 <br><br>
 <div class="centerimg"> 
