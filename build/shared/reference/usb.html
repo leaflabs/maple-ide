@@ -33,8 +33,8 @@ USB device.
 <h2><a name="functions">Function Reference</a></h2>
 
 <dl>
-  <dt><code>SerialUsb.print(...)</code><br>
-      <code>SerialUsb.println(...)</code><br>
+  <dt><code>SerialUSB.print(...)</code><br>
+      <code>SerialUSB.println(...)</code><br>
   <dd> Writes data into the port buffer to be transmitted as soon as possible.
   Accepts strings (character arrays). If a raw integer is passed the
   corresponding ASCII character will be transmitted; to print out a number in
@@ -42,8 +42,8 @@ USB device.
   out the decimal number '1234' use <code>print(1234,DEC)</code>; to print out
   the binary numner '1001' use <code>print(9,BIN)</code>. 
     
-  <dt><code>SerialUsb.available()</code><br> 
-      <code>SerialUsb.read()</code><br>
+  <dt><code>SerialUSB.available()</code><br> 
+      <code>SerialUSB.read()</code><br>
   <dd><code>read()</code> will return any data that has been recieved over the
   port and <code>available()</code> will tell if any such data acutally exists,
   and if so how many bytes. If there is no data <code>read()</code> will
