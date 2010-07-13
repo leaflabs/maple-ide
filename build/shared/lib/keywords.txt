@@ -21,6 +21,13 @@ DEFAULT	LITERAL1	AnalogReference
 EXTERNAL	LITERAL1	AnalogReference
 INTERAL	LITERAL1	AnalogReference
 
+OUTPUT_OPEN_DRAIN	LITERAL1
+INPUT_FLOATING	LITERAL1
+INPUT_PULLUP	LITERAL1
+INPUT_PULLDOWN	LITERAL1
+INPUT_ANALOG	LITERAL1
+PWM	LITERAL1
+
 # KEYWORD1 specifies datatypes and C/C++ keywords
 
 boolean	KEYWORD1	BooleanVariables
@@ -58,6 +65,9 @@ unsigned	KEYWORD1
 void	KEYWORD1	Void
 while	KEYWORD1	While
 word	KEYWORD1	Word
+
+pow	KEYWORD1	Pow
+goto	KEYWORD1	Goto
 
 # operators aren't highlighted, but may have documentation
 
@@ -171,3 +181,10 @@ flush	KEYWORD2	Serial_Flush
 
 setup	KEYWORD3	Setup
 loop	KEYWORD3	Loop
+
+sizeof	KEYWORD2
+SerialUSB	KEYWORD3
+Timer1	KEYWORD3
+Timer2	KEYWORD3
+Timer3	KEYWORD3
+Timer4	KEYWORD3
