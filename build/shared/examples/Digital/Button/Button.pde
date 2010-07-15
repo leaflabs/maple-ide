@@ -18,13 +18,15 @@
  by DojoDave <http://www.0j0.org>
  modified 17 Jun 2009
  by Tom Igoe
+ modified 15 Jul 2010
+ by Bryan Newbold; thanks adamfeuer!
  
   http://www.arduino.cc/en/Tutorial/Button
  */
 
 // constants won't change. They're used here to 
 // set pin numbers:
-const int buttonPin = 2;     // the number of the pushbutton pin
+const int buttonPin = 38;     // the number of the BUT button on Maple
 const int ledPin =  13;      // the number of the LED pin
 
 // variables will change:
