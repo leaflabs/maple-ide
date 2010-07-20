@@ -31,6 +31,7 @@
     <li><code>NullPointerException</code>
     <li><code>undefined reference to `setup()'</code>
     <li><code>error: 'Serial' was not declared in this scope</code>
+    <li><code>File(s) not found</code>
     </ul>
   <li><a href="#upload">Common Upload Problems</a>
     <ul>
@@ -114,6 +115,10 @@
   have multiple USARTS refered to as Serial1, Serial2, etc. You probably want
   Serial2 on the Maple; that's the one connected to pins D0 and D1. See also
   the <a href="/docs/maple/usart/">USART docs</a>.
+  <dt><a name="compile4">File(s) not found</a>
+  <dd>There is an intermittent bug with the temporary directory build system
+  that on occasion will loose many of the <code>#include</code>d libmaple
+  files. If you recompile everything should be fine.
 </dl>
 
 <h2><a name="upload">Common Upload Problems</a></h2>
