@@ -78,13 +78,13 @@ void HardwareSerial::begin(uint32 baud) {
         gpio_set_mode(USART1_TX_PORT, USART1_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);
         gpio_set_mode(USART1_RX_PORT, USART1_RX_PIN, GPIO_MODE_INPUT_FLOATING);
         /* Turn off any pwm  */
-        timers_disable_channel(1, 2);
+        timer_set_mode(1, 2, TIMER_DISABLED);
         break;
     case 2:
         gpio_set_mode(USART2_TX_PORT, USART2_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);
         gpio_set_mode(USART2_RX_PORT, USART2_RX_PIN, GPIO_MODE_INPUT_FLOATING);
         /* Turn off any pwm  */
-        timers_disable_channel(2, 3);
+        timer_set_mode(2, 3, TIMER_DISABLED);
         break;
     case 3:
         gpio_set_mode(USART3_TX_PORT, USART3_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);
@@ -95,6 +95,14 @@ void HardwareSerial::begin(uint32 baud) {
     }
 
     usart_init(usartNum, baud);
+}
+
+void HardwareSerial::end(void) {
+    usart_disable(usartNum);
+}
+
+void HardwareSerial::flush(void) {
+    usart_clear_buffer(usartNum);
 }
 
 HardwareSerial Serial1(1);
