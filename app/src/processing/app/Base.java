@@ -780,7 +780,7 @@ public class Base {
           "p { font: 11pt \"Lucida Grande\"; margin-top: 8px }"+
           "</style> </head>" +
           "<b>Are you sure you want to Quit?</b>" +
-          "<p>Closing the last open sketch will quit Arduino.";
+          "<p>Closing the last open sketch will quit.";
 
         int result = JOptionPane.showOptionDialog(editor,
                                                   prompt,
