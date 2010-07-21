@@ -2,7 +2,7 @@
 body { margin: 25px; font-family: helvetica; }
 table,th,td { border: 1px solid black; }
 table { border-collapse: collapse; margin-top: 12px;}
-td,th { padding: 8px; }
+td,th { padding: 6px; }
 h1 { border-bottom: 2px solid; }
 dt { font-weight: bold; margin-top: 12px; margin-bottom:8px;}
 dt a { color: black; }

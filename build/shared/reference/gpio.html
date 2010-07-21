@@ -25,6 +25,59 @@ pin), while some are not.
   <li><a href="#links">Recommended Reading</a>
 </ul>
 
+<h2><a name="pins">Pin Mapping Mega Table</a></h2>
+
+This huge reference table shows the available functionality on every GPIO pin,
+by peripheral type. The STM32 pin is the port and number that the header is
+connected to on the microcontroller.
+
+<table style="font-size: .8em;">
+<tr><th>Pin <th>STM32 Pin   <th>ADC     <th>Timer          <th>I2C        <th>UART        <th>SPI         <th>5v OK?
+<tr><th>D0  <td>PA3         <td>ADC3    <td>TIM2_CH4       <td>-          <td>USART2_RX   <td>-           <td>No
+<tr><th>D1  <td>PA2         <td>ADC2    <td>TIM2_CH3       <td>-          <td>USART2_TX   <td>-           <td>No
+<tr><th>D2  <td>PA0         <td>ADC0    <td>TIM2_CH1_ETR   <td>-          <td>USART2_CTS  <td>-           <td>No
+<tr><th>D3  <td>PA1         <td>ADC1    <td>TIM2_CH2       <td>-          <td>USART2_RTS  <td>-           <td>No
+<tr><th>D4  <td>PB5         <td>-       <td>-              <td>ISC1_SMBA  <td>-           <td>-           <td>No
+<tr><th>D5  <td>PB6         <td>-       <td>TIM4_CH1       <td>I2C1_SCL   <td>-           <td>-           <td>Yes
+<tr><th>D6  <td>PA8         <td>-       <td>TIM1_CH1       <td>-          <td>USART1_CK   <td>-           <td>Yes
+<tr><th>D7  <td>PA9         <td>-       <td>TIM1_CH2       <td>-          <td>USART1_TX   <td>-           <td>Yes
+<tr><th>D8  <td>PA10        <td>-       <td>TIM1_CH3       <td>-          <td>USART1_RX   <td>-           <td>Yes
+<tr><th>D9  <td>PB7         <td>-       <td>TIM4_CH2       <td>I2C1_SDA   <td>-           <td>-           <td>Yes
+<tr><th>D10 <td>PA4         <td>ADC4    <td>-              <td>-          <td>USART2_CK   <td>SPI1_NSS    <td>No
+<tr><th>D11 <td>PA7         <td>ADC7    <td>TIM3_CH2       <td>-          <td>-           <td>SPI1_MOSI   <td>No
+<tr><th>D12 <td>PA6         <td>ADC6    <td>TIM3_CH1       <td>-          <td>-           <td>SPI1_MISO   <td>No
+<tr><th>D13 <td>PA5         <td>ADC5    <td>-              <td>-          <td>-           <td>SPI1_SCK    <td>No
+<tr><th>D14 <td>PB8         <td>-       <td>TIM4_CH3       <td>-          <td>-           <td>-           <td>Yes
+
+<tr><td colspan="8" align="center"><i>Analog header</i>
+<tr><th>D15 <td>PC0         <td>ADC10   <td>-              <td>-          <td>-           <td>-           <td>No
+<tr><th>D16 <td>PC1         <td>ADC11   <td>-              <td>-          <td>-           <td>-           <td>No
+<tr><th>D17 <td>PC2         <td>ADC12   <td>-              <td>-          <td>-           <td>-           <td>No
+<tr><th>D18 <td>PC3         <td>ADC13   <td>-              <td>-          <td>-           <td>-           <td>No
+<tr><th>D19 <td>PC4         <td>ADC14   <td>-              <td>-          <td>-           <td>-           <td>No
+<tr><th>D20 <td>PC5         <td>ADC15   <td>-              <td>-          <td>-           <td>-           <td>No
+
+<tr><td colspan="8" align="center"><i>External header</i>
+<tr><th>D21 <td>PC13        <td>-       <td>-              <td>-          <td>-           <td>-           <td>No
+<tr><th>D22 <td>PC14        <td>-       <td>-              <td>-          <td>-           <td>-           <td>No
+<tr><th>D23 <td>PC15        <td>-       <td>-              <td>-          <td>-           <td>-           <td>No
+<tr><th>D24 <td>PB9         <td>-       <td>TIM4_CH4       <td>-          <td>-           <td>-           <td>Yes
+<tr><th>D25 <td>PD2         <td>-       <td>TIM3_ETR       <td>-          <td>-           <td>-           <td>Yes
+<tr><th>D26 <td>PC10        <td>-       <td>-              <td>-          <td>-           <td>-           <td>Yes
+<tr><th>D27 <td>PB0         <td>ADC8    <td>TIM3_CH3       <td>-          <td>-           <td>-           <td>No
+<tr><th>D28 <td>PB1         <td>ADC9    <td>TIM3_CH4       <td>-          <td>-           <td>-           <td>No
+<tr><th>D29 <td>PB10        <td>-       <td>-              <td>I2C2_SCL   <td>USART3_TX   <td>-           <td>Yes
+<tr><th>D30 <td>PB11        <td>-       <td>-              <td>I2C2_SDA   <td>USART3_RX   <td>-           <td>Yes
+<tr><th>D31 <td>PB12        <td>-       <td>TIM1_BKIN      <td>I2C2_SMBAL <td>USART3_CK   <td>SPI2_NSS    <td>Yes
+<tr><th>D32 <td>PB13        <td>-       <td>TIM1_CH1N      <td>-          <td>USART3_CTS  <td>SPI2_SCK    <td>Yes
+<tr><th>D33 <td>PB14        <td>-       <td>TIM1_CH2N      <td>-          <td>USART3_RTS  <td>SPI2_MISO   <td>Yes
+<tr><th>D34 <td>PB15        <td>-       <td>TIM1_CH3N      <td>-          <td>-           <td>SPI2_MOSI   <td>Yes
+<tr><th>D35 <td>PC6         <td>-       <td>-              <td>-          <td>-           <td>-           <td>Yes
+<tr><th>D36 <td>PC7         <td>-       <td>-              <td>-          <td>-           <td>-           <td>Yes
+<tr><th>D37 <td>PC8         <td>-       <td>-              <td>-          <td>-           <td>-           <td>Yes
+<tr><th>D38 <td>PC9         <td>-       <td>-              <td>-          <td>-           <td>-           <td>Yes
+</table>
+
 <h2><a name="modes">GPIO Modes</a></h2>
 <dl>
   <dt>OUTPUT
