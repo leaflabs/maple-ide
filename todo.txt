@@ -1,4 +1,4 @@
-20100720a maple-ide
+20100720d maple-ide
 
 Fix Linux make.sh, etc. scripts
 Test on Linux.

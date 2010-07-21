@@ -32,7 +32,7 @@
 #include "wirish.h"
 #include "usb.h"
 
-#define USB_TIMEOUT 3
+#define USB_TIMEOUT 50
 
 USBSerial :: USBSerial(void) {
 }
