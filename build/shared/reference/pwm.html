@@ -29,17 +29,22 @@ dim an LED or even (with careful filtering) generate audio waveforms.
 <p>
 The Maple has a large number of 16-bit PWM outputs, each connected to one of 4
 timers. Some configuration, such as the clock rate or prescaling, must be
-common to the entire timer. 
+common to the entire timer; see the <a href="timers.html">timer docs</a> for
+more information!
 <p>
 Note that unlike the Arduino, the Maple does not have PWM functionality on
 pin D10; all other pins are <a href="./compatability.html">compatible</a>. 
+<p>
+The following table shows which <a href="timers.html">timer</a> generates which
+PWM outputs. See the <a href="gpio.html#pins">pin mapping table</a> to track
+down exactly which timer <i>channel</i> corresponds to each pin.
 
 <table>
-  <tr><th>Timer <th>PWM Headers
-  <tr><td>1     <td>D6,D7,D8
-  <tr><td>2     <td>D0,D1,D2,D3
-  <tr><td>3     <td>D11,D12,D27,D28
-  <tr><td>4     <td>D5,D9,D14,D24
+  <tr><th>Timer     <th>PWM Headers
+  <tr><td>Timer1    <td>D6,D7,D8
+  <tr><td>Timer2    <td>D0,D1,D2,D3
+  <tr><td>Timer3    <td>D11,D12,D27,D28
+  <tr><td>Timer4    <td>D5,D9,D14,D24
 </table>
 
 <h2><a name="background">Background</a></h2>
@@ -103,18 +108,18 @@ Here are some commonly used PWM configurations (note: double check our math!):
   Arduino code, though period and duty will have to be recalibrated (see
   <a href="./compatability.html">compatability.html</a>).
 
-  <dt><code>timers_set_prescaler(timer_num, prescaler)</code>
+  <dt><code>Timer1.setPrescaleFactor(prescale)</code>
   <dd>Find the appropriate timer for a given PWM header using the table above,
   then set the prescaler. This function is normally called once from
   <code>setup()</code>, but the timer can be reconfigured with a new prescaler
   at any time. The default prescaler is 1 (eg, no prescaling). 
 
-  <dt><code>timers_set_reload(timer_num, reload)</code>
-  <dd>This function sets the period ("reload") value for an entire PWM timer
-  bank. The value is 16bit (0 to 65535) and determines the maximum value that
-  can be written with <code>pwmWrite()</code> corresponding to 100% duty cycle.
-  This also affects the PWM frequency: the higher reload is, the lower the PWM
-  frequency will be.
+  <dt><code>Timer1.setOverflow(overflow)</code>
+  <dd>This function sets the period ("reload" or "overflow") value for an
+  entire PWM timer bank. The value is 16bit (0 to 65535) and determines the
+  maximum value that can be written with <code>pwmWrite()</code> corresponding
+  to 100% duty cycle.  This also affects the PWM frequency: the higher reload
+  is, the lower the PWM frequency will be.
 
 </dl>
 

@@ -82,6 +82,8 @@ void loop() {
                 SerialUSB.println("Hello World!");
                 break;
             case 119: // 'w'
+                Serial1.begin(9600);
+                Serial3.begin(9600);
                 Serial1.println("Hello World!");
                 Serial2.println("Hello World!");
                 Serial3.println("Hello World!");

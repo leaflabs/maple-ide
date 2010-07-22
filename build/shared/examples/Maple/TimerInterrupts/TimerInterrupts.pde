@@ -11,7 +11,7 @@
 
 #define LED_PIN 13
 #define BUTTON_PIN 38
-#define LED_RATE 2000000    // in microseconds; should give 0.5Hz
+#define LED_RATE 500000    // in microseconds; should give 0.5Hz toggles
 
 void handler_led(void);
 void handler_count1(void);
@@ -63,7 +63,7 @@ void loop() {
     SerialUSB.println(count2);
 
     // Run... while BUT is held, pause Count2
-    for(int i = 0; i<4000; i++) {
+    for(int i = 0; i<1000; i++) {
         if(digitalRead(BUTTON_PIN)) {
             Timer4.pause();
         } else {
