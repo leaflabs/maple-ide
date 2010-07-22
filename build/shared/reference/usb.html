@@ -11,8 +11,22 @@
 
 <ul>
   <li><a href="#functions">Function Reference</a>
+  <li><a href="#examples">Code Examples</a>
   <li><a href="#links">Recommended Reading</a>
 </ul>
+<div class="warningbox">
+<h3>Changes and Caveats</h3>
+The SerialUSB functionality was modified for the 0.0.6 IDE release. It now
+includes a 50 milisecond timeout for writes and does not try to detect if the
+USB host is "really" connected or just enumerated and initialized. This means
+that if you have a number of SerialUSB writes or prints in your code and you
+are not monitoring on a computer your program will run much, much slower than
+if it is being monitored or totally disconnected (battery). 
+
+<br>You can avoid this behavior by deciphering the port status using the
+DTR and RTS line status; the behavior of these control lines is platform
+dependant and we no longer interpret them by default. 
+</div>
 
 <p>
 The Maple stm32 microprocessor includes a dedicated USB peripheral which can be
@@ -30,17 +44,31 @@ the Maple could be reprogrammed to appear as a mass storage device (thumb
 drive), human interface device (mouse or keyboard), microphone, or any other
 USB device. 
 
+<p>
+The SerialUSB channel is also used as part of the auto-reset feature of the IDE
+to program the board: a magic sequence of control line toggles and transmitted
+data causes the Maple to reset itself and enter bootloader mode. As an
+unfortunate consequence, the auto-reset will not work if the IDE can not access
+the serial port, either do to a conflict with another program (serial monitor)
+or because the interface has been disabled from the Maple side
+(<code>SerialUSB.end()</code>).
+
 <h2><a name="functions">Function Reference</a></h2>
 
 <dl>
   <dt><code>SerialUSB.print(...)</code><br>
       <code>SerialUSB.println(...)</code><br>
+      <code>SerialUSB.write(bytes)</code><br>
   <dd> Writes data into the port buffer to be transmitted as soon as possible.
   Accepts strings (character arrays). If a raw integer is passed the
   corresponding ASCII character will be transmitted; to print out a number in
   human readable form add a second parameter with the base system. Eg, to print
   out the decimal number '1234' use <code>print(1234,DEC)</code>; to print out
   the binary numner '1001' use <code>print(9,BIN)</code>. 
+  <br><code>write()</code> is a lower-level function that writes bytes
+  directly into the buffer. <code>print()</code> often calls this function
+  dozens of times to write out a single formated number; usercode can optimize
+  raw data speed by calling this function with 64-bytes chunks instead.
     
   <dt><code>SerialUSB.available()</code><br> 
       <code>SerialUSB.read()</code><br>
@@ -50,7 +78,79 @@ USB device.
   block/fail, so the usual program structure is to poll with
   <code>available()</code> and only <code>read()</code> if there's something
   ready.  
+
+  <dt><code>uint8 SerialUSB.pending()</code><br> 
+  <dd>Returns the number of bytes waiting in the transmit buffer. Usercode can use
+  this to prevent any blocking/waiting when using the direct <code>write()</code>
+  functions, or to check if data was actually requested/recieved by the host.
+
+  <dt><code>uint8 getRTS()</code><br>
+  <dd>Returns the state (1 or 0) of the virtual RTS ("ready to send") line. This
+  can be used to guess if the USB host is actively waiting for data (aka a 
+  serial monitor program is running) or just "configured" (the virtual serial
+  port is configured but no program is reading data).
+
+  <dt><code>uint8 getDTR()</code><br>
+  <dd>Returns the state (1 or 0) of the virtual DTR ("data terminal ready")
+  line. This can be used to guess if the USB host is actively waiting for data
+  (aka a serial monitor program is running) or just "configured" (the virtual
+  serial port is configured but no program is reading data).
+
+  <dt><code>uint8 isConnected()</code><br>
+  <dd>Returns 1 if the USB host is connected and the virtual serial interface
+  is initialized (though not necessarily active), otherwise 0.
+
+  <dt><code>SerialUSB.end()</code><br>
+      <code>SerialUSB.begin()</code><br>
+  <dd>The USB peripheral is enabled by default so that the auto-reset feature
+  will work, but it can be disabled/restarted at any time with the
+  <code>end()</code> and <code>begin()</code> functions. The <code>end()</code>
+  is a relatively hard shutdown, similar to unplugging the board; this may
+  crash or confuse any programs running host-side. It's probably wise to wait a
+  few seconds between an <code>end()</code>/<code>begin()</code> or a
+  <code>begin()</code>/<code>print()</code> to let the computer reconfigure.
+
 </dl>
+
+<h2><a name="examples">Code Examples</a></h2>
+
+<h3>Safe Print</h3>
+This function should run smoothly and not block; the LED should blink at
+</i>roughly</i> the same speed whether being monitored, running from battery,
+or connected but not monitored. You may need to experiment with the DTR/RTS
+logic for your platform and device configuration.
+
+<pre class="code">
+#define&nbsp;LED_PIN&nbsp;13
+
+<span style="color: #CC6600;">void</span> <span style="color: #CC6600;"><b>setup</b></span>() {
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #7E7E7E;">/* Set up the LED to blink  */</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #CC6600;">pinMode</span>(LED_PIN, <span style="color: #006699;">OUTPUT</span>);
+}
+
+<span style="color: #CC6600;">void</span> <span style="color: #CC6600;"><b>loop</b></span>() {
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #7E7E7E;">// LED will stay off if we are disconnected;</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #7E7E7E;">// will blink quickly if USB is unplugged (battery etc)</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #CC6600;">if</span>(<span style="color: #CC6600;"><b>SerialUSB</b></span>.isConnected()) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #CC6600;">digitalWrite</span>(LED_PIN, 1);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #CC6600;">delay</span>(100);
+
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #7E7E7E;">// If this logic fails to detect if bytes are going to</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #7E7E7E;">// be read by the USB host, then the println() will fully</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #7E7E7E;">// many times, causing a very slow LED blink.</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #7E7E7E;">// If the characters are printed and read, the blink will</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #7E7E7E;">// only slow a small amount when "really" connected, and fast </span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #7E7E7E;">// when the virtual port is only configured.</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #CC6600;">if</span>(<span style="color: #CC6600;"><b>SerialUSB</b></span>.isConnected() && (<span style="color: #CC6600;"><b>SerialUSB</b></span>.getDTR() || <span style="color: #CC6600;"><b>SerialUSB</b></span>.getRTS())) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #CC6600;">for</span>(<span style="color: #CC6600;">int</span> i=0; i<10; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #CC6600;"><b>SerialUSB</b></span>.<span style="color: #CC6600;">println</span>(123456,<span style="color: #006699;">BIN</span>); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #CC6600;">digitalWrite</span>(LED_PIN, 0);
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #CC6600;">delay</span>(100);
+}
+</pre>
 
 <h2><a name="links">Recommended Reading</a></h2>
 <ul>
