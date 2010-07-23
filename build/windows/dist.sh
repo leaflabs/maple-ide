@@ -109,7 +109,7 @@ echo Packaging standard release...
 echo
 P5=maple-ide-$RELEASE
 mv arduino $P5
-zip -rq $P5.zip $P5
+zip -rq $P5-windowsxp32.zip $P5
 # nah, keep the new directory around
 #rm -rf $P5
 
