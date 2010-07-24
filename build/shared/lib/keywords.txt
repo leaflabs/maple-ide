@@ -183,6 +183,7 @@ setup	KEYWORD3	Setup
 loop	KEYWORD3	Loop
 
 sizeof	KEYWORD2
+pwmWrite	KEYWORD2
 SerialUSB	KEYWORD3
 Timer1	KEYWORD3
 Timer2	KEYWORD3
