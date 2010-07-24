@@ -21,7 +21,7 @@
 <p>
 There are four general purpose timers in the Maple microcontroller that can be
 configured to generate periodic or delayed events with minimal work done by the
-microcontroller. For example, the <a href="pwm.html">PWM</a> channels, once
+microcontroller. For example, the <a href="./pwm.html">PWM</a> channels, once
 enabled, generate regular square-wave signals on specific output pins that will
 continue even if the microcontroller is busy crunching numbers or handling
 communications interrupts. By attaching interrupt handlers to these channels
@@ -45,7 +45,7 @@ the counter to reset to zero more frequently.
 <b>PWM Conflicts:</b> Because PWM functionality on a given pin depends on the
 configuration of the timer and channel, you must chose your channels carefully
 if you want to use both timer interrupts and PWM in the same program. Refer to
-the full <a href="gpio.html#pines">pin mappling table</a> to match up timmer
+the full <a href="./gpio.html#pines">pin mappling table</a> to match up timmer
 channels and Maple header pin numbers. 
 
 <p>
@@ -79,7 +79,7 @@ important for your program.
 
 <dt>TIMER_PWM
     <dd>This is the default mode for pins after initialization. See the <a
-    href="pwm.html">PWM docs</a> for more information on this mode.
+    href="./pwm.html">PWM docs</a> for more information on this mode.
     <br><b>NOTE:</b> Timer1.setChannel1Mode(TIMER_PWM) may not work as
     expected; if you want PWM functionality on a channel make sure you don't
     set it to something else!
