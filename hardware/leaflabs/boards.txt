@@ -1,6 +1,6 @@
 ##############################################################
 
-maple.name=LeafLabs Maple R3 to FLASH
+maple.name=LeafLabs Maple rev3 to FLASH
 
 maple.upload.file_type=bin
 maple.upload.maximum_size=100000
@@ -21,7 +21,7 @@ maple.build.core=maple
 maple.build.using=make
 
 ##############################################################
-mapleRAM.name=LeafLabs R3 Maple to RAM
+mapleRAM.name=LeafLabs Maple rev3 to RAM
 
 mapleRAM.upload.file_type=bin
 mapleRAM.upload.maximum_size=17000
