@@ -44,7 +44,7 @@ The Maple has two i2c ports. Port 1 (i2c1) has SDA on header D9 and SCL on D5;
 Port 2 (i2c2) has SDA on D30 and SCL on D29.
 
 <p>
-The Maple reliably communicates with up to a 400khz clock speed; this doesn't
+The Maple reliably communicates with up to a 400kHz clock speed; this doesn't
 translate into a 400kilobit data rate except in extreme cases because of 
 addressing and protocol overhead. We have tested clock speeds up to a megahertz
 and have had mixed results; in theory it could be possible to achieve even 
@@ -53,11 +53,11 @@ unreliable.
 
 <p>
 Proper wiring and pullup resistor selection are essential when incorporating
-i2c into a circuit, especially with datarates above 100khz. In the lab we 
+i2c into a circuit, especially with datarates above 100kHz. In the lab we 
 usually use ~5k ohm resistors with Vcc (3.3v) as the high voltage and try to
 connect the pullup voltage as close to the SDA and SCL pins as possible. We
 recommend looking at the reference website listed below, starting with a slow
-clock rate (10khz), and if possible using an oscilloscope to debug any issues. 
+clock rate (10kHz), and if possible using an oscilloscope to debug any issues. 
 
 <h2><a name="functions">Function Reference</a></h2>
 

@@ -17,7 +17,7 @@
 
 <h2><a name="hardware">Hardware/Circuit Design</a></h2>
 
-The Maple has 3 seperate USART devices: Serial1, Serial2, and Serial3. In the
+The Maple has 3 separate USART devices: Serial1, Serial2, and Serial3. In the
 most simple use case the RX and TX pins are used to send data at a
 predetermined baudrate with the the line voltage level relative to ground. 
 <table>
@@ -55,8 +55,8 @@ In the following replace "SerialN" with Serial1, Serial2, or Serial3.
   Accepts strings (character arrays). If a raw integer is passed the
   corresponding ASCII character will be transmitted; to print out a number in
   human readable form add a second parameter with the base system. Eg, to print
-  out the decimal number '1234' use print(1234,DEC); to print out the binary
-  numner '1001' use print(9,BIN). 
+  out the decimal number '1234' use <code>print(1234,DEC)</code>; to print out
+  the binary numner '1001' use <code>print(9,BIN)</code>. 
 
   <dt><code>SerialN.available()</code><br>
       <code>SerialN.read()</code>

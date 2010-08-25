@@ -33,7 +33,7 @@ common to the entire timer; see the <a href="timers.html">timer docs</a> for
 more information!
 <p>
 Note that unlike the Arduino, the Maple does not have PWM functionality on
-pin D10; all other pins are <a href="./compatability.html">compatible</a>. 
+pin D10; all other pins are <a href="./compatibility.html">compatible</a>. 
 <p>
 The following table shows which <a href="./timers.html">timer</a> generates
 which PWM outputs. See the <a href="./gpio.html#pins">pin mapping table</a> to
@@ -106,7 +106,7 @@ Here are some commonly used PWM configurations (note: double check our math!):
   honor the maximum value (based on the configured period). As a convenience,
   <code>analogWrite</code> is an alias of <code>pwmWrite</code> to ease porting
   Arduino code, though period and duty will have to be recalibrated (see
-  <a href="./compatability.html">compatability.html</a>).
+  <a href="./compatibility.html">compatibility.html</a>).
 
   <dt><code>Timer1.setPrescaleFactor(prescale)</code>
   <dd>Find the appropriate timer for a given PWM header using the table above,

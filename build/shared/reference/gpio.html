@@ -76,7 +76,6 @@ connected to on the microcontroller.
 <tr><th>D35 <td>PC6         <td>-       <td>-              <td>-          <td>-           <td>-           <td>Yes
 <tr><th>D36 <td>PC7         <td>-       <td>-              <td>-          <td>-           <td>-           <td>Yes
 <tr><th>D37 <td>PC8         <td>-       <td>-              <td>-          <td>-           <td>-           <td>Yes
-<tr><th>D38 <td>PC9         <td>-       <td>-              <td>-          <td>-           <td>-           <td>Yes
 </table>
 
 <h2><a name="modes">GPIO Modes</a></h2>
@@ -89,7 +88,7 @@ connected to on the microcontroller.
   <dd>In open drain mode, the pin indicates "low" by accepting current flow to
   ground and "high" by providing increased impedence. An example use would be
   to connect a pin to a bus line (which is pulled up to a positive voltage by a
-  seperate supply through a large resistor). When the pin is high, not much
+  separate supply through a large resistor). When the pin is high, not much
   current flows through to ground and the line stays at positive voltage; when
   the pin is low the bus "drains" to ground with a small amount of current
   constantly flowing through the large resistor from the external supply. In
@@ -125,7 +124,7 @@ connected to on the microcontroller.
   special case of digital output). See the <a href="./pwm.html">PWM</a> page.
 </dl>
 
-<h2><a name="functions">Funtion Reference</a></h2>
+<h2><a name="functions">Function Reference</a></h2>
 <dl>
   <dt><code>pinMode(pin_number, MODE)</code>
   <dd>Usually called from within <code>setup()</code> to configure the pin.

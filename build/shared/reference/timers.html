@@ -31,7 +31,7 @@ call can be scheduled. You can even modify the configuration of the timer
 itself at a regular interval; the possibilities are endless!
 
 <p> 
-The four timers each have four seperate compare channels. Each timer is a
+The four timers each have four separate compare channels. Each timer is a
 single 16-bit counter that can be configured with both a prescaler and an
 overflow value. The prescaler acts as a divider of the 72MHz system clock;
 without prescaling the counter would get up to 65536 (2 to the 16th power) and
@@ -93,7 +93,7 @@ important for your program.
 <h2><a name="systick">SysTick Peripheral</a></h2>
 The SysTick peripheral is and the associated <code>millis()</code> and
 <code>delay()</code> functions are another simple way to perform periodic or
-delayed events. This seperate timer does not conflict with any other
+delayed events. This separate timer does not conflict with any other
 peripherals, but the associated 1khz interrupt can jitter the general purpose
 timer interrupts; this is clearly seen when running VGA code, where the timing
 jitters are transformed into visual jags in the image. A future version of
