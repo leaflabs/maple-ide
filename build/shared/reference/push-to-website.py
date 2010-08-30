@@ -1,46 +1,49 @@
 #!/usr/bin/env python
-"""This script is a memory hog; it searches and converts files in RAM for 
-speed and laziness"""
+"""Pull the contents out of the html files in this directory and SCP
+them to the website"""
 
-import os,tempfile,re
+# TODO [mbolivar] switch this to lxml or something else reasonable.
+#   (it's gross and incorrect to parse non-regular languages with
+#   regular expressions, so this code is buggy as-is)
+
+from __future__ import with_statement
+
+import os,tempfile,re,shutil
 
 r1 = re.compile('href="./(.*?)\.html')
 r2 = re.compile('src="./img/(.*?)"')
 r3 = re.compile('(<h1>.*?</h1>)')
 
-originals = filter(lambda x: x.endswith(".html"), os.listdir('.'))
-processed = list()
+originals = [x for x in os.listdir('.') if x.endswith(".html")]
 t = tempfile.mkdtemp()
 
-for f in originals:
-    f = file(f)
-    state = 0
-    cache = list()
-    for l in f.readlines():
-        if(state == 0):
-            if l.find("<!-- STARTDOC -->") != -1:
-                state = 1
+def process_file(file_name):
+    processed_lines = []
+    with open(file_name,'r') as f:
+        state = 'head'
+        for l in f.readlines():
+            if state == 'head' and '<!-- STARTDOC -->' in l:
+                state = 'body'
                 continue
-        elif(state == 1):
-            if l.find("<!-- ENDDOC -->") != -1:
-                state = 2
-                break
-            l = r1.sub(r'href="../\1/',l)
-            l = r2.sub(r'src="http://static.leaflabs.com/img/docs/\1"',l)
-            l = r3.sub('',l)
-            cache.append(l)
+            elif state == 'body':
+                if '<!-- ENDDOC -->' in l:
+                    state = 'done'
+                    break
+                l = r1.sub(r'href="../\1/',l)
+                l = r2.sub(r'src="http://static.leaflabs.com/img/docs/\1"',l)
+                l = r3.sub('',l)
+                processed_lines.append(l)
+        if state != 'done':
+            return None
+        return processed_lines
 
-    if state != 2:
-        print "Skipping " + f.name
-        continue
+for f in originals:
+    processed_contents = process_file(f)
 
-    o = open(t + "/" + f.name,'w')
-    o.writelines(cache);
-    o.close()
-    print "Processed " + f.name
-    processed.append(o)
-
-#print processed
+    if processed_contents is not None:
+        with open(os.path.join(t, f), 'w') as o:
+            o.writelines(processed_contents)
+        print "Processed " + f
 
 cmd1 = "scp " + t + "/* leaf:STATIC_DOCS/"
 print "Uploading html..."
@@ -51,7 +54,4 @@ print "Uploading img..."
 print cmd2
 os.system(cmd2)
 
-for f in processed:
-    os.unlink(f.name)
-
-os.rmdir(t)
+shutil.rmtree(t)

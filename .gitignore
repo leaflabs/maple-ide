@@ -22,3 +22,5 @@ build/macosx/work/
 build/windows/dist/java/
 build/windows/dist/tools/arm/
 build/windows/sun-java6-jre-win32.tar.gz
+*~
+*.pyc
