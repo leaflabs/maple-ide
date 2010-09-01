@@ -18,51 +18,55 @@
   <li><a href="#porting">Sketch and Library Porting HOWTO</a>
 </ul>
 
-<h2><a name="overview">Overview</a></h2>
-The biggest difference between the Maple and most Arduino boards is that the
-Maple uses a 32-bit ARM Cortex-M3 architecture chip while the Arduinos have
-8-bit Atmel AVR chips. The different instruction set means that machine code
-(executable binary programs) is incompatible between the two and a different
-compiler (actually just a different version of gcc) is required. The compiler
-for the regular Arduino IDE is the popular "avr-gcc" package; the compiler
-for the Maple version of the IDE is Codesourcery's edition of gcc for the
-ARM EABI target (aka "arm-non-eabi-gcc"). 
+<h2><a name="overview">Overview</a></h2> The biggest difference
+between the Maple and most Arduino boards is that the Maple uses a
+32-bit ARM Cortex-M3 architecture chip while the Arduinos have 8-bit
+Atmel AVR chips. The different instruction set means that machine code
+(executable binary programs) is incompatible between the two, and a
+different compiler (actually just a different version of gcc) is
+required. The compiler for the regular Arduino IDE is the popular
+"avr-gcc" package; the compiler for the Maple version of the IDE is
+Codesourcery's edition of gcc for the ARM EABI target (aka
+"arm-non-eabi-gcc").
 
 <p>
-The bitwidth of the processor means that the Maple can process 32-bit operations
-in a single instruction (for instance add two 32-bit integers together) while
-an Arduino processor would have to split up large operations into several
-smaller ones. In a lot of cases 8-bit operations are plenty (integers 0-255,
-single characters of text, etc), but if you're dealing with higher resolution
-data the speed up could be significant. A trade-off is that code could be
-larger as well; program instructions and memory locations can be up to 32-bits
-each as well, which in the worst case would quadruple program size. In reality
-the removal of extra instructions and fancy packing together of simple 
-instructions means that programs aren't much larger (or are even smaller).
+The bitwidth of the processor means that the Maple can process 32-bit
+operations (like adding two 32-bit integers) in a single instruction,
+while an Arduino processor would have to split up large operations
+into several smaller ones. In a lot of cases 8-bit operations are
+plenty (integers 0-255, single characters of text, etc.), but if
+you're dealing with higher resolution data, the speed up could be
+significant. A trade-off is that code could be larger as well; program
+instructions and memory locations can be up to 32-bits each, which in
+the worst case would quadruple program size. In reality, the removal
+of extra instructions and fancy packing together of simple
+instructions means that programs aren't much larger (or are even
+smaller).
 
 
 <h2><a name="headers">Header Numbering and Incompatibilities</a></h2>
 
-The numbering of headers is different; on the Maple each GPIO has a unique
-number: D0, D1, D2, all the way up to D37 (actually there are a couple
-more...).  On the Arduino the analog pins are numbered separately (A0-A5) from
-the digital pins (D0-D13). 
+The numbering of headers is different; on the Maple each GPIO has a
+unique number: D0, D1, D2, all the way up to D37 (actually, there are
+a couple more...).  On the Arduino, the analog pins are numbered
+separately (A0-A5) from the digital pins (D0-D13).
 
 <p>
 The incompatible hardware differences are:
 <ul>
 
-  <li><b style="color:red;">i2c port:</b> on most Arduinos the i2c port is
-  Analog Input 4 (SDA) and Analog Input 5 (SCL); on the Maple i2c port 1 is D5
-  (SCL) and D9 (SDA), and i2c port 2 is D29 (SCL) and D30 (SDA). It should be
-  possible to skywire, sacraficing signal quality (increased capacitance). Or
-  i2c can be bit banged reasonably well in software. Or this peripheral could
-  potentially be rerouted internally (but we haven't looked in to it).
+  <li><b style="color:red;">i2c port:</b> on most Arduinos, the i2c
+  port is Analog Input 4 (SDA) and Analog Input 5 (SCL); on the Maple,
+  i2c port 1 is D5 (SCL) and D9 (SDA), and i2c port 2 is D29 (SCL) and
+  D30 (SDA). It should be possible to skywire, sacrificing signal
+  quality (increased capacitance).  Alternatively, i2c can be bit
+  banged reasonably well in software. This peripheral could
+  potentially be rerouted internally, but we haven't looked in to it.
 
   <li><b style="color:red;">PWM on D10:</b> all the other standard Arduino PWM
   headers have PWM functionality on the Maple (D2,D3,D6,D9,D11), but not D10.
   We did our best! It may be possible to reroute this peripheral internally
-  using low level configuration (but we haven't looked in to it). 
+  using low level configuration, but we haven't looked in to it.
 
   <li><b style="color:red;">No External Voltage Reference:</b> The Arduino has
   an Aref pin which allows the use of an external ADC voltage reference; the
@@ -70,7 +74,7 @@ The incompatible hardware differences are:
   not allow an external voltage reference to be configured. 
 
   <li><b style="color:red;">EEPROM:</b> the Maple does not have any internal
-  EEPROM. This functionality can be emulated with regular peristant flash
+  EEPROM. This functionality can be emulated with regular peristent flash
   memory, or with an external EEPROM chip. 
 
   <li><b style="color:red;">ISP Programming:</b> the Maple does not use an
