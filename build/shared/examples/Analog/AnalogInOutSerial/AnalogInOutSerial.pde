@@ -28,6 +28,9 @@ int outputValue = 0;        // value output to the PWM (analog out)
 
 void setup() {
   // USB communications already initialized
+
+  // Configure the ADC pin
+  pinMode(analogInPin, INPUT_ANALOG);
 }
 
 void loop() {
