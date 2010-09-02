@@ -45,26 +45,27 @@ the counter to reset to zero more frequently.
 <b>PWM Conflicts:</b> Because PWM functionality on a given pin depends on the
 configuration of the timer and channel, you must chose your channels carefully
 if you want to use both timer interrupts and PWM in the same program. Refer to
-the full <a href="./gpio.html#pines">pin mappling table</a> to match up timmer
+the full <a href="./gpio.html#pins">pin mapping table</a> to match up timer
 channels and Maple header pin numbers. 
 
 <p>
-<b>Overhead:</b> there is some overhead assocated with function and interrupt
-calls (loading and unloading the stack, preparing state, etc) and this overhead
-can fudge your timing. Imperfect code branching also means that, eg, channel 1
+<b>Overhead:</b> there is some overhead associated with function and interrupt
+calls (loading and unloading the stack, preparing state, etc.) and this overhead
+can fudge your timing. Imperfect code branching also means that, e.g., channel 1
 interrupts may get called a couple clock cycles sooner than a channel 4
-interrupt all other configuration being the same. 
+interrupt, all other configuration being the same. 
 
 <p>
-<b>Jitter:</b> other interrupts (USB, Serial, SysTick, or other timers) can and
-will get called before or during the timer interrupt routines, causing
-pseudo-random delays and other frustrations. Disabling the USB port
-(<code>SerialUSB.end()</code> or just run off a battery) helps a lot, but then
-you loose the auto-reset and communications functionality.
+<b>Jitter:</b> other interrupts (USB, Serial, SysTick, or other
+timers) can and will get called before or during the timer interrupt
+routines, causing pseudo-random delays and other
+frustrations. Disabling the USB port (<code>SerialUSB.end()</code> or
+just run off a battery) helps a lot, but then you loose the auto-reset
+and communications functionality.
 
 <p>
 <b>General:</b> working with timers and interrupts can be tricky and hard to
-debug; they are a somewhat "advanded" topic. Start simple, test with
+debug; they are a somewhat "advanced" topic. Start simple, test with
 <code>ASSERT()</code>, and don't try to do too much in your interrupt handlers!
 Make sure that what you're trying to do in a handler isn't going to block other
 interrupts from firing (eg USB, Serial, SysTick) if those other interrupts are
@@ -115,11 +116,12 @@ the channel numbers also range from 1 to 4.
   not a perfect way to align multiple timers to the same count value.
 
   <dt><code>Timer1.setOverflow(val)</code><br>
-  <dd>Sets the overflow (or "reload") value for the whole timer; when the
-  counter reaches this value it resets to zero. Defaults to 65535 (the largest
-  16bit number); setting it to anything lower will cause interrupts to be
-  called more frequently (see the <code>setPeriod</code> function below for a
-  shortcut). This number sets the maximum value for the channel compare values.
+  <dd>Sets the overflow (or "reload") value for the whole timer; when
+  the counter reaches this value it resets to zero. Defaults to 65535
+  (the largest unsigned 16bit integer); setting it to anything lower
+  will cause interrupts to be called more frequently (see
+  the <code>setPeriod</code> function below for a shortcut). This
+  number sets the maximum value for the channel compare values.
 
   <dt><code>Timer1.setPrescaleFactor(val)</code><br>
   <dd>The prescaler acts as a clock divider to slow down the rate at which the
@@ -147,7 +149,7 @@ the channel numbers also range from 1 to 4.
   an external real-time-clock chip.
 
   <dt><code>Timer1.setCount(val)</code><br>
-      <code>unint16 Timer1.getCount()</code>
+      <code>uint16 Timer1.getCount()</code>
   <dd>These functions let you mess with the counter's brains directly. You can
   probably make it not work if you try! The timer is 16bit, so <code>val</code>
   and the return value of <code>getCount</code> are <code>uint16</code>.

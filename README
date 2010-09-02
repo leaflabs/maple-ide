@@ -63,6 +63,27 @@ Windows build requirements:
  - a cygwin build environment (see the Arduino build docs)
  - A java compiler on your PATH
 
+Build Instructions
+------------------------------------------------------------------------------
+
+From the build/ directory, select the appropriate subdirectory based
+on your target platform.  Run make.sh from within that directory.
+
+Linux:
+    $ cd build/linux
+    $ ./make.sh
+
+OS X:
+    $ cd build/macosx
+    $ ./make.sh
+
+Windows (Cygwin):
+    $ cd build/windows
+    $ ./make.sh
+
+After compilation, you can run the appropriate build/<platform>/run.sh
+script to run the IDE.
+
 Notes on RXTX
 ------------------------------------------------------------------------------
 We have recompiled the RXTX Java libraries for linux so that they will detect
