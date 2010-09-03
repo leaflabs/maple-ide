@@ -1,7 +1,7 @@
 /* *****************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2010 Marti F. Bolivar.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +23,21 @@
  * ****************************************************************************/
 
 /**
- *  @brief 
+ * @brief wrapper class for starting and stopping SysTick interrupts.
  */
 
-#include "libmaple.h"
-#include "wirish.h"
-#include "io.h"
+#ifndef _SYSTEMTICK_H_
+#define _SYSTEMTICK_H_
 
-/* Assumes that the ADC has been initialized and
- * that the pin is set to ANALOG_INPUT */
-uint32 analogRead(uint8 pin) {
-    if(PIN_MAP[pin].adc == ADC_INVALID) {
-        return 0;
-    } 
+#include "systick.h"
 
-    return adc_read(PIN_MAP[pin].adc);
-}
+class SysTick {
+ public:
+  SysTick(void);
+  void begin(void);
+  void end(void);
+};
+
+extern SysTick SystemTick;
+
+#endif

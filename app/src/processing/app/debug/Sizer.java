@@ -54,7 +54,7 @@ public class Sizer implements MessageConsumer {
       buildUsing = Preferences.get("build.using");
     }
     String commandSize[];
-    if (buildUsing.equals("make")) {
+    if (buildUsing.equals("armcompiler")) {
         return 1;      // GUI will tell user to check manually
     } else {
         String avrBasePath = Base.getAvrBasePath();

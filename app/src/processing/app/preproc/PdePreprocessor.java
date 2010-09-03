@@ -237,7 +237,7 @@ public class PdePreprocessor {
       // fall back on global prefs
       buildUsing = Preferences.get("build.using");
     }
-    if (buildUsing.equals("make")) {
+    if (buildUsing.equals("armcompiler")) {
         String core = boardPreferences.get("build.core");
         String corePath;
 
