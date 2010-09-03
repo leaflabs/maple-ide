@@ -226,23 +226,22 @@ You first need to clone libmaple:
 $ git clone git://github.com/leaflabs/libmaple.git libmaple</pre>
 
   Then you need to get the cross-compilers we use to build a project.
-  Luckily, jsnyder on github modified the linker scripts for OS X; get
-  them with:
+  These are just modified versions of GCC; you can
+  <a href="http://static.leaflabs.com/pub/codesourcery/arm-2010q1-188-arm-none-eabi-toolchain-macosx32.tar.gz">download
+  them for OS X here</a>.  Assuming you saved this file
+  to <code>~/Downloads/arm-2010q1-188-arm-none-eabi-toolchain-macosx32.tar.gz</code>,
+  you can then unpack the archive and let OS X know where the
+  compilers live with
 
-<pre class="code">$ git clone git://github.com/jsnyder/arm-eabi-toolchain.git jsnyder-arm-eabi</pre>
-
-  Then build everything (this is going to take a while).  You can look
-  at jsnyder-arm-eabi/README.md and follow the directions if you want
-  to pick your own install location, but if you want to accept the
-  default/are lazy, you can just:
-
-<pre class="code">$ mkdir -p ~/arm-cs-tools/bin
-$ export PATH=$PATH:~/arb-cs-tools/bin
-$ sudo make install-deps
-$ make install-cross</pre>
+<pre class="code">
+$ cd ~/Downloads
+$ tar -xvzf arm-2010q1-188-arm-none-eabi-toolchain-macosx32.tar.gz
+$ mv arm ~/libmaple/arm
+</pre>  
 
   After that's done, you'll probably want to update your shell startup
-  script to stick ~/arm-cs-tools/bin into PATH.
+  script to stick <code>~/libmaple/arm/bin</code> into
+  your <code>PATH</code>.
 
 <h3>All done?</h3> 
 
@@ -347,7 +346,7 @@ variable <code>LIB_MAPLE_HOME</code> in your shell startup script to
 point to the libmaple repository you cloned (this tutorial assumes you
 put it in <code>~/libmaple</code>).  For example, if you
 use <code>bash</code> as your shell, just put this line in your
-.bashrc:
+<code>~/.bashrc</code> or <code>~/.bash_profile</code>:
 
 <pre class="code">
 export LIB_MAPLE_HOME=~/libmaple
