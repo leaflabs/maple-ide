@@ -430,13 +430,14 @@ application" and without the Auto-generated filename prefixes or extensions.
 Set the Output filename to <code>support/codeblocks/program_flash.sh</code> and
 <code>support/codeblocks/program_ram.sh</code> respectively; these scripts just
 call the program_ram/program_flash make targets and are a hack to get the "run"
-button to upload code to the Maple. The IDE will warn that these files
-will be overwritten, but they won't be. For both the "flash" and "ram" targets,
-click the "Build options..." button button (below "Virtual targets..." etc) and
-go to the far right tab ("'Make' commands"). Edit the Clean project/target line
-so it's just "clean" (not "clean$target"), and set the "Build project/target"
-and "Compile single file" commands to <code>$make -f $makefile MAPLE_TARGET=$target</code>
-and <code>$make -f $makefile MAPLE_TARGET=$target $file</code> respectively.
+button to upload code to the Maple. The IDE will warn that these files will be
+overwritten, but they won't be. For both the "flash" and "ram" targets, click
+the "Build options..." button (below "Virtual targets..." etc) and go to the
+far right tab ("'Make' commands"). Edit the Clean project/target line so it's
+just "clean" (not "clean$target"), and set the "Build project/target" and
+"Compile single file" commands to <code>$make -f $makefile
+MAPLE_TARGET=$target</code> and <code>$make -f $makefile MAPLE_TARGET=$target
+$file</code> respectively.
 
 <br><br>
 <div class="centerimg"> 
