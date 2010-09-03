@@ -3,22 +3,22 @@
 maple.name=LeafLabs Maple rev3 to FLASH
 
 maple.upload.file_type=bin
-maple.upload.maximum_size=100000
+maple.upload.maximum_size=108000
 maple.upload.ram.maximum_size=17000
-maple.upload.flash.maximum_size=100000
+maple.upload.flash.maximum_size=108000
 maple.upload.usbID=1EAF:0003
 maple.upload.altID=1
 maple.upload.uploader=dfu-util
 maple.upload.auto_reset=true
 
-maple.build.mcu=cortex-m3
+maple.build.board=maple
+maple.build.mcu=STM32F103RB
+maple.build.family=cortex-m3
 maple.build.f_cpu=72000000L
 maple.build.core=maple
-maple.build.submdl=stm32f103
 maple.build.vect=VECT_TAB_FLASH
-maple.build.linker=flash.ld
-maple.build.core=maple
-maple.build.using=make
+maple.build.linker=maple/flash.ld
+maple.build.using=armcompiler
 
 ##############################################################
 mapleRAM.name=LeafLabs Maple rev3 to RAM
@@ -26,18 +26,41 @@ mapleRAM.name=LeafLabs Maple rev3 to RAM
 mapleRAM.upload.file_type=bin
 mapleRAM.upload.maximum_size=17000
 mapleRAM.upload.ram.maximum_size=17000
-mapleRAM.upload.flash.maximum_size=100000
+mapleRAM.upload.flash.maximum_size=108000
 mapleRAM.upload.usbID=1EAF:0003
 mapleRAM.upload.altID=0
 mapleRAM.upload.uploader=dfu-util
 mapleRAM.upload.auto_reset=true
 
-mapleRAM.build.mcu=cortex-m3
+mapleRAM.build.board=maple
+mapleRAM.build.mcu=STM32F103RB
+mapleRAM.build.family=cortex-m3
 mapleRAM.build.f_cpu=72000000L
 mapleRAM.build.core=maple
 mapleRAM.build.submdl=stm32f103
 mapleRAM.build.vect=VECT_TAB_RAM
-mapleRAM.build.linker=ram.ld
-mapleRAM.build.core=maple
-mapleRAM.build.using=make
+mapleRAM.build.linker=maple/ram.ld
+mapleRAM.build.using=armcompiler
+
+##############################################################
+
+maple_native.name=LeafLabs Maple Native (prototype) to FLASH
+
+maple_native.upload.file_type=bin
+maple_native.upload.maximum_size=500000
+maple_native.upload.ram.maximum_size=61000
+maple_native.upload.flash.maximum_size=500000
+maple_native.upload.usbID=1EAF:0003
+maple_native.upload.altID=1
+maple_native.upload.uploader=dfu-util
+maple_native.upload.auto_reset=true
+
+maple_native.build.board=maple_native
+maple_native.build.mcu=STM32F103ZE
+maple_native.build.family=cortex-m3
+maple_native.build.f_cpu=72000000L
+maple_native.build.core=maple
+maple_native.build.vect=VECT_TAB_FLASH
+maple_native.build.linker=maple_native/flash.ld
+maple_native.build.using=armcompiler
 

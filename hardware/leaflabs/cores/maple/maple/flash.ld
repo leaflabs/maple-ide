@@ -1,3 +1,20 @@
+/* Linker script for STM32 (by Lanchon with Mods by LeafLabs)
+ *
+ * Version:Sourcery G++ 4.2-84
+ * BugURL:https://support.codesourcery.com/GNUToolchain/
+ *
+ *  Copyright 2007 CodeSourcery.
+ *
+ * The authors hereby grant permission to use, copy, modify, distribute,
+ * and license this software and its documentation for any purpose, provided
+ * that existing copyright notices are retained in all copies and that this
+ * notice is included verbatim in any distributions. No written agreement,
+ * license, or royalty fee is required for any of the authorized uses.
+ * Modifications to this software may be copyrighted by their authors
+ * and need not follow the licensing terms described here, provided that
+ * the new terms are clearly indicated on the first page of each file where
+ * they apply. */
+
 /* Linker script for STM32 (by Lanchon),
  * ROM and RAM relocated to their positions 
  * as placed by Maple bootloader
@@ -8,15 +25,15 @@
 /* Define memory spaces. */
 MEMORY
 {
-  ram (rwx) : ORIGIN = 0x20000000, LENGTH = 20K
-  rom (rx) : ORIGIN = 0x08000000, LENGTH = 120K
+  ram (rwx) : ORIGIN = 0x20000C00, LENGTH = 17K
+  rom (rx)  : ORIGIN = 0x08005000, LENGTH = 108K
 }
 
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 ENTRY(_start)
 SEARCH_DIR(.)
 /* GROUP(-lgcc -lc -lcs3 -lcs3unhosted -lcs3-lanchon-stm32) */
-GROUP(libgcc.a libc.a libcs3-lanchon-stm32.a)
+GROUP(libgcc.a libc.a libm.a libcs3-lanchon-stm32.a)
 
 /* These force the linker to search for particular symbols from
  * the start of the link process and thus ensure the user's
@@ -117,6 +134,14 @@ SECTIONS
     . = ALIGN(8);
     _etext = .;
   } >rom
+
+/* expose a custom rom only section */
+  .USER_FLASH :
+  {
+    *(.USER_FLASH)
+  } >rom
+
+
   /* __cs3_region_end_rom is deprecated */
   __cs3_region_end_rom = __cs3_region_start_rom + LENGTH(rom);
   __cs3_region_size_rom = LENGTH(rom);

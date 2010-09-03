@@ -1422,7 +1422,7 @@ public class Sketch {
       buildUsing = Preferences.get("build.using");
     }
     System.out.print("Going to build using '" + buildUsing + "'");
-    if(buildUsing.equals("make")) {
+    if(buildUsing.equals("armcompiler")) {
         System.out.println(" (ARM)");
         compiler = new ArmCompiler();
     } else {
@@ -1505,7 +1505,7 @@ public class Sketch {
       buildUsing = Preferences.get("build.using");
     }
 
-    if (buildUsing.equals("make")) {
+    if (buildUsing.equals("armcompiler")) {
       System.out.println("Binary sketch size is reported above. Check it against a "+  maxsize + " byte maximum.");      
     } else {
       Sizer sizer = new Sizer(buildPath, suggestedClassName);

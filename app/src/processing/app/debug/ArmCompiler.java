@@ -274,6 +274,8 @@ public class ArmCompiler extends Compiler {
       //      "-g",
       "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
       "-D"+ boardPreferences.get("build.vect"),
+      "-DBOARD_"+ boardPreferences.get("build.board"),
+      "-DMCU_"+ boardPreferences.get("build.mcu"),
       "-DARDUINO=" + Base.REVISION,
     }));
 
@@ -310,6 +312,8 @@ public class ArmCompiler extends Compiler {
     baseCommandCompiler.add("-Wl,--gc-sections");
     baseCommandCompiler.add("-DF_CPU=" + boardPreferences.get("build.f_cpu"));
     baseCommandCompiler.add("-D" + boardPreferences.get("build.vect"));
+    baseCommandCompiler.add("-DBOARD_" + boardPreferences.get("build.board"));
+    baseCommandCompiler.add("-DMCU_" + boardPreferences.get("build.mcu"));
     baseCommandCompiler.add("-DARDUINO=" + Base.REVISION);
     baseCommandCompiler.add("-c");
 
@@ -342,6 +346,8 @@ public class ArmCompiler extends Compiler {
     baseCommandCompilerCPP.add("-Wl,--gc-sections");
     baseCommandCompilerCPP.add("-DF_CPU=" + boardPreferences.get("build.f_cpu"));
     baseCommandCompilerCPP.add("-D" + boardPreferences.get("build.vect"));
+    baseCommandCompilerCPP.add("-DBOARD_"+ boardPreferences.get("build.board"));
+    baseCommandCompilerCPP.add("-DMCU_"+ boardPreferences.get("build.mcu"));
     baseCommandCompilerCPP.add("-DARDUINO=" + Base.REVISION);
     baseCommandCompilerCPP.add("-fno-rtti");
     baseCommandCompilerCPP.add("-fno-exceptions");

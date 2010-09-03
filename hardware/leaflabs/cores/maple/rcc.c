@@ -23,115 +23,148 @@
  * ****************************************************************************/
 
 /**
- *  @file rcc.c
- *
- *  @brief Implements pretty much only the basic clock setup on the maple,
- *  exposes a handful of clock enable/disable and peripheral reset commands.
+ *  @brief Implements pretty much only the basic clock setup on the stm32,
+ *      clock enable/disable and peripheral reset commands.
  */
 
 #include "libmaple.h"
 #include "flash.h"
 #include "rcc.h"
 
-static void set_ahb_prescaler(uint32 divider) {
-   uint32 cfgr = __read(RCC_CFGR);
+enum {
+   APB1,
+   APB2,
+   AHB
+};
 
-   cfgr &= ~HPRE;
+struct rcc_dev_info {
+   const uint8 clk_domain;
+   const uint8 line_num;
+};
 
-   switch (divider) {
-   case SYSCLK_DIV_1:
-      cfgr |= SYSCLK_DIV_1;
-      break;
-   default:
-      ASSERT(0);
-   }
+/* device descriptor tables  */
+static const struct rcc_dev_info rcc_dev_table[] = {
+   [RCC_GPIOA]  = { .clk_domain = APB2, .line_num = 2 },
+   [RCC_GPIOB]  = { .clk_domain = APB2, .line_num = 3 },
+   [RCC_GPIOC]  = { .clk_domain = APB2, .line_num = 4 },
+   [RCC_GPIOD]  = { .clk_domain = APB2, .line_num = 5 },
+   [RCC_GPIOE]  = { .clk_domain = APB2, .line_num = 6 }, // High-density devices only
+   [RCC_GPIOF]  = { .clk_domain = APB2, .line_num = 7 }, // High-density devices only
+   [RCC_GPIOG]  = { .clk_domain = APB2, .line_num = 8 }, // High-density devices only
+   [RCC_AFIO]   = { .clk_domain = APB2, .line_num = 0 },
+   [RCC_ADC1]   = { .clk_domain = APB2, .line_num = 9 },
+   [RCC_ADC2]   = { .clk_domain = APB2, .line_num = 10 },
+   [RCC_USART1] = { .clk_domain = APB2, .line_num = 14 },
+   [RCC_USART2] = { .clk_domain = APB1, .line_num = 17 },
+   [RCC_USART3] = { .clk_domain = APB1, .line_num = 18 },
+   [RCC_USART4] = { .clk_domain = APB1, .line_num = 19 },  // High-density devices only
+   [RCC_USART5] = { .clk_domain = APB1, .line_num = 20 },  // High-density devices only
+   [RCC_TIMER1] = { .clk_domain = APB2, .line_num = 11 },
+   [RCC_TIMER2] = { .clk_domain = APB1, .line_num = 0 },
+   [RCC_TIMER3] = { .clk_domain = APB1, .line_num = 1 },
+   [RCC_TIMER4] = { .clk_domain = APB1, .line_num = 2 },
+   [RCC_TIMER5] = { .clk_domain = APB1, .line_num = 3 },   // High-density devices only
+   [RCC_TIMER6] = { .clk_domain = APB1, .line_num = 4 },   // High-density devices only
+   [RCC_TIMER7] = { .clk_domain = APB1, .line_num = 5 },   // High-density devices only
+   [RCC_TIMER8] = { .clk_domain = APB2, .line_num = 13 },  // High-density devices only
+   [RCC_SPI1]   = { .clk_domain = APB2, .line_num = 12 },
+   [RCC_SPI2]   = { .clk_domain = APB1, .line_num = 14 },
+   [RCC_FSMC]   = { .clk_domain = AHB,  .line_num = 8 },   // High-density devices only
+   [RCC_DAC]    = { .clk_domain = APB1, .line_num = 9 },  // High-density devices only
+};
 
-   __write(RCC_CFGR, cfgr);
+/**
+ * @brief Initialize the clock control system. Initializes the system
+ *      clock source to use the PLL driven by an external oscillator
+ * @param sysclk_src system clock source, must be PLL
+ * @param pll_src pll clock source, must be HSE
+ * @param pll_mul pll multiplier
+ */
+void rcc_clk_init(uint32 sysclk_src, uint32 pll_src, uint32 pll_mul) {
+   /* Assume that we're going to clock the chip off the PLL, fed by
+    * the HSE */
+   ASSERT(sysclk_src == RCC_CLKSRC_PLL &&
+          pll_src    == RCC_PLLSRC_HSE);
+
+   uint32 cfgr = 0;
+   uint32 cr = RCC_READ_CR();
+
+   cfgr =  (pll_src | pll_mul);
+   RCC_WRITE_CFGR(cfgr);
+
+   /* Turn on the HSE  */
+   cr |= RCC_CR_HSEON;
+   RCC_WRITE_CR(cr);
+   while (!(RCC_READ_CR() & RCC_CR_HSERDY))
+      ;
+
+   /* Now the PLL  */
+   cr |= RCC_CR_PLLON;
+   RCC_WRITE_CR(cr);
+   while (!(RCC_READ_CR() & RCC_CR_PLLRDY))
+      ;
+
+   /* Finally, let's switch over to the PLL  */
+   cfgr &= ~RCC_CFGR_SW;
+   cfgr |= RCC_CFGR_SW_PLL;
+   RCC_WRITE_CFGR(cfgr);
+   while ((RCC_READ_CFGR() & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL)
+      ;
 }
 
-static void set_apb1_prescaler(uint32 divider) {
-   uint32 cfgr = __read(RCC_CFGR);
 
-   cfgr &= ~PPRE1;
 
-   switch (divider) {
-   case HCLK_DIV_2:
-      cfgr |= HCLK_DIV_2;
-      break;
-   default:
-      ASSERT(0);
-   }
+/**
+ * @brief Turn on the clock line on a device
+ * @param dev_num device to turn on
+ */
+void rcc_clk_enable(uint32 dev_num) {
+   static const uint32 enable_regs[] = {
+      [APB1] = RCC_APB1ENR,
+      [APB2] = RCC_APB2ENR,
+      [AHB] = RCC_AHBENR,
+   };
 
-   __write(RCC_CFGR, cfgr);
+   uint8 clk_domain = rcc_dev_table[dev_num].clk_domain;
+
+   __set_bits(enable_regs[clk_domain], BIT(rcc_dev_table[dev_num].line_num));
 }
 
-static void set_apb2_prescaler(uint32 divider) {
-   uint32 cfgr = __read(RCC_CFGR);
 
-   cfgr &= ~PPRE2;
+/**
+ * @brief Set the divider on a device prescaler
+ * @param prescaler prescaler to set
+ * @param divider prescaler divider
+ */
+void rcc_set_prescaler(uint32 prescaler, uint32 divider) {
+   static const uint32 masks[] = {
+      [RCC_PRESCALER_AHB] = RCC_CFGR_HPRE,
+      [RCC_PRESCALER_APB1] = RCC_CFGR_PPRE1,
+      [RCC_PRESCALER_APB2] = RCC_CFGR_PPRE2,
+      [RCC_PRESCALER_USB] = RCC_CFGR_USBPRE,
+      [RCC_PRESCALER_ADC] = RCC_CFGR_ADCPRE,
+   };
 
-   switch (divider) {
-   case HCLK_DIV_1:
-      cfgr |= HCLK_DIV_1;
-      break;
-   default:
-      ASSERT(0);
-   }
+   uint32 cfgr = RCC_READ_CFGR();
 
-   __write(RCC_CFGR, cfgr);
+   cfgr &= ~masks[prescaler];
+   cfgr |= divider;
+   RCC_WRITE_CFGR(cfgr);
 }
 
-/* FIXME: magic numbers  */
-static void pll_init(void) {
-   uint32 cfgr;
 
-   cfgr = __read(RCC_CFGR);
-   cfgr &= (~PLLMUL | PLL_INPUT_CLK_HSE);
+/**
+ * @brief reset a device
+ * @param dev_num device to reset
+ */
+void rcc_reset_dev(uint32 dev_num) {
+   static const uint32 reset_regs[] = {
+      [APB1] = RCC_APB1RSTR,
+      [APB2] = RCC_APB2RSTR,
+   };
 
-   /* pll multiplier 9, input clock hse */
-   __write(RCC_CFGR, cfgr | PLL_MUL_9 | PLL_INPUT_CLK_HSE);
+   uint8 clk_domain = rcc_dev_table[dev_num].clk_domain;
 
-   /* enable pll  */
-   __set_bits(RCC_CR, PLLON);
-   while(!__get_bits(RCC_CR, PLLRDY)) {
-      asm volatile("nop");
-   }
-
-   /* select pll for system clock source  */
-   cfgr = __read(RCC_CFGR);
-   cfgr &= ~RCC_CFGR_SWS;
-   __write(RCC_CFGR, cfgr | RCC_CFGR_SWS_PLL);
-
-   while (__get_bits(RCC_CFGR, 0x00000008) != 0x8) {
-      asm volatile("nop");
-   }
-}
-
-static void hse_init(void) {
-   __set_bits(RCC_CR, HSEON);
-   while (!HSERDY) {
-      asm volatile("nop");
-   }
-}
-
-void rcc_init(void) {
-   hse_init();
-
-   /* Leave this here for now...  */
-   /* Enable Prefetch Buffer */
-   flash_enable_prefetch();
-
-   /* Flash 2 wait state */
-   flash_set_latency();
-
-   set_ahb_prescaler(SYSCLK_DIV_1);
-   set_apb1_prescaler(HCLK_DIV_2);
-   set_apb2_prescaler(HCLK_DIV_1);
-   pll_init();
-}
-
-void rcc_set_adc_prescaler(uint32 divider) {
-   uint32 cfgr = __read(RCC_CFGR);
-   cfgr &= ~ADCPRE;
-   __write(RCC_CFGR, cfgr | PCLK2_DIV_2);
+   __set_bits(reset_regs[clk_domain], BIT(rcc_dev_table[dev_num].line_num));
+   __clear_bits(reset_regs[clk_domain], BIT(rcc_dev_table[dev_num].line_num));
 }

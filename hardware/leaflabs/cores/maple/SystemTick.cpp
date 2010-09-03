@@ -1,7 +1,7 @@
 /* *****************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2010 Marti F. Bolivar.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,19 @@
  * THE SOFTWARE.
  * ****************************************************************************/
 
-/**
- *  @brief 
- */
+#include "SystemTick.h"
+#include "systick.h"
+#include "time.h"
 
-#include "libmaple.h"
-#include "wirish.h"
-#include "io.h"
-
-/* Assumes that the ADC has been initialized and
- * that the pin is set to ANALOG_INPUT */
-uint32 analogRead(uint8 pin) {
-    if(PIN_MAP[pin].adc == ADC_INVALID) {
-        return 0;
-    } 
-
-    return adc_read(PIN_MAP[pin].adc);
+SysTick::SysTick(void) {
 }
+
+void SysTick::begin(void) {
+  systick_init(MAPLE_RELOAD_VAL);
+}
+
+void SysTick::end(void) {
+  systick_disable();
+}
+
+SysTick SystemTick;

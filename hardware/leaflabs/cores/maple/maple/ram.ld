@@ -26,7 +26,7 @@
 MEMORY
 {
   ram (rwx) : ORIGIN = 0x20000C00, LENGTH = 17K
-  rom (rx) : ORIGIN = 0x00000000, LENGTH = 0K
+  rom (rx)  : ORIGIN = 0x08005000, LENGTH = 0K
 }
 
 
@@ -34,7 +34,7 @@ OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 ENTRY(_start)
 SEARCH_DIR(.)
 /* GROUP(-lgcc -lc -lcs3 -lcs3unhosted -lcs3-lanchon-stm32) */
-GROUP(libgcc.a libc.a libcs3-lanchon-stm32.a)
+GROUP(libgcc.a libc.a libm.a libcs3-lanchon-stm32.a)
 
 /* These force the linker to search for particular symbols from
  * the start of the link process and thus ensure the user's
