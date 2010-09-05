@@ -17,7 +17,7 @@
 <div class="warningbox">
 <h3>Changes and Caveats</h3>
 The SerialUSB functionality was modified for the 0.0.6 IDE release. It now
-includes a 50 milisecond timeout for writes and does not try to detect if the
+includes a 50 millisecond timeout for writes and does not try to detect if the
 USB host is "really" connected or just enumerated and initialized. This means
 that if you have a number of SerialUSB writes or prints in your code and you
 are not monitoring on a computer your program will run much, much slower than
@@ -25,7 +25,7 @@ if it is being monitored or totally disconnected (battery).
 
 <br>You can avoid this behavior by deciphering the port status using the
 DTR and RTS line status; the behavior of these control lines is platform
-dependant and we no longer interpret them by default. 
+dependent and we no longer interpret them by default. 
 </div>
 
 <p>
@@ -38,7 +38,7 @@ port for use as a terminal (text read/write).
 
 <p>
 The emulated terminal is relatively slow and inefficient; it is best for 
-transfering data at regulat serial speeds (kilobaud). Users requiring faster
+transferring data at regular serial speeds (kilobaud). Users requiring faster
 data transfer should consider implementing a different communications protocol;
 the Maple could be reprogrammed to appear as a mass storage device (thumb
 drive), human interface device (mouse or keyboard), microphone, or any other
@@ -64,16 +64,16 @@ or because the interface has been disabled from the Maple side
   corresponding ASCII character will be transmitted; to print out a number in
   human readable form add a second parameter with the base system. Eg, to print
   out the decimal number '1234' use <code>print(1234,DEC)</code>; to print out
-  the binary numner '1001' use <code>print(9,BIN)</code>. 
+  the binary number '1001' use <code>print(9,BIN)</code>. 
   <br><code>write()</code> is a lower-level function that writes bytes
   directly into the buffer. <code>print()</code> often calls this function
-  dozens of times to write out a single formated number; usercode can optimize
+  dozens of times to write out a single formatted number; usercode can optimize
   raw data speed by calling this function with 64-bytes chunks instead.
     
   <dt><code>SerialUSB.available()</code><br> 
       <code>SerialUSB.read()</code><br>
   <dd><code>read()</code> will return any data that has been received over the
-  port and <code>available()</code> will tell if any such data acutally exists,
+  port and <code>available()</code> will tell if any such data actually exists,
   and if so how many bytes. If there is no data <code>read()</code> will
   block/fail, so the usual program structure is to poll with
   <code>available()</code> and only <code>read()</code> if there's something
@@ -82,7 +82,7 @@ or because the interface has been disabled from the Maple side
   <dt><code>uint8 SerialUSB.pending()</code><br> 
   <dd>Returns the number of bytes waiting in the transmit buffer. Usercode can use
   this to prevent any blocking/waiting when using the direct <code>write()</code>
-  functions, or to check if data was actually requested/recieved by the host.
+  functions, or to check if data was actually requested/received by the host.
 
   <dt><code>uint8 getRTS()</code><br>
   <dd>Returns the state (1 or 0) of the virtual RTS ("ready to send") line. This

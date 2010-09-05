@@ -56,12 +56,12 @@ In the following replace "SerialN" with Serial1, Serial2, or Serial3.
   corresponding ASCII character will be transmitted; to print out a number in
   human readable form add a second parameter with the base system. Eg, to print
   out the decimal number '1234' use <code>print(1234,DEC)</code>; to print out
-  the binary numner '1001' use <code>print(9,BIN)</code>. 
+  the binary number '1001' use <code>print(9,BIN)</code>. 
 
   <dt><code>SerialN.available()</code><br>
       <code>SerialN.read()</code>
-  <dd><code>read()</code> will return any data that has been recieved over the
-  port and <code>available()</code> will tell if any such data acutally exists,
+  <dd><code>read()</code> will return any data that has been received over the
+  port and <code>available()</code> will tell if any such data actually exists,
   and if so how many bytes. If there is no data <code>read()</code> will
   block/fail, so the usual program structure is to poll with
   <code>available()</code> and only <code>read()</code> if there's something

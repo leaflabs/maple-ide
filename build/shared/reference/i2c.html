@@ -18,7 +18,7 @@ i2c is a crude and easy-to-hack serial protocol that requires only two
 wires/channels for communication between many devices. Every message passed
 on the bus is between a Master (who initiates the message) and a Slave 
 device. Slaves are addressed using 7-bit addresses (up to 127 unique devices);
-10-bit addressing is possible but currently unimplented.  Every message 
+10-bit addressing is possible but currently unimplemented.  Every message 
 consists of an arbitrary combination of 8-bit reads and writes as requested by
 the Master; higher level functionality, such as reading a particular register
 value, is achieved by writing to set the memory location then reading to pull
@@ -45,14 +45,14 @@ Port 2 (i2c2) has SDA on D30 and SCL on D29.
 
 <p>
 The Maple reliably communicates with up to a 400kHz clock speed; this doesn't
-translate into a 400kilobit data rate except in extreme cases because of 
+translate into a 400kbps data rate except in extreme cases because of 
 addressing and protocol overhead. We have tested clock speeds up to a megahertz
 and have had mixed results; in theory it could be possible to achieve even 
 higher rates but signal quality degrades rapidly and the bus becomes 
 unreliable. 
 
 <p>
-Proper wiring and pullup resistor selection are essential when incorporating
+Proper wiring and pull-up resistor selection are essential when incorporating
 i2c into a circuit, especially with datarates above 100kHz. In the lab we 
 usually use ~5k ohm resistors with Vcc (3.3v) as the high voltage and try to
 connect the pullup voltage as close to the SDA and SCL pins as possible. We
@@ -68,7 +68,7 @@ The function API for i2c is not finished! See the source code for now.
 
 <p>
 The stm32 microcontroller has hardware support for SMBus, we simply have not
-writen software for it. The SMBAL line for i2c1 is on header D4 and for i2c2 is
+written software for it. The SMBAL line for i2c1 is on header D4 and for i2c2 is
 on D31. 
 
 <h2><a name="links">Recommended Reading</a></h2>

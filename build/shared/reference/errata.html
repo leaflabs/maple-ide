@@ -29,11 +29,11 @@ silkscreen and the "infinity-leaf" logo.
   <li><span style="color:orange;">Bad/Sticky Buttons:</span> a number of rev3
   boards sold in May-June 2010 have questionable reset and "BUT" buttons. What
   seems to have happened is that the flux removed we used to clean the boards
-  before shipping erroded the plastic internals which results in intermittant
+  before shipping eroded the plastic internals which results in intermittent
   functionality. All buttons on all shipped boards did function in testing, 
   but some may have worked in testing but be unreliable in regular use. If you
   have this problem we will be happy to ship you new buttons if you think you
-  can resolder them yourself, or you can ship us your board and we will swap
+  can re-solder them yourself, or you can ship us your board and we will swap
   out that part. For reference, the button part number is KMR211GLFS and the
   flux remover we used is "Precision Electronics Cleaner" from RadioShack,
   which is "Safe on most plastics" and contains Dipropylene glycol monomethyl
@@ -48,7 +48,7 @@ silkscreen and the "infinity-leaf" logo.
   they appear to protect the USB-Serial converter from TTL voltage on the
   headers.
 
-  <li><span style="color:yellow;">GPIO 39-43 Unconfigured:</span> this is 
+  <li><span style="color:yellow;">GPIO 39-43 not configured:</span> this is 
   really more of a software todo item; some of the JTAG header pins are 
   numbered 39-43. These STM32 pins are indeed fully functional GPIO when the
   a JTAG device is not connected, but we have not enabled them in software
@@ -82,11 +82,11 @@ the logo is a single pixelated leaf.
   <li><span style="color:red;">ADC noise: </span> generally very high, in
   particular when the USB port is being used for communications (including
   keep-alive pings when connected to a computer).  This issue was resolved in
-  rev3 with a 4-layer design and a geometricaly isolated ADC Vref plane.
+  rev3 with a 4-layer design and a geometrically isolated ADC Vref plane.
 
   <li><span style="color:red;">Resistors on D0, D1: </span> these header pins,
   which are RX/TX on USART2 ("Serial2"), have (TODO) Ohm in-line. These 
-  resistors increase the immpedence of the lines for ADC reads and affect the
+  resistors increase the impedance of the lines for ADC reads and affect the
   open drain GPIO functionality of the pins. These resistors were accidentally
   copied over from older Arduino USB designs, where they appear to protect the
   USB-Serial converter from TTL voltage on the headers.

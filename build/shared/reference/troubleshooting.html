@@ -48,7 +48,7 @@
 
 <h2><a name="hardware">Hardware Problems</a></h2>
 <dl>
-  <dt><a name="hw1">The status LED is throbing and I can't upload my
+  <dt><a name="hw1">The status LED is throbbing and I can't upload my
       program!</a> 
   <dd>The LED throbs when there has been a failed software assertion.  You can
   still reprogram by resetting the board and uploading during the short window
@@ -56,10 +56,10 @@
   be hard to get the timing right), hit the reset and then tap the bootloader
   button (make sure you aren't holding the bootloader button when the reset
   button is released or it will enter serial bootloader mode; if you tap
-  afterwards it will stay in the USB bootloader window indefinately).
+  afterwords it will stay in the USB bootloader window indefinitely).
 
   <dt><a name="hw2">My board is bricked! I can't upload via the bootloader no matter what!</a>
-  <dd> Use the hardcoded serial stm32 serial bootloader to reflash the
+  <dd> Use the hardcoded serial stm32 serial bootloader to re-flash the
   bootloader.  
   <dd>If it really is bricked and you think it's our fault contact us!
 
@@ -125,7 +125,7 @@
 <dl>
   <dt><a name="up1">My program is too large!</a>
   <dd>First, make sure you're using the FLASH target instead of RAM; there is
-  serveral times more FLASH memory available for user programs. 
+  several times more FLASH memory available for user programs. 
   <dt><a name="up2"><code>No DFU capable USB device found</code>
   <dd>This probably means you don't have a Maple plugged in or powered on!
   <dt><a name="up3">I have multiple Maples installed; how do I know which one will get flashed?</a>

@@ -95,7 +95,7 @@ important for your program.
 The SysTick peripheral is and the associated <code>millis()</code> and
 <code>delay()</code> functions are another simple way to perform periodic or
 delayed events. This separate timer does not conflict with any other
-peripherals, but the associated 1khz interrupt can jitter the general purpose
+peripherals, but the associated 1kHz interrupt can jitter the general purpose
 timer interrupts; this is clearly seen when running VGA code, where the timing
 jitters are transformed into visual jags in the image. A future version of
 libmaple will allow the SysTick interrupt to be disabled when it is not needed.
@@ -177,7 +177,7 @@ channel numbers also range from 1 to 4.
 
   <dd>This is how to attach or disable an interrupt handlers to timer channels;
   this what will get called when the counter reaches the compare value set with
-  <code>setCompareN(val)</code>. "<code>function</code>" (sometimes refered to
+  <code>setCompareN(val)</code>. "<code>function</code>" (sometimes referred to
   as an ISR: "interrupt service routine") should be of a type that does not
   accept or return any values. They are just like any other function in your
   sketch/program and must be initialized at the top of the file and defined
