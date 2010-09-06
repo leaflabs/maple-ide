@@ -47,7 +47,7 @@ public class ThinkDifferent implements ApplicationListener {
   // reference to the app where the existing quit, about, prefs code is
   private Base base;
 
-  
+  @SuppressWarnings("deprecation")
   static protected void init(Base base) {    
     if (application == null) {
       application = new com.apple.eawt.Application();

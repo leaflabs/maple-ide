@@ -44,6 +44,7 @@ public class ArmCompiler extends Compiler {
 
   private boolean messagesNonError = false; // THIS IS SUCH A HACK.
 
+  private List<String> hackErrors = null;
   /**
    * Compile for ARM with make
    *
@@ -56,12 +57,14 @@ public class ArmCompiler extends Compiler {
   public boolean compile(Sketch sketch,
                          String buildPath,
                          String primaryClassName,
-                         boolean verbose) throws RunnerException {
+                         boolean verbose,
+                         List<String> compileErrors) 
+    throws RunnerException {
     this.sketch = sketch;
     this.buildPath = buildPath;
     this.primaryClassName = primaryClassName;
     this.verbose = verbose;
-
+    this.hackErrors = compileErrors;
     // the pms object isn't used for anything but storage
     MessageStream pms = new MessageStream(this);
 
@@ -105,21 +108,9 @@ public class ArmCompiler extends Compiler {
                    findFilesInPath(corePath, "cpp", true),
                    boardPreferences));
     
-    /*
-    List baseCommandAR = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + "avr-ar",
-      "rcs",
-      runtimeLibraryName
-    }));
 
-    for(File file : coreObjectFiles) {
-      List commandAR = new ArrayList(baseCommandAR);
-      commandAR.add(file.getAbsolutePath());
-      execAsynchronously(commandAR);
-    }
-    */
-
-    // 2. compile the libraries, outputting .o files to: <buildPath>/<library>/
+    // 2. compile the libraries, outputting .o files to:
+    // <buildPath>/<library>/
 
     // use library directories as include paths for all libraries
     for (File file : sketch.getImportedLibraries()) {
@@ -370,7 +361,7 @@ public class ArmCompiler extends Compiler {
     // This receives messages as full lines, so a newline needs
     // to be added as they're printed to the console.
     //System.err.print(s);
-
+    this.hackErrors.add(s);
     // SUCH A HACK
     if (messagesNonError) {
       System.out.print(s);
@@ -386,14 +377,7 @@ public class ArmCompiler extends Compiler {
     // ignore obj copy
     if (s.indexOf("copy from ") != -1) return;
 
-    // jikes always uses a forward slash character as its separator,
-    // so replace any platform-specific separator characters before
-    // attemping to compare
-    //
-    //String buildPathSubst = buildPath.replace(File.separatorChar, '/') + "/";
-    String buildPathSubst =
-      buildPath.replace(File.separatorChar,File.separatorChar) +
-      File.separatorChar;
+    String buildPathSubst = buildPath + File.separatorChar;
 
     String partialTempPath = null;
     int partialStartIndex = -1; //s.indexOf(partialTempPath);
@@ -454,7 +438,6 @@ public class ArmCompiler extends Compiler {
       if (fileIndex == 0) {  // main class, figure out which tab
         for (int i = 1; i < sketch.getCodeCount(); i++) {
           if (sketch.getCode(i).isExtension("pde")) {
-            //System.out.println("preprocOffset "+ sketch.getCode(i).getPreprocOffset());
             if (sketch.getCode(i).getPreprocOffset() < lineNumber) {
               fileIndex = i;
               //System.out.println("i'm thinkin file " + i);

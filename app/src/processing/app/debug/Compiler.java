@@ -61,7 +61,8 @@ public class Compiler implements MessageConsumer {
   public boolean compile(Sketch sketch,
                          String buildPath,
                          String primaryClassName,
-                         boolean verbose) throws RunnerException {
+                         boolean verbose,
+                         List<String> ignored) throws RunnerException {
     this.sketch = sketch;
     this.buildPath = buildPath;
     this.primaryClassName = primaryClassName;

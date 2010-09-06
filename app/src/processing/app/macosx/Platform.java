@@ -101,7 +101,7 @@ public class Platform extends processing.app.Platform {
     */
   }
 
-
+  @SuppressWarnings("deprecation")
   public void openURL(String url) throws Exception {
     if (!url.startsWith("http://")) {
       // Assume this is a file instead, and just open it.

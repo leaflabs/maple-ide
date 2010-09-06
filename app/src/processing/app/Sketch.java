@@ -33,7 +33,7 @@ import processing.app.debug.Uploader;
 import processing.app.preproc.*;
 import processing.core.*;
 
-import java.awt.*;
+import java.awt.FileDialog;
 import java.awt.event.*;
 import java.beans.*;
 import java.io.*;
@@ -50,6 +50,9 @@ import javax.swing.border.TitledBorder;
  */
 public class Sketch {
   static private File tempBuildFolder;
+  public static String tempBuildFolder() {
+    return tempBuildFolder.getAbsolutePath();
+  }
 
   private Editor editor;
 
@@ -1125,20 +1128,6 @@ public class Sketch {
   }
 
 
-  /**
-   * Cleanup temporary files used during a build/run.
-   */
-  protected void cleanup() {
-    // if the java runtime is holding onto any files in the build dir, we
-    // won't be able to delete them, so we need to force a gc here
-    System.gc();
-
-    // note that we can't remove the builddir itself, otherwise
-    // the next time we start up, internal runs using Runner won't
-    // work because the build dir won't exist at startup, so the classloader
-    // will ignore the fact that that dir is in the CLASSPATH in run.sh
-    Base.removeDescendants(tempBuildFolder);
-  }
 
 
   /**
@@ -1167,27 +1156,15 @@ public class Sketch {
    *    X. afterwards, some of these steps need a cleanup function
    * </PRE>
    */
-  protected String compile(boolean verbose)
-    throws RunnerException {
-    
-    String name;
-  
+  protected void compile(boolean verbose, List<String> hackErrors) throws RunnerException {
     // make sure the user didn't hide the sketch folder
     ensureExistence();
 
     current.setProgram(editor.getText());
 
-    // TODO record history here
-    //current.history.record(program, SketchHistory.RUN);
-
     // if an external editor is being used, need to grab the
     // latest version of the code from the file.
     if (Preferences.getBoolean("editor.external")) {
-      // history gets screwed by the open..
-      //String historySaved = history.lastRecorded;
-      //handleOpen(sketch);
-      //history.lastRecorded = historySaved;
-
       // set current to null so that the tab gets updated
       // http://dev.processing.org/bugs/show_bug.cgi?id=515
       current = null;
@@ -1202,11 +1179,64 @@ public class Sketch {
     cleanup();
 
     // handle preprocessing the main file's code
-    name = build(tempBuildFolder.getAbsolutePath(), verbose);
+    String name = build(tempBuildFolder.getAbsolutePath(), verbose, hackErrors);
     size(tempBuildFolder.getAbsolutePath(), name);
-    
-    return name;
   }
+
+  /**
+   * Cleanup temporary files used during a build/run.
+   */
+  protected void cleanup() {
+    System.gc(); // maybe java runtime holds refs to files in build
+                 // folder? or something
+    Base.removeDescendants(tempBuildFolder);
+  }
+
+  /**
+   * Preprocess and compile all the code for this sketch.
+   *
+   * In an advanced program, the returned class name could be different,
+   * which is why the className is set based on the return value.
+   * A compilation error will burp up a RunnerException.
+   *
+   * @return null if compilation failed, main class name if not
+   */
+  public String build(String buildPath, boolean verbose,
+                      // this extra parameter is a hack that stores
+                      // ALL of the compiler errors/output -- whether
+                      // it can be successfully parsed or not
+                      List<String> compileErrors) throws RunnerException {
+    
+    // run the preprocessor
+    String primaryClassName = preprocess(buildPath);
+
+    // compile the program. errors will happen as a RunnerException
+    // that will bubble up to whomever called build().
+    Compiler compiler;
+    String buildUsing;
+    try {
+        buildUsing = Base.getBoardPreferences().get("build.using");
+    } catch (NullPointerException npe) {
+        throw new RunnerException("No board selected, please choose one from the Tools menu.");
+    }
+    if (buildUsing == null) {
+      // fall back on global prefs
+      buildUsing = Preferences.get("build.using");
+    }
+    System.out.print("Going to build using '" + buildUsing + "'");
+    if(buildUsing.equals("armcompiler")) {
+        System.out.println(" (ARM)");
+        compiler = new ArmCompiler();
+    } else {
+        System.out.println(" (AVR)");
+        compiler = new Compiler();
+    }
+    if (compiler.compile(this, buildPath, primaryClassName, verbose, compileErrors)) {
+      return primaryClassName;
+    }
+    return null;
+  }
+
 
 
   /**
@@ -1235,35 +1265,8 @@ public class Sketch {
     String[] codeFolderPackages = null;
     classPath = buildPath;
 
-//    // figure out the contents of the code folder to see if there
-//    // are files that need to be added to the imports
-//    if (codeFolder.exists()) {
-//      libraryPath = codeFolder.getAbsolutePath();
-//
-//      // get a list of .jar files in the "code" folder
-//      // (class files in subfolders should also be picked up)
-//      String codeFolderClassPath =
-//        Compiler.contentsToClassPath(codeFolder);
-//      // append the jar files in the code folder to the class path
-//      classPath += File.pathSeparator + codeFolderClassPath;
-//      // get list of packages found in those jars
-//      codeFolderPackages =
-//        Compiler.packageListFromClassPath(codeFolderClassPath);
-//
-//    } else {
-//      libraryPath = "";
-//    }
-
     // 1. concatenate all .pde files to the 'main' pde
     //    store line number for starting point of each code bit
-
-    // Unfortunately, the header has to be written on a single line, because
-    // there's no way to determine how long it will be until the code has
-    // already been preprocessed. The header will vary in length based on
-    // the programming mode (STATIC, ACTIVE, or JAVA), which is determined
-    // by the preprocessor. So the preprocOffset for the primary class remains
-    // zero, even though it'd be nice to have a legitimate offset, and be able
-    // to remove the 'pretty' boolean for preproc.write().
 
     StringBuffer bigCode = new StringBuffer();
     int bigCount = 0;
@@ -1273,33 +1276,12 @@ public class Sketch {
         bigCode.append(sc.getProgram());
         bigCode.append('\n');
         bigCount += sc.getLineCount();
-//        if (sc != code[0]) {
-//          sc.setPreprocName(null);  // don't compile me
-//        }
       }
     }
-
-    /*
-    String program = code[0].getProgram();
-    StringBuffer bigCode = new StringBuffer(program);
-    int bigCount = code[0].getLineCount();
-    bigCode.append('\n');
-
-    for (int i = 1; i < codeCount; i++) {
-      if (code[i].isExtension("pde")) {
-        code[i].setPreprocOffset(bigCount);
-        bigCode.append(code[i].getProgram());
-        bigCode.append('\n');
-        bigCount += code[i].getLineCount();
-        code[i].setPreprocName(null);  // don't compile me
-      }
-    }
-    */
 
     // Note that the headerOffset isn't applied until compile and run, because
     // it only applies to the code after it's been written to the .java file.
     int headerOffset = 0;
-    //PdePreprocessor preprocessor = new PdePreprocessor();
     try {
       headerOffset = preprocessor.writePrefix(bigCode.toString(),
                                               buildPath,
@@ -1323,14 +1305,6 @@ public class Sketch {
 
       if (className == null) {
         throw new RunnerException("Could not find main class");
-        // this situation might be perfectly fine,
-        // (i.e. if the file is empty)
-        //System.out.println("No class found in " + code[i].name);
-        //System.out.println("(any code in that file will be ignored)");
-        //System.out.println();
-
-//      } else {
-//        code[0].setPreprocName(className + ".java");
       }
 
       // store this for the compiler and the runtime
@@ -1370,11 +1344,7 @@ public class Sketch {
 
     for (SketchCode sc : code) {
       if (sc.isExtension("c") || sc.isExtension("cpp") || sc.isExtension("h")) {
-        // no pre-processing services necessary for java files
-        // just write the the contents of 'program' to a .java file
-        // into the build directory. uses byte stream and reader/writer
-        // shtuff so that unicode bunk is properly handled
-        String filename = sc.getFileName(); //code[i].name + ".java";
+        String filename = sc.getFileName();
         try {
           Base.saveFile(sc.getProgram(), new File(buildPath, filename));
         } catch (IOException e) {
@@ -1382,7 +1352,6 @@ public class Sketch {
           throw new RunnerException("Problem moving " + filename +
                                     " to the build folder");
         }
-//        sc.setPreprocName(filename);
 
       } else if (sc.isExtension("pde")) {
         // The compiler and runner will need this to have a proper offset
@@ -1393,47 +1362,6 @@ public class Sketch {
   }
 
 
-  /**
-   * Preprocess and compile all the code for this sketch.
-   *
-   * In an advanced program, the returned class name could be different,
-   * which is why the className is set based on the return value.
-   * A compilation error will burp up a RunnerException.
-   *
-   * @return null if compilation failed, main class name if not
-   */
-  public String build(String buildPath, boolean verbose)
-    throws RunnerException {
-    
-    // run the preprocessor
-    String primaryClassName = preprocess(buildPath);
-
-    // compile the program. errors will happen as a RunnerException
-    // that will bubble up to whomever called build().
-    Compiler compiler;
-    String buildUsing;
-    try {
-        buildUsing = Base.getBoardPreferences().get("build.using");
-    } catch (NullPointerException npe) {
-        throw new RunnerException("No board selected, please choose one from the Tools menu.");
-    }
-    if (buildUsing == null) {
-      // fall back on global prefs
-      buildUsing = Preferences.get("build.using");
-    }
-    System.out.print("Going to build using '" + buildUsing + "'");
-    if(buildUsing.equals("armcompiler")) {
-        System.out.println(" (ARM)");
-        compiler = new ArmCompiler();
-    } else {
-        System.out.println(" (AVR)");
-        compiler = new Compiler();
-    }
-    if (compiler.compile(this, buildPath, primaryClassName, verbose)) {
-      return primaryClassName;
-    }
-    return null;
-  }
 
 
   protected boolean exportApplet(boolean verbose) throws Exception {
@@ -1468,18 +1396,10 @@ public class Sketch {
     appletFolder.mkdirs();
 
     // build the sketch
-    String foundName = build(appletFolder.getPath(), false);
+    String foundName = build(appletFolder.getPath(), false,
+                             new ArrayList<String>()/*hack*/);
     // (already reported) error during export, exit this function
     if (foundName == null) return false;
-
-//    // If name != exportSketchName, then that's weirdness
-//    // BUG unfortunately, that can also be a bug in the preproc :(
-//    if (!name.equals(foundName)) {
-//      Base.showWarning("Error during export",
-//                       "Sketch name is " + name + " but the sketch\n" +
-//                       "name in the code was " + foundName, null);
-//      return false;
-//    }
 
     size(appletFolder.getPath(), foundName);
     upload(appletFolder.getPath(), foundName, verbose);

@@ -1789,26 +1789,41 @@ public class Editor extends JFrame implements RunnerListener {
       console.clear();
     }
 
-    //presenting = present;
-
+    hackErrors.clear();
     SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-    try {
-          sketch.compile(verbose);    
-          statusNotice("Done compiling.");
-        } catch (RunnerException e) {
-          //statusError("Error compiling...");
-          statusError(e);
-
-        } catch (Exception e) {
-          e.printStackTrace();
+        public void run() {
+          try {
+            sketch.compile(verbose, hackErrors);
+            statusNotice("Done compiling.");
+          } catch (RunnerException e) {
+            statusError(e);
+            System.out.println("\n\n");
+            printHackError();
+          } catch (Exception e) {
+            System.out.println("Something went wrong.  Exception received:");
+            e.printStackTrace();
+            printHackError();
           }
-
-        toolbar.deactivate(EditorToolbar.RUN);
-    }
-    });
+          toolbar.deactivate(EditorToolbar.RUN);
+        }
+      });
   }
 
+  private void printHackError() {
+    String buildDir = Sketch.tempBuildFolder();
+    System.out.println
+      ("Listing of all compiler output follows.\n" +
+       "\tNote: <BUILD> stands for the temporary build directory used to "+
+       "compile your sketch, which is:\n\t\t" + buildDir + "\n");
+    System.out.println
+      ("\tAlso note that because of preprocessing, line numbers won't match " +
+       "up exactly.  We're working on a fix.");
+    for (String s: hackErrors) {
+      System.out.print(s.replace(buildDir, "<BUILD>"));
+    }
+  }
+
+  private final ArrayList<String> hackErrors = new ArrayList<String>();
 
   /**
    * Set the location of the sketch run window. Used by Runner to update the
@@ -2352,7 +2367,6 @@ public class Editor extends JFrame implements RunnerListener {
    */
   public void statusError(String what) {
     status.error(what);
-    //new Exception("deactivating RUN").printStackTrace();
     toolbar.deactivate(EditorToolbar.RUN);
   }
 

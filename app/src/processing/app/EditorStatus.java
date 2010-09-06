@@ -115,7 +115,6 @@ public class EditorStatus extends JPanel /*implements ActionListener*/ {
     repaint();
   }
 
-
   /*
   public void prompt(String message) {
     mode = PROMPT;
