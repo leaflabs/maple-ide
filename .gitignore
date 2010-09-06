@@ -13,6 +13,7 @@ tools-universal.zip
 ./build/macosx/dist/tools-universal.zip
 *.class
 build/linux/arm-2009q3-68-arm-none-eabi-toolchain-linux32.tar.gz
+build/linux/arm-2010q1-188-arm-none-eabi-toolchain-linux32.tar.gz
 build/linux/dist/tools/arm/
 build/linux/maple-ide-*
 build/linux/work/

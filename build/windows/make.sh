@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIST_ARCHIVE=arm-2009q3-68-arm-none-eabi-toolchain-win32.tar.gz
+DIST_ARCHIVE=arm-2010q1-188-arm-none-eabi-toolchain-win32.tar.gz
 DIST_URL=http://static.leaflabs.com/pub/codesourcery
 
 JAVA_ARCHIVE=sun-java6-jre-win32.tar.gz
