@@ -43,24 +43,24 @@ mapleRAM.build.linker=maple/ram.ld
 mapleRAM.build.using=armcompiler
 
 ##############################################################
+# Commented out for 0.0.7
+# maple_native.name=LeafLabs Maple Native (prototype) to FLASH
 
-maple_native.name=LeafLabs Maple Native (prototype) to FLASH
+# maple_native.upload.file_type=bin
+# maple_native.upload.maximum_size=500000
+# maple_native.upload.ram.maximum_size=61000
+# maple_native.upload.flash.maximum_size=500000
+# maple_native.upload.usbID=1EAF:0003
+# maple_native.upload.altID=1
+# maple_native.upload.uploader=dfu-util
+# maple_native.upload.auto_reset=true
 
-maple_native.upload.file_type=bin
-maple_native.upload.maximum_size=500000
-maple_native.upload.ram.maximum_size=61000
-maple_native.upload.flash.maximum_size=500000
-maple_native.upload.usbID=1EAF:0003
-maple_native.upload.altID=1
-maple_native.upload.uploader=dfu-util
-maple_native.upload.auto_reset=true
-
-maple_native.build.board=maple_native
-maple_native.build.mcu=STM32F103ZE
-maple_native.build.family=cortex-m3
-maple_native.build.f_cpu=72000000L
-maple_native.build.core=maple
-maple_native.build.vect=VECT_TAB_FLASH
-maple_native.build.linker=maple_native/flash.ld
-maple_native.build.using=armcompiler
+# maple_native.build.board=maple_native
+# maple_native.build.mcu=STM32F103ZE
+# maple_native.build.family=cortex-m3
+# maple_native.build.f_cpu=72000000L
+# maple_native.build.core=maple
+# maple_native.build.vect=VECT_TAB_FLASH
+# maple_native.build.linker=maple_native/flash.ld
+# maple_native.build.using=armcompiler
 
