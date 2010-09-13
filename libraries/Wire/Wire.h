@@ -29,10 +29,24 @@
 #ifndef _WIRE_H_
 #define _WIRE_H_
 
+typedef struct {
+  uint8 scl;
+  uint8 sda;
+} Port;
+
 class TwoWire {
  private:
  public:
 }
+
+static void    i2c_start(Port port);
+static void    i2c_stop(Port port);
+static boolean i2c_get_ack(Port port);
+static void    i2c_send_ack(Port port);
+static void    i2c_send_nack(Port port);
+static uint8   i2c_shift_in(Port port);
+static void    i2c_shift_out(Port port, uint8 val);
+
 
 extern TwoWire Wire; 
 #endif // _WIRE_H_

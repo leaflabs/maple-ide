@@ -28,3 +28,26 @@
 
 #include "Wire.h"
 #include "wirish.h"
+
+static void i2c_start(Port port) {
+}
+
+static void i2c_stop(Port port) {
+}
+
+static boolean i2c_get_ack(Port port) {
+  return false;
+}
+
+static void i2c_send_ack(Port port) {
+}
+
+static void i2c_send_nack(Port port) {
+}
+
+static uint8 i2c_shift_in(Port port) {
+  return 0;
+}
+
+static void i2c_shift_out(Port port, uint8 val) {
+}
