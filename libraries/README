@@ -1,4 +1,12 @@
 
-Libraries still need to be ported from Arduino... grab the original source from
-the Arduino SVN repo.
+Many libraries still need to be ported from Arduino... grab the original source 
+from the Arduino SVN repo and get hacking!
 
+- The LiquidCrystal library has already been ported and lives in this directory
+
+- The Wire library has been partially ported, the current implementation only 
+  supports master mode using a bit-banged (software) protocol. Future 
+  enhancements will use the hardware i2c peripheral on the stm32 as well as the 
+  DMA for performance. Support for slave, smBUS, and multimaster modes are also 
+  slated for inclusion in the enhanced Wire port. 
+ 
