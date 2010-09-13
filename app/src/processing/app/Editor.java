@@ -2075,8 +2075,9 @@ public class Editor extends JFrame implements RunnerListener {
       return false;
     }
     header.rebuild();
-    // Set the title of the window to "sketch_070752a - Processing 0126"
-    setTitle(sketch.getName() + " | Maple IDE (Arduino " + Base.VERSION_NAME + ")");
+    // reset window title to reflect currently opened sketch
+    setTitle(sketch.getName() + " | Maple IDE " + Base.MAPLE_VERSION_NAME +
+             " (Arduino " + Base.VERSION_NAME + ")");
     // Disable untitled setting from previous document, if any
     untitled = false;
 

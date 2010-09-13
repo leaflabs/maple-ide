@@ -227,42 +227,42 @@ public class PdePreprocessor {
     Map<String, String> boardPreferences;
     String buildUsing;
     try {
-        boardPreferences = Base.getBoardPreferences();
-    	buildUsing = boardPreferences.get("build.using");
+      boardPreferences = Base.getBoardPreferences();
+      buildUsing = boardPreferences.get("build.using");
     } catch (NullPointerException npe) {
-        Base.showWarning("No board selected", "Please choose a board from the Tools menu.",npe);
-        return;
+      Base.showWarning("No board selected", "Please choose a board from the Tools menu.",npe);
+      return;
     }
     if (buildUsing == null) {
       // fall back on global prefs
       buildUsing = Preferences.get("build.using");
     }
     if (buildUsing.equals("armcompiler")) {
-        String core = boardPreferences.get("build.core");
-        String corePath;
+      String core = boardPreferences.get("build.core");
+      String corePath;
 
-        if (core.indexOf(':') == -1) {
+      if (core.indexOf(':') == -1) {
         Target t = Base.getTarget();
         File coreFolder = new File(new File(t.getFolder(), "cores"), core);
         corePath = coreFolder.getAbsolutePath();
-        } else {
+      } else {
         Target t = Base.targetsTable.get(core.substring(0, core.indexOf(':')));
         File coresFolder = new File(t.getFolder(), "cores");
         File coreFolder = new File(coresFolder, core.substring(core.indexOf(':') + 1));
         corePath = coreFolder.getAbsolutePath();
-        }
+      }
 
-        String mainFileName = corePath + File.separator + "main.cxx";
-        FileReader reader = new FileReader(mainFileName);
+      String mainFileName = corePath + File.separator + "main.cxx";
+      FileReader reader = new FileReader(mainFileName);
 
-        LineNumberReader mainfile = new LineNumberReader(reader);
+      LineNumberReader mainfile = new LineNumberReader(reader);
 
-        String line;
-        while ((line = mainfile.readLine()) != null) {
-            out.print(line + "\n");
-        }
+      String line;
+      while ((line = mainfile.readLine()) != null) {
+        out.print(line + "\n");
+      }
 
-        mainfile.close();
+      mainfile.close();
     }
   }
 
@@ -287,16 +287,16 @@ public class PdePreprocessor {
     
     try {
       pattern = compiler.compile(
-        // XXX: doesn't properly handle special single-quoted characters
-        // whitespace
-        "\\s+" + "|" +
-        // multi-line comment
-        "(/\\*[^*]*(?:\\*(?!/)[^*]*)*\\*/)" + "|" +
-        // single-line comment
-        "(//.*?$)" + "|" +
-        // pre-processor directive
-        "(#(?:\\\\\\n|.)*)",
-        Perl5Compiler.MULTILINE_MASK);
+                                 // XXX: doesn't properly handle special single-quoted characters
+                                 // whitespace
+                                 "\\s+" + "|" +
+                                 // multi-line comment
+                                 "(/\\*[^*]*(?:\\*(?!/)[^*]*)*\\*/)" + "|" +
+                                 // single-line comment
+                                 "(//.*?$)" + "|" +
+                                 // pre-processor directive
+                                 "(#(?:\\\\\\n|.)*)",
+                                 Perl5Compiler.MULTILINE_MASK);
     } catch (MalformedPatternException e) {
       throw new RuntimeException("Internal error in firstStatement()", e);
     }
@@ -320,18 +320,18 @@ public class PdePreprocessor {
     PatternCompiler compiler = new Perl5Compiler();
     PatternMatcher matcher = new Perl5Matcher();
     Pattern pattern = compiler.compile(
-      // XXX: doesn't properly handle special single-quoted characters
-      // single-quoted character
-      "('.')" + "|" +
-      // double-quoted string
-      "(\"(?:[^\"\\\\]|\\\\.)*\")" + "|" +
-      // multi-line comment
-      "(/\\*[^*]*(?:\\*(?!/)[^*]*)*\\*/)" + "|" +
-      // single-line comment
-      "(//.*?$)" + "|" +
-      // pre-processor directive
-      "(^\\s*#.*?$)",
-      Perl5Compiler.MULTILINE_MASK);
+                                       // XXX: doesn't properly handle special single-quoted characters
+                                       // single-quoted character
+                                       "('.')" + "|" +
+                                       // double-quoted string
+                                       "(\"(?:[^\"\\\\]|\\\\.)*\")" + "|" +
+                                       // multi-line comment
+                                       "(/\\*[^*]*(?:\\*(?!/)[^*]*)*\\*/)" + "|" +
+                                       // single-line comment
+                                       "(//.*?$)" + "|" +
+                                       // pre-processor directive
+                                       "(^\\s*#.*?$)",
+                                       Perl5Compiler.MULTILINE_MASK);
       
     while (matcher.contains(in, pattern)) {
       MatchResult result = matcher.getMatch();
@@ -384,7 +384,7 @@ public class PdePreprocessor {
     // XXX: doesn't handle ... varargs
     // XXX: doesn't handle function pointers
     Pattern pattern = compiler.compile(
-      "[\\w\\[\\]\\*]+\\s+[\\[\\]\\*\\w\\s]+\\([,\\[\\]\\*\\w\\s]*\\)(?=\\s*\\{)");
+                                       "[\\w\\[\\]\\*]+\\s+[\\[\\]\\*\\w\\s]+\\([,\\[\\]\\*\\w\\s]*\\)(?=\\s*\\{)");
     List matches = new ArrayList();
     
     while (matcher.contains(input, pattern)) {
