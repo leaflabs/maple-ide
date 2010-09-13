@@ -359,9 +359,15 @@ in the libmaple repository, and you're good to go:
 <pre class="code">
 $ cd
 $ mkdir my-awesome-project
-$ cp ~/libmaple/Makefile my-awesome-project
+$ cp ~/libmaple/Makefile ~/libmaple/build-targets.mk my-awesome-project
 $ cp ~/libmaple/main.cpp.example my-awesome-project/main.cpp
 </pre>
+
+(TEMPORARY: The file <code>build-targets.mk</code> is where the rule
+to build the object file for <code>main.cpp</code> lives. If you have
+multiple source files, you'll probably need to look at it and edit as
+appropriate.  We're sorry about that and will update the Makefile
+structure later to remove this pain point.)
 
 Then hack away!  You can <code>make</code>, <code>make clean</code>,
 and <code>make install</code> from your new
