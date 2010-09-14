@@ -39,28 +39,30 @@ typedef struct {
 #define WIRE_BUFSIZ 32
 
 /* return codes from endTransmission() */
-#define SUCCESS = 0,        /* transmission was successful */
-#define EDATA = 1,          /* too much data */
-#define ENACKADDR = 2,      /* received nack on transmit of address */
-#define ENACKTRNS = 3,      /* received nack on transmit of data */
-#define EOTHER = 4          /* other error */
+#define SUCCESS   0        /* transmission was successful */
+#define EDATA     1        /* too much data */
+#define ENACKADDR 2        /* received nack on transmit of address */
+#define ENACKTRNS 3        /* received nack on transmit of data */
+#define EOTHER    4        /* other error */
 
-#define SDA 6
-#define SCL 7
+#define SDA 7
+#define SCL 6
 
 #define I2C_WRITE 1
-#define I2C_READ 0
+#define I2C_READ  0
+
+#define I2C_DELAY do{for(int i=0;i<100;i++) {asm volatile("nop");}}while(0)
 
 class TwoWire {
  private:
-    static uint8* rx_buf;      /* receive buffer */
-    static uint8 rx_buf_idx;   /* first unread idx in rx_buf */
-    static uint8 rx_buf_len;   /* number of bytes read */
+    uint8 rx_buf[WIRE_BUFSIZ];      /* receive buffer */
+    uint8 rx_buf_idx;   /* first unread idx in rx_buf */
+    uint8 rx_buf_len;   /* number of bytes read */
 
-    static uint8 tx_addr;      /* address transmitting to */
-    static uint8* tx_buf;      /* transmit buffer */
-    static uint8 tx_buf_idx;   /* next idx available in tx_buf, -1 overflow */
-    static boolean tx_buf_overflow;
+    uint8 tx_addr;      /* address transmitting to */
+    uint8 tx_buf[WIRE_BUFSIZ];      /* transmit buffer */
+    uint8 tx_buf_idx;   /* next idx available in tx_buf, -1 overflow */
+    boolean tx_buf_overflow;
     Port port;
 
     uint8 writeOneByte(uint8,uint8);
@@ -83,13 +85,13 @@ class TwoWire {
     uint8 receive();
 };
 
-static void    i2c_start(Port port);
-static void    i2c_stop(Port port);
-static boolean i2c_get_ack(Port port);
-static void    i2c_send_ack(Port port);
-static void    i2c_send_nack(Port port);
-static uint8   i2c_shift_in(Port port);
-static void    i2c_shift_out(Port port, uint8 val);
+void    i2c_start(Port port);
+void    i2c_stop(Port port);
+boolean i2c_get_ack(Port port);
+void    i2c_send_ack(Port port);
+void    i2c_send_nack(Port port);
+uint8   i2c_shift_in(Port port);
+void    i2c_shift_out(Port port, uint8 val);
 
 extern TwoWire Wire;
 

@@ -33,32 +33,32 @@
    - SDA/SCL idle high (expected high) 
    - always start with i2c_delay rather than end
 */
-uint32 i2c_delay;
+uint32 i2c_delay = 1;
 
 
-static void i2c_start(Port port) {
-    delayMicroseconds(i2c_delay);
+void i2c_start(Port port) {
+    I2C_DELAY;
     digitalWrite(port.sda,LOW);
-    delayMicroseconds(i2c_delay);
+    I2C_DELAY;
     digitalWrite(port.scl,LOW);
 }
 
-static void i2c_stop(Port port) {
-    delayMicroseconds(i2c_delay);
+void i2c_stop(Port port) {
+    I2C_DELAY;
     digitalWrite(port.scl,HIGH);
-    delayMicroseconds(i2c_delay);
+    I2C_DELAY;
     digitalWrite(port.sda,HIGH);
 }
 
-static boolean i2c_get_ack(Port port) {
-    delayMicroseconds(i2c_delay);
+boolean i2c_get_ack(Port port) {
+    I2C_DELAY;
     digitalWrite(port.sda,HIGH);
-    delayMicroseconds(i2c_delay);
+    I2C_DELAY;
     digitalWrite(port.scl,HIGH);
-    delayMicroseconds(i2c_delay);
+    I2C_DELAY;
 
   if (!digitalRead(port.sda)) {
-      delayMicroseconds(i2c_delay);
+      I2C_DELAY;
       digitalWrite(port.scl,LOW);
       return true;
   } else {
@@ -66,46 +66,46 @@ static boolean i2c_get_ack(Port port) {
   }
 }
 
-static void i2c_send_ack(Port port) {
-    delayMicroseconds(i2c_delay);
+void i2c_send_ack(Port port) {
+    I2C_DELAY;
     digitalWrite(port.sda,LOW);
-    delayMicroseconds(i2c_delay);
+    I2C_DELAY;
     digitalWrite(port.scl,HIGH);
-    delayMicroseconds(i2c_delay);
+    I2C_DELAY;
     digitalWrite(port.scl,LOW);
 }
 
-static void i2c_send_nack(Port port) {
-    delayMicroseconds(i2c_delay);
+void i2c_send_nack(Port port) {
+    I2C_DELAY;
     digitalWrite(port.sda,HIGH);
-    delayMicroseconds(i2c_delay);
+    I2C_DELAY;
     digitalWrite(port.scl,HIGH);
 }
 
-static uint8 i2c_shift_in(Port port) {
+uint8 i2c_shift_in(Port port) {
     uint8 data;
 
     int i;
     for (i=0;i<8;i++) {
-        delayMicroseconds(i2c_delay);
+        I2C_DELAY;
         digitalWrite(port.scl,HIGH);
-        delayMicroseconds(i2c_delay);
+        I2C_DELAY;
         data += digitalRead(port.sda) << (7-i);
-        delayMicroseconds(i2c_delay);
+        I2C_DELAY;
         digitalWrite(port.scl,LOW);
     }
 
     return data;
 }
 
-static void i2c_shift_out(Port port, uint8 val) {
+void i2c_shift_out(Port port, uint8 val) {
     int i;
     for (i=0;i<8;i++) {
-        delayMicroseconds(i2c_delay);
+        I2C_DELAY;
         digitalWrite(port.sda, !!(val & (1 << (7 - i))));
-        delayMicroseconds(i2c_delay);
+        I2C_DELAY;
         digitalWrite(port.scl, HIGH);
-        delayMicroseconds(i2c_delay);
+        I2C_DELAY;
         digitalWrite(port.scl, LOW);
     }
 }
@@ -123,6 +123,11 @@ TwoWire::tx_buf_overflow = false;
 
 TwoWire::TwoWire() {
     i2c_delay = 0;
+    rx_buf_idx = 0;
+    rx_buf_len = 0;
+    tx_addr = 0;
+    tx_buf_idx = 0;
+    tx_buf_overflow = false;
 }
 
 /*
@@ -138,7 +143,6 @@ void TwoWire::begin() {
  * Joins I2C bus as master on given SDA and SCL pins.
  */
 void TwoWire::begin(uint8 sda, uint8 scl) {
-    Port port;
     port.sda = sda;
     port.scl = scl;
     pinMode(sda, OUTPUT_OPEN_DRAIN);
@@ -167,6 +171,7 @@ uint8 TwoWire::endTransmission(void) {
         uint8 ret = writeOneByte(tx_addr, tx_buf[i]);
         if (ret) return ret;    // SUCCESS is 0
     }
+
     tx_buf_idx = 0;
     tx_buf_overflow = false;
     return SUCCESS;
@@ -235,7 +240,7 @@ uint8 TwoWire::writeOneByte(uint8 address, uint8 byte) {
     if (!i2c_get_ack(port)) return ENACKADDR;
 
     i2c_shift_out(port, byte);
-    if (!i2c_get_ack(port)) return ENACKTRANS;
+    if (!i2c_get_ack(port)) return ENACKTRNS;
 
     i2c_stop(port);
     return SUCCESS;
