@@ -29,25 +29,80 @@
 #include "Wire.h"
 #include "wirish.h"
 
+/* low level conventions:
+   - SDA/SCL idle high (expected high) 
+   - always start with i2c_delay rather than end
+*/
 static void i2c_start(Port port) {
+  delayMicroseconds(i2c_delay);
+  digitalWrite(port.sda,LOW);
+  delayMicroseconds(i2c_delay);
+  digitalWrite(port.scl,LOW);
 }
 
 static void i2c_stop(Port port) {
+  delayMicroseconds(i2c_delay);
+  digitalWrite(port.scl,HIGH);
+  delayMicroseconds(i2c_delay);
+  digitalWrite(port.sda,HIGH);
 }
 
 static boolean i2c_get_ack(Port port) {
-  return false;
+  delayMicroseconds(i2c_delay);
+  digitalWrite(port.sda,HIGH);
+  delayMicroseconds(i2c_delay);
+  digitalWrite(port.scl,HIGH);
+  delayMicroseconds(i2c_delay);
+
+  if (!digitalRead(port.sda)) {
+    delayMicroseconds(i2c_delay);
+    digitalWrite(port.scl,LOW);
+    return true;
+  } else {
+    return false;
+  }
 }
 
 static void i2c_send_ack(Port port) {
+  delayMicroseconds(i2c_delay);
+  digitalWrite(port.sda,LOW);
+  delayMicroseconds(i2c_delay);
+  digitalWrite(port.scl,HIGH);
+  delayMicroseconds(i2c_delay);
+  digitalWrite(port.scl,LOW);
 }
 
 static void i2c_send_nack(Port port) {
+  delayMicroseconds(i2c_delay);
+  digitalWrite(port.sda,HIGH);
+  delayMicroseconds(i2c_delay);
+  digitalWrite(port.scl,HIGH);
 }
 
 static uint8 i2c_shift_in(Port port) {
-  return 0;
+  uint8 data;
+
+  int i;
+  for (i=0;i<8;i++) {
+    delayMicroseconds(i2c_delay);
+    digitalWrite(port.scl,HIGH);
+    delayMicroseconds(i2c_delay);
+    data += digitalRead(port.sda) << (7-i);
+    delayMicroseconds(i2c_delay);
+    digitalWrite(port.scl,LOW);
+  }
+
+  return data;
 }
 
 static void i2c_shift_out(Port port, uint8 val) {
+  int i;
+  for (i=0;i<8;i++) {
+    delayMicroseconds(i2c_delay);
+    digitalWrite(port.sda, !!(val & (1 << (7 - i))));
+    delayMicroseconds(i2c_delay);
+    digitalWrite(port.scl, HIGH);
+    delayMicroseconds(i2c_delay);
+    digitalWrite(port.scl, LOW);
+  }
 }
