@@ -109,12 +109,12 @@ static void i2c_shift_out(Port port, uint8 val) {
 
 TwoWire::rx_buf[WIRE_BUFSIZ];
 TwoWire::rx_buf_idx = 0;
-TwoWire::rx_buf_len = WIRE_BUFSIZ;
+TwoWire::rx_buf_len = 0;
 
 TwoWire::tx_addr = 0;
-TwoWire::tx_buf[WIRE_BUFSIZ]
+TwoWire::tx_buf[WIRE_BUFSIZ];
 TwoWire::tx_buf_idx = 0;
-TwoWire::tx_buf_len = WIRE_BUFSIZ;
+TwoWire::tx_buf_overflow = false;
 
 TwoWire::TwoWire() {
 }
@@ -145,7 +145,9 @@ void TwoWire::begin(uint8 sda, uint8 scl) {
 void TwoWire::beginTransmission(uint8 slave_address) {
     tx_addr = slave_address;
     tx_buf_idx = 0;
+    tx_buf_overflow = false;
     rx_buf_idx = 0;
+    rx_buf_len = 0;
 }
 
 void TwoWire::beginTransmission(int slave_address) {
@@ -153,7 +155,7 @@ void TwoWire::beginTransmission(int slave_address) {
 }
 
 uint8 TwoWire::endTransmission(void) {
-    if (tx_buf_idx == tx_buf_len) return EDATA;
+    if (tx_buf_overflow) return EDATA;
 
     // shift out the address we're transmitting to
     for (uint8 i = 0; i < tx_buf_idx; i++) {
@@ -161,7 +163,62 @@ uint8 TwoWire::endTransmission(void) {
         if (ret) return ret;    // SUCCESS is 0
     }
     tx_buf_idx = 0;
+    tx_buf_overflow = false;
     return SUCCESS;
+}
+
+uint8 TwoWire::requestFrom(uint8 address, uint8 numBytes) {
+    if (numBytes > WIRE_BUFSIZ) numBytes = WIRE_BUFSIZ;
+
+    rx_buf_idx = 0;
+    rx_buf_len = 0;
+    while (rx_buf_len < numBytes) {
+        if(readOneByte(address, rx_buf + rx_buf_len)) rx_buf_len++;
+        else break;
+    }
+    return rx_buf_len;
+}
+
+uint8 TwoWire::requestFrom(int address, int numBytes) {
+    return TwoWire::requestFrom((uint8)address, (uint8) numBytes);
+}
+
+void TwoWire::send(uint8 value) {
+    if (tx_buf_idx == WIRE_BUFSIZ) {
+        tx_buf_overflow = true;
+        return;
+    }
+
+    tx_buf[tx_buf_idx++] = value;
+}
+
+void TwoWire::send(uint8* buf, uint8 len) {
+    for (uint8 i = 0; i < len; i++) send(buf[i]);
+}
+
+void TwoWire::send(int value) {
+    send((uint8)value);
+}
+
+void TwoWire::send(int* buf, int len) {
+    send((uint8*)buf, (uint8)len);
+}
+
+void TwoWire::send(char* buf) {
+    uint8 *ptr = (uint8*)buf;
+    while(*ptr) {
+        send(*ptr);
+        ptr++;
+    }
+}
+
+uint8 TwoWire::available() {
+    return rx_buf_len - rx_buf_idx;
+}
+
+uint8 TwoWire::receive() {
+    if (rx_buf_idx == rx_buf_len) return 0;
+    return rx_buf[rx_buf_idx++];
 }
 
 // private methods
@@ -179,7 +236,7 @@ uint8 TwoWire::writeOneByte(uint8 address, uint8 byte) {
     return SUCCESS;
 }
 
-uint8 TwoWire::readOneByte(uint8 address, uint8* byte) {
+uint8 TwoWire::readOneByte(uint8 address, uint8 *byte) {
     i2c_start(port);
 
     i2c_shift_out(port, (rx_addr << 1) | I2C_READ);

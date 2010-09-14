@@ -55,19 +55,18 @@ static uint16 delay;
 
 class TwoWire {
  private:
-    static uint8* rx_buf;
-    static uint8 rx_buf_idx;
-    static uint8 rx_buf_len;
+    static uint8* rx_buf;      /* receive buffer */
+    static uint8 rx_buf_idx;   /* first unread idx in rx_buf */
+    static uint8 rx_buf_len;   /* number of bytes read */
 
-    static uint8 tx_addr;
-    static uint8* tx_buf;
-    static uint8 tx_buf_idx;
-    static uint8 tx_buf_len;
-
+    static uint8 tx_addr;      /* address transmitting to */
+    static uint8* tx_buf;      /* transmit buffer */
+    static uint8 tx_buf_idx;   /* next idx available in tx_buf, -1 overflow */
+    static boolean tx_buf_overflow;
     Port port;
 
     uint8 writeOneByte(uint8);
-    uint8 readOneByte(uint8, uint8*);  /* read/write bit is LSB, comes out first */
+    uint8 readOneByte(uint8, uint8*);
  public:
     public TwoWire();
     void begin();
@@ -83,7 +82,7 @@ class TwoWire {
     void send(int*, int);
     void send(char*);
     uint8 available();
-    uitn8 receive();
+    uint8 receive();
 }
 
 static void    i2c_start(Port port);
