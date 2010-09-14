@@ -51,8 +51,6 @@ typedef struct {
 #define I2C_WRITE 1
 #define I2C_READ 0
 
-static uint16 delay;
-
 class TwoWire {
  private:
     static uint8* rx_buf;      /* receive buffer */
@@ -65,10 +63,10 @@ class TwoWire {
     static boolean tx_buf_overflow;
     Port port;
 
-    uint8 writeOneByte(uint8);
+    uint8 writeOneByte(uint8,uint8);
     uint8 readOneByte(uint8, uint8*);
  public:
-    public TwoWire();
+    TwoWire();
     void begin();
     void begin(uint8, uint8);
     void beginTransmission(uint8);
@@ -83,7 +81,7 @@ class TwoWire {
     void send(char*);
     uint8 available();
     uint8 receive();
-}
+};
 
 static void    i2c_start(Port port);
 static void    i2c_stop(Port port);
