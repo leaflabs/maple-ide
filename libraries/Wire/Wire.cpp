@@ -52,18 +52,22 @@ void i2c_stop(Port port) {
 
 boolean i2c_get_ack(Port port) {
     I2C_DELAY;
+    digitalWrite(port.scl,LOW);
+    I2C_DELAY;
     digitalWrite(port.sda,HIGH);
     I2C_DELAY;
     digitalWrite(port.scl,HIGH);
     I2C_DELAY;
 
-  if (!digitalRead(port.sda)) {
+    if (!digitalRead(port.sda)) {
       I2C_DELAY;
       digitalWrite(port.scl,LOW);
       return true;
-  } else {
+    } else {
+      I2C_DELAY;
+      digitalWrite(port.scl,LOW);
       return false;
-  }
+    }
 }
 
 void i2c_send_ack(Port port) {
@@ -145,10 +149,10 @@ void TwoWire::begin() {
 void TwoWire::begin(uint8 sda, uint8 scl) {
     port.sda = sda;
     port.scl = scl;
-    pinMode(sda, OUTPUT_OPEN_DRAIN);
     pinMode(scl, OUTPUT_OPEN_DRAIN);
-    digitalWrite(sda, HIGH);
+    pinMode(sda, OUTPUT_OPEN_DRAIN);
     digitalWrite(scl, HIGH);
+    digitalWrite(sda, HIGH);
 }
 
 void TwoWire::beginTransmission(uint8 slave_address) {
@@ -166,11 +170,18 @@ void TwoWire::beginTransmission(int slave_address) {
 uint8 TwoWire::endTransmission(void) {
     if (tx_buf_overflow) return EDATA;
 
+    i2c_start(port);
+
+    i2c_shift_out(port, (tx_addr << 1) | I2C_WRITE);
+    if (!i2c_get_ack(port)) return ENACKADDR;
+
     // shift out the address we're transmitting to
     for (uint8 i = 0; i < tx_buf_idx; i++) {
-        uint8 ret = writeOneByte(tx_addr, tx_buf[i]);
+        uint8 ret = writeOneByte(tx_buf[i]);
         if (ret) return ret;    // SUCCESS is 0
     }
+
+    i2c_stop(port);
 
     tx_buf_idx = 0;
     tx_buf_overflow = false;
@@ -183,7 +194,7 @@ uint8 TwoWire::requestFrom(uint8 address, uint8 numBytes) {
     rx_buf_idx = 0;
     rx_buf_len = 0;
     while (rx_buf_len < numBytes) {
-        if(readOneByte(address, rx_buf + rx_buf_len)) rx_buf_len++;
+        if(!readOneByte(address, rx_buf + rx_buf_len)) rx_buf_len++;
         else break;
     }
     return rx_buf_len;
@@ -233,16 +244,10 @@ uint8 TwoWire::receive() {
 
 // private methods
 
-uint8 TwoWire::writeOneByte(uint8 address, uint8 byte) {
-    i2c_start(port);
-
-    i2c_shift_out(port, (address << 1) | I2C_WRITE);
-    if (!i2c_get_ack(port)) return ENACKADDR;
-
+uint8 TwoWire::writeOneByte(uint8 byte) {
     i2c_shift_out(port, byte);
     if (!i2c_get_ack(port)) return ENACKTRNS;
 
-    i2c_stop(port);
     return SUCCESS;
 }
 

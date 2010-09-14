@@ -48,10 +48,10 @@ typedef struct {
 #define SDA 7
 #define SCL 6
 
-#define I2C_WRITE 1
-#define I2C_READ  0
+#define I2C_WRITE 0
+#define I2C_READ  1
 
-#define I2C_DELAY do{for(int i=0;i<100;i++) {asm volatile("nop");}}while(0)
+#define I2C_DELAY do{for(int i=0;i<50;i++) {asm volatile("nop");}}while(0)
 
 class TwoWire {
  private:
@@ -65,7 +65,7 @@ class TwoWire {
     boolean tx_buf_overflow;
     Port port;
 
-    uint8 writeOneByte(uint8,uint8);
+    uint8 writeOneByte(uint8);
     uint8 readOneByte(uint8, uint8*);
  public:
     TwoWire();
