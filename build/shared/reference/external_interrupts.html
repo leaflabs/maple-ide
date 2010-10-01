@@ -57,6 +57,9 @@ The following table shows which pins can be used on which lines.
   <tr><td>EXTI14<td>22, 33
   <tr><td>EXTI15<td>23, 34
 </table>
+<p>
+<strong>Note:</strong>You should set the pin mode of your desired pin
+to an input mode (e.g INPUT or INPUT_FLOATING, INPUT_PULLUP, INPUT_PULLDOWN).
 
 <h2><a name="functions">Function Reference</a></h2>
 <dl>
@@ -84,6 +87,7 @@ volatile&nbsp;<span style="color: #CC6600;">int</span> state = <span style="colo
 <span style="color: #CC6600;">void</span> <span style="color: #CC6600;"><b>setup</b></span>()
 {
 &nbsp;&nbsp;<span style="color: #CC6600;">pinMode</span>(pin, <span style="color: #006699;">OUTPUT</span>);
+&nbsp;&nbsp;<span style="color: #CC6600;">pinMode</span>(0, <span style="color: #006699;">INPUT_FLOATING</span>);
 &nbsp;&nbsp;<span style="color: #CC6600;">attachInterrupt</span>(0, blink, <span style="color: #006699;">CHANGE</span>);
 }
 
@@ -96,6 +100,7 @@ volatile&nbsp;<span style="color: #CC6600;">int</span> state = <span style="colo
 {
 &nbsp;&nbsp;state&nbsp;=&nbsp;!state;
 }
+
 </pre>
 <h2><a name="links">Recommended Reading</a></h2>
 
