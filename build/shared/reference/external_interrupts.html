@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>Maple Reference Documentation</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<link rel="stylesheet" href="minimal.css" type="text/css">
+</head><body> 
+<!-- minimalist html; this is designed to be copy/pasted into a website -->
+<!-- STARTDOC -->
+<h1>Maple Reference Documentation: External Interrupts</h1>
+<p>
+External interrupts can be used to trigger routines to run in response
+to changes in voltage on a pin. Each GPIO pin on the Maple can be used to detect
+transitions such as when the voltage goes from low to high, or from high to low.
+This technique can be used to avoid unnecessary polling of the state of a pin.
+
+<ul>
+  <li><a href="#overview">Overview</a>
+  <li><a href="#functions">Function Reference</a>
+  <li><a href="#links">Recommended Reading</a>
+</ul>
+
+<h2><a name="overview">Overview</a></h2>
+<p>
+External interrupts are often used to detect when events happen outside of
+the microcontroller. These can be used to tell the Maple when events happen,
+such as when a sensor has data ready to be read, or when a button has been
+pushed. When such an event happens, an interrupt is raised and the Maple
+can react to it with a preset <i>interrupt handler</i>.
+
+<p>
+Every GPIO pin on the Maple can be used as an external interrupt, subject to
+certain constraints; there can be a maximum of 16 different external interrupts
+set up at a time on the Maple. This is because the external interrupt lines
+on the STM32 are multiplexed between GPIO ports. In effect, this means that
+every pin on the Maple maps to a certain EXTI line, and within that EXTI line,
+only one of the pins that maps to it can be used as an external interrupt at
+a time.
+<p>
+The following table shows which pins can be used on which lines.
+<table>
+  <tr><th>EXTI Line<th>Maple pins
+  <tr><td>EXTI0<td>2, 15, 27
+  <tr><td>EXTI1<td>3, 16, 28
+  <tr><td>EXTI2<td>1, 17, 25
+  <tr><td>EXTI3<td>0, 18
+  <tr><td>EXTI4<td>10, 19
+  <tr><td>EXTI5<td>4, 13, 20
+  <tr><td>EXTI6<td>5, 12, 35
+  <tr><td>EXTI7<td>9, 11, 36
+  <tr><td>EXTI8<td>6, 14, 37
+  <tr><td>EXTI9<td>7, 25, 28
+  <tr><td>EXTI10<td>8, 26, 29
+  <tr><td>EXTI11<td>30
+  <tr><td>EXTI12<td>31
+  <tr><td>EXTI13<td>21, 32
+  <tr><td>EXTI14<td>22, 33
+  <tr><td>EXTI15<td>23, 34
+</table>
+
+<h2><a name="functions">Function Reference</a></h2>
+<dl>
+  <dt><code>attachInterrupt(pin, handler, mode)</code>
+  <dd>This command attaches the function <code>handler</code> to run
+  when a transition of type <code>mode</code> is detected on pin <code>pin</code>.
+  <p>
+  Mode can be any of the following:
+  <dd><strong>RISING:</strong> To trigger the interrupt when the pin goes from low to high.
+  <dd><strong>FALLING:</strong> To trigger the interrupt when the pin goes from low to high.
+  <dd><strong>CHANGE:</strong> To trigger the interrupt when the pin goes from
+      either low to high or high to low.
+
+
+  <dt><code>detachInterrupt(pin)</code>
+  <dd>Turns off the interrupt handler on pin <code>pin</code>.
+</dl>
+
+<h2><a name="links">Recommended Reading</a></h2>
+
+<ul>
+  <li>STMicro documentation for STM32F103RB microcontroller:<ul>
+    <li><a href="http://www.st.com/mcu/devicedocs-STM32F103RB-110.html">All</a>
+    <li><a href="http://www.st.com/stonline/products/literature/ds/13587.pdf">Datasheet (pdf)</a>
+    <li><a href="http://www.st.com/stonline/products/literature/rm/13902.pdf">Reference Manual (pdf)</a>
+    </ul>
+</ul>
+
+<div class="box">
+<h3><i>About this Document</i></h3>
+A more recent version of this document may be available from the 
+<a href="http://leaflabs.com">LeafLabs website</a>. Our documentation is
+versioned on <a href="http://github.com">github</a>; you can track changes
+to the master branch at <a href="http://github.com/leaflabs/maple-ide/tree/master/build/shared/reference/">this link</a>.
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<img alt="Creative Commons License" style="border-width:0" 
+    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+<br /><i>This documentation is released under a 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+Creative Commons Attribution-Share Alike 3.0</a> license.</i>
+<p>
+Translations are welcomed; give us a ping to make sure we aren't in the
+process of revising or editing first.
+</div>
+<!-- ENDDOC -->
+<
