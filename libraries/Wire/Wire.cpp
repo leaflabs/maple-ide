@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 LeafLabs LLC.
@@ -20,21 +20,21 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @brief Wire library, ported from Arduino. Provides a lean interface to i2c
+ *  @brief Wire library, ported from Arduino. Provides a simplistic
+ *  interface to i2c.
  */
 
 #include "Wire.h"
 #include "wirish.h"
 
 /* low level conventions:
-   - SDA/SCL idle high (expected high) 
-   - always start with i2c_delay rather than end
-*/
+ * - SDA/SCL idle high (expected high)
+ * - always start with i2c_delay rather than end
+ */
 uint32 i2c_delay = 1;
-
 
 void i2c_start(Port port) {
     I2C_DELAY;
@@ -114,17 +114,6 @@ void i2c_shift_out(Port port, uint8 val) {
     }
 }
 
-/*
-TwoWire::rx_buf[WIRE_BUFSIZ];
-TwoWire::rx_buf_idx = 0;
-TwoWire::rx_buf_len = 0;
-
-TwoWire::tx_addr = 0;
-TwoWire::tx_buf[WIRE_BUFSIZ];
-TwoWire::tx_buf_idx = 0;
-TwoWire::tx_buf_overflow = false;
-*/
-
 TwoWire::TwoWire() {
     i2c_delay = 0;
     rx_buf_idx = 0;
@@ -136,8 +125,8 @@ TwoWire::TwoWire() {
 
 /*
  * Sets pins SDA and SCL to OUPTUT_OPEN_DRAIN, joining I2C bus as
- * master..  This will steal them from you.  If you want them to be
- * some other pins, use begin(uint8, uint8);
+ * master.  If you want them to be some other pins, use begin(uint8,
+ * uint8);
  */
 void TwoWire::begin() {
     begin(SDA, SCL);
@@ -188,12 +177,12 @@ uint8 TwoWire::endTransmission(void) {
     return SUCCESS;
 }
 
-uint8 TwoWire::requestFrom(uint8 address, uint8 numBytes) {
-    if (numBytes > WIRE_BUFSIZ) numBytes = WIRE_BUFSIZ;
+uint8 TwoWire::requestFrom(uint8 address, uint8 num_bytes) {
+    if (num_bytes > WIRE_BUFSIZ) num_bytes = WIRE_BUFSIZ;
 
     rx_buf_idx = 0;
     rx_buf_len = 0;
-    while (rx_buf_len < numBytes) {
+    while (rx_buf_len < num_bytes) {
         if(!readOneByte(address, rx_buf + rx_buf_len)) rx_buf_len++;
         else break;
     }

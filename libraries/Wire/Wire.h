@@ -23,7 +23,8 @@
  * ****************************************************************************/
 
 /**
- *  @brief Wire library, ported from Arduino. Provides a lean interface to I2C (two-wire) communication
+ *  @brief Wire library, ported from Arduino. Provides a lean
+ *  interface to I2C (two-wire) communication.
  */
 
 #include "wirish.h"
@@ -36,6 +37,7 @@ typedef struct {
   uint8 sda;
 } Port;
 
+/* You must update the online docs if you change this value. */
 #define WIRE_BUFSIZ 32
 
 /* return codes from endTransmission() */
@@ -45,8 +47,8 @@ typedef struct {
 #define ENACKTRNS 3        /* received nack on transmit of data */
 #define EOTHER    4        /* other error */
 
-#define SDA 7
-#define SCL 6
+#define SDA 20
+#define SCL 21
 
 #define I2C_WRITE 0
 #define I2C_READ  1
@@ -56,15 +58,14 @@ typedef struct {
 class TwoWire {
  private:
     uint8 rx_buf[WIRE_BUFSIZ];      /* receive buffer */
-    uint8 rx_buf_idx;   /* first unread idx in rx_buf */
-    uint8 rx_buf_len;   /* number of bytes read */
+    uint8 rx_buf_idx;               /* first unread idx in rx_buf */
+    uint8 rx_buf_len;               /* number of bytes read */
 
-    uint8 tx_addr;      /* address transmitting to */
+    uint8 tx_addr;                  /* address transmitting to */
     uint8 tx_buf[WIRE_BUFSIZ];      /* transmit buffer */
-    uint8 tx_buf_idx;   /* next idx available in tx_buf, -1 overflow */
+    uint8 tx_buf_idx;  /* next idx available in tx_buf, -1 overflow */
     boolean tx_buf_overflow;
     Port port;
-
     uint8 writeOneByte(uint8);
     uint8 readOneByte(uint8, uint8*);
  public:
