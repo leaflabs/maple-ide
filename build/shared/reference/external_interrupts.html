@@ -75,6 +75,28 @@ The following table shows which pins can be used on which lines.
   <dd>Turns off the interrupt handler on pin <code>pin</code>.
 </dl>
 
+<h2><a name="links">Code example</a></h2>
+Blink the LED on every transition:
+<pre class="code">
+<span style="color: #CC6600;">int</span> pin = 13;
+volatile&nbsp;<span style="color: #CC6600;">int</span> state = <span style="color: #006699;">LOW</span>;
+
+<span style="color: #CC6600;">void</span> <span style="color: #CC6600;"><b>setup</b></span>()
+{
+&nbsp;&nbsp;<span style="color: #CC6600;">pinMode</span>(pin, <span style="color: #006699;">OUTPUT</span>);
+&nbsp;&nbsp;<span style="color: #CC6600;">attachInterrupt</span>(0, blink, <span style="color: #006699;">CHANGE</span>);
+}
+
+<span style="color: #CC6600;">void</span> <span style="color: #CC6600;"><b>loop</b></span>()
+{
+&nbsp;&nbsp;<span style="color: #CC6600;">digitalWrite</span>(pin, state);
+}
+
+<span style="color: #CC6600;">void</span> blink()
+{
+&nbsp;&nbsp;state&nbsp;=&nbsp;!state;
+}
+</pre>
 <h2><a name="links">Recommended Reading</a></h2>
 
 <ul>
