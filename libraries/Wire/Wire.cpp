@@ -87,7 +87,7 @@ void i2c_send_nack(Port port) {
 }
 
 uint8 i2c_shift_in(Port port) {
-    uint8 data;
+    uint8 data = 0;
 
     int i;
     for (i=0;i<8;i++) {
@@ -253,3 +253,7 @@ uint8 TwoWire::readOneByte(uint8 address, uint8 *byte) {
 
     return SUCCESS;      // no real way of knowing, but be optimistic!
 }
+
+// Declare the instance that the users of the library can use
+TwoWire Wire;
+
