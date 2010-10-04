@@ -45,21 +45,21 @@
 
 class LiquidCrystal : public Print {
 public:
-  LiquidCrystal(uint8 rs, uint8 enable,			\
-		uint8 d0, uint8 d1, uint8 d2, uint8 d3,	\
-		uint8 d4, uint8 d5, uint8 d6, uint8 d7);
-  LiquidCrystal(uint8 rs, uint8 rw, uint8 enable,		\
-		uint8 d0, uint8 d1, uint8 d2, uint8 d3,	\
-		uint8 d4, uint8 d5, uint8 d6, uint8 d7);
-  LiquidCrystal(uint8 rs, uint8 rw, uint8 enable,		\
-		uint8 d0, uint8 d1, uint8 d2, uint8 d3);
-  LiquidCrystal(uint8 rs, uint8 enable,			\
-		uint8 d0, uint8 d1, uint8 d2, uint8 d3);
+  LiquidCrystal(uint8 rs, uint8 enable,
+                uint8 d0, uint8 d1, uint8 d2, uint8 d3,
+                uint8 d4, uint8 d5, uint8 d6, uint8 d7);
+  LiquidCrystal(uint8 rs, uint8 rw, uint8 enable,
+                uint8 d0, uint8 d1, uint8 d2, uint8 d3,
+                uint8 d4, uint8 d5, uint8 d6, uint8 d7);
+  LiquidCrystal(uint8 rs, uint8 rw, uint8 enable,
+                uint8 d0, uint8 d1, uint8 d2, uint8 d3);
+  LiquidCrystal(uint8 rs, uint8 enable,
+                uint8 d0, uint8 d1, uint8 d2, uint8 d3);
 
-  void init(uint8 fourbitmode, uint8 rs, uint8 rw, uint8 enable,\
-	    uint8 d0, uint8 d1, uint8 d2, uint8 d3,		\
-	    uint8 d4, uint8 d5, uint8 d6, uint8 d7);
-    
+  void init(uint8 fourbitmode, uint8 rs, uint8 rw, uint8 enable,
+            uint8 d0, uint8 d1, uint8 d2, uint8 d3,
+            uint8 d4, uint8 d5, uint8 d6, uint8 d7);
+
   void begin(uint8 cols, uint8 rows, uint8 charsize = LCD_5x8DOTS);
 
   void clear();
@@ -79,7 +79,7 @@ public:
   void noAutoscroll();
 
   void createChar(uint8, uint8[]);
-  void setCursor(uint8, uint8); 
+  void setCursor(uint8, uint8);
   virtual void write(uint8);
   void command(uint8);
 private:

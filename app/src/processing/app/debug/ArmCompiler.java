@@ -43,8 +43,13 @@ public class ArmCompiler extends Compiler {
   public ArmCompiler() { }
 
   private boolean messagesNonError = false; // THIS IS SUCH A HACK.
-
   private List<String> hackErrors = null;
+
+  // well, if we're using fields as a global variable hack, we might
+  // as well be consistent
+  private Map<String, String> boardPrefs;
+  private File corePath;
+
   /**
    * Compile for ARM with make
    *
@@ -52,303 +57,341 @@ public class ArmCompiler extends Compiler {
    * @param buildPath Where the temporary files live and will be built from.
    * @param primaryClassName the name of the combined sketch file w/ extension
    * @return true if successful.
-   * @throws RunnerException Only if there's a problem. Only then.
+   * @throws RunnerException iff there's a problem.
    */
-  public boolean compile(Sketch sketch,
-                         String buildPath,
-                         String primaryClassName,
-                         boolean verbose,
-                         List<String> compileErrors) 
+  @Override
+    public boolean compile
+    (Sketch sketch, String buildPath, String primaryClassName,
+     boolean verbose, List<String> compileErrors)
     throws RunnerException {
+
     this.sketch = sketch;
     this.buildPath = buildPath;
+    createFolder(new File(buildPath));
     this.primaryClassName = primaryClassName;
     this.verbose = verbose;
     this.hackErrors = compileErrors;
     // the pms object isn't used for anything but storage
     MessageStream pms = new MessageStream(this);
 
-    String armBasePath = Base.getArmBasePath();
-    Map<String, String> boardPreferences;
     try {
-        boardPreferences = Base.getBoardPreferences();
+      this.boardPrefs = Base.getBoardPreferences();
     } catch (NullPointerException npe) {
-        Base.showWarning("No board selected", "please choose one from the Tools menu.",npe);
-        return false;
+      Base.showWarning("No board selected",
+                       "please choose one from the Tools menu.",
+                       npe);
+      return false;
     }
-    String core = boardPreferences.get("build.core");
-    String corePath;
 
+    String core = boardPrefs.get("build.core");
     if (core.indexOf(':') == -1) {
       Target t = Base.getTarget();
       File coreFolder = new File(new File(t.getFolder(), "cores"), core);
-      corePath = coreFolder.getAbsolutePath();
+      this.corePath = new File(coreFolder.getAbsolutePath());
     } else {
       Target t = Base.targetsTable.get(core.substring(0, core.indexOf(':')));
       File coresFolder = new File(t.getFolder(), "cores");
-      File coreFolder = new File(coresFolder, core.substring(core.indexOf(':') + 1));
-      corePath = coreFolder.getAbsolutePath();
+      File coreFolder = new File(coresFolder,
+                                 core.substring(core.indexOf(':') + 1));
+      this.corePath = new File(coreFolder.getAbsolutePath());
     }
 
     List<File> objectFiles = new ArrayList<File>();
+    List<File> includePaths = new ArrayList<File>(Arrays.asList(corePath));
 
-    List includePaths = new ArrayList();
-    includePaths.add(corePath);
 
-    String runtimeLibraryName = buildPath + File.separator + "core.a";
-
-    // 1. compile the target (core), outputting .o files to <buildPath> and
-    // then collecting them into the core.a library file.
+    // 1. compile the core (e.g. libmaple for a Maple target),
+    // outputting .o files to buildPath.
     System.out.print("\tCompiling core...\n");
+    objectFiles.addAll(compileFiles(buildPath, includePaths,
+                                    corePath.getAbsolutePath(), true));
 
-    objectFiles.addAll(
-      compileFiles(armBasePath, buildPath, includePaths,
-                   findFilesInPath(corePath, "S", true),
-                   findFilesInPath(corePath, "c", true),
-                   findFilesInPath(corePath, "cpp", true),
-                   boardPreferences));
-    
-
-    // 2. compile the libraries, outputting .o files to:
-    // <buildPath>/<library>/
-
-    // use library directories as include paths for all libraries
-    for (File file : sketch.getImportedLibraries()) {
-      includePaths.add(file.getPath());
-    }
-
-    System.out.print("\tCompiling any libs...\n");
-    for (File libraryFolder : sketch.getImportedLibraries()) {
-      File outputFolder = new File(buildPath, libraryFolder.getName());
-      File utilityFolder = new File(libraryFolder, "utility");
-      createFolder(outputFolder);
-      // this library can use includes in its utility/ folder
-      includePaths.add(utilityFolder.getAbsolutePath());
-      objectFiles.addAll(
-        compileFiles(armBasePath, outputFolder.getAbsolutePath(), includePaths,
-                     findFilesInFolder(libraryFolder, "S", false),
-                     findFilesInFolder(libraryFolder, "c", false),
-                     findFilesInFolder(libraryFolder, "cpp", false),
-                     boardPreferences));
-      outputFolder = new File(outputFolder, "utility");
-      createFolder(outputFolder);
-      objectFiles.addAll(
-        compileFiles(armBasePath, outputFolder.getAbsolutePath(), includePaths,
-                     findFilesInFolder(utilityFolder, "S", false),
-                     findFilesInFolder(utilityFolder, "c", false),
-                     findFilesInFolder(utilityFolder, "cpp", false),
-                     boardPreferences));
-      // other libraries should not see this library's utility/ folder
-      includePaths.remove(includePaths.size() - 1);
-    }
+    // 2. compile the libraries, updating includePaths as necessary.
+    objectFiles.addAll(compileLibraries(includePaths));
 
     // 3. compile the sketch (already in the buildPath)
+    System.out.println("\tCompiling the sketch...");
+    objectFiles.addAll(compileFiles(buildPath, includePaths,
+                                    buildPath, false));
 
-    System.out.print("\tCompiling the sketch...\n");
-    objectFiles.addAll(
-      compileFiles(armBasePath, buildPath, includePaths,
-                   findFilesInPath(buildPath, "S", false),
-                   findFilesInPath(buildPath, "c", false),
-                   findFilesInPath(buildPath, "cpp", false),
-                   boardPreferences));
+    // 4. link it all together into the .bin file
+    File binFile = linkFiles(objectFiles);
 
-    // 4. link it all together into the .elf file
-    //System.out.print("Linking compiled \n");
-    String linkerInclude = "-L"+corePath;
-    String linkerScript  = "-T"+corePath+File.separator+boardPreferences.get("build.linker");
-    //String mapOut        = "-Map="+buildPath+File.separator+primaryClassName+".map";
-    List baseCommandLinker = new ArrayList(Arrays.asList(new String[] {
-      armBasePath + "arm-none-eabi-gcc",
-      linkerScript,
-      linkerInclude,
-      "-mcpu=cortex-m3",
-      "-mthumb",
-      "-Xlinker",
-      //      mapOut,
-      "--gc-sections",
-      "--print-gc-sections",
-      "--march=armv7-m",
-      "-Wall",
-      "-o",
-      buildPath + File.separator + primaryClassName + ".out"
-    }));
-
-    for (File file : objectFiles) {
-      //System.out.println(file);
-      baseCommandLinker.add(file.getAbsolutePath());
-    }
-
-    baseCommandLinker.add("-L" + buildPath);
-    System.out.print("\trunning linker asynchronously...\n");
-    execAsynchronously(baseCommandLinker);
-
-    List commandObjCopy = new ArrayList(Arrays.asList(new String[] {
-      armBasePath + "arm-none-eabi-objcopy",
-      "-v",
-      "-Obinary",
-      buildPath + File.separator + primaryClassName + ".out",
-      buildPath + File.separator + primaryClassName + ".bin"
-    }));
-    
-    System.out.print("\trunning obj copy asynchronously...\n");
-    execAsynchronously(commandObjCopy);
-
-    List commandSize = new ArrayList(Arrays.asList(new String[] {
-      armBasePath + "arm-none-eabi-size",
-      "--target=binary",
-      "-A",
-      buildPath + File.separator + primaryClassName + ".bin"
-    }));
-    
-    System.out.print("\trunning size asynchronously...\n");
-    messagesNonError = true;
-    System.out.println();
-    execAsynchronously(commandSize);
-    messagesNonError = false;
+    // 5. compute binary sizes and report to user
+    sizeBinary(binFile);
 
     return true;
   }
 
-  private List<File> compileFiles(String avrBasePath,
-                                  String buildPath, List<File> includePaths,
-                                  List<File> sSources, 
-                                  List<File> cSources, List<File> cppSources,
-                                  Map<String, String> boardPreferences)
+  /**
+   * @return List of object paths created as a result of compilation.
+   */
+  private List<File> compileFiles(String buildPath, List<File> includePaths,
+                                  String sourcePath, boolean recurse)
     throws RunnerException {
 
+    // getCommandCompilerFoo will destructively modify objectPaths
+    // with any object files the command produces.
     List<File> objectPaths = new ArrayList<File>();
-    
-    for (File file : sSources) {
-      String objectPath = buildPath + File.separator + file.getName() + ".o";
-      objectPaths.add(new File(objectPath));
-      execAsynchronously(getCommandCompilerS(avrBasePath, includePaths,
+
+    // Compile assembly files
+    for (File file : findFilesInPath(sourcePath, "S", recurse)) {
+      execAsynchronously(getCommandCompilerS(includePaths,
                                              file.getAbsolutePath(),
-                                             objectPath,
-                                             boardPreferences));
-    }
- 		
-    for (File file : cSources) {
-        String objectPath = buildPath + File.separator + file.getName() + ".o";
-        objectPaths.add(new File(objectPath));
-        execAsynchronously(getCommandCompilerC(avrBasePath, includePaths,
-                                               file.getAbsolutePath(),
-                                               objectPath,
-                                               boardPreferences));
+                                             buildPath,
+                                             objectPaths));
     }
 
-    for (File file : cppSources) {
-        String objectPath = buildPath + File.separator + file.getName() + ".o";
-        objectPaths.add(new File(objectPath));
-        execAsynchronously(getCommandCompilerCPP(avrBasePath, includePaths,
-                                                 file.getAbsolutePath(),
-                                                 objectPath,
-                                                 boardPreferences));
+    // Compile C files
+    for (File file : findFilesInPath(sourcePath, "c", recurse)) {
+      execAsynchronously(getCommandCompilerC(includePaths,
+                                             file.getAbsolutePath(),
+                                             buildPath,
+                                             objectPaths));
     }
-    
+
+    // Compile C++ files
+    for (File file : findFilesInPath(sourcePath, "cpp", recurse)) {
+      execAsynchronously(getCommandCompilerCPP(includePaths,
+                                               file.getAbsolutePath(),
+                                               buildPath,
+                                               objectPaths));
+    }
+
     return objectPaths;
   }
 
+  /**
+   * Destructively modifies includePaths to reflect any library
+   * includes, which will be of the form
+   *   <buildPath>/<library>/
+   *
+   * @return List of object files created.
+   */
+  private List<File> compileLibraries(List<File> includePaths)
+    throws RunnerException {
+
+    List<File> objectFiles = new ArrayList<File>();
+
+    List<File> importedLibs = sketch.getImportedLibraries();
+    if (!importedLibs.isEmpty()) {
+      List<String> libNames = new ArrayList<String>();
+      for (File lib: importedLibs) libNames.add(lib.getName());
+      String libString = libNames.toString();
+      libString = libString.substring(1, libString.length()-1);
+      System.out.println("\tCompiling libraries: " + libString);
+
+      // use library directories as include paths for all libraries
+      includePaths.addAll(importedLibs);
+
+      for (File libraryFolder: importedLibs) {
+        File outputFolder = new File(buildPath, libraryFolder.getName());
+        File utilityFolder = new File(libraryFolder, "utility");
+        createFolder(outputFolder);
+        // libraries can have private includes in their utility/ folders
+        includePaths.add(utilityFolder);
+
+        objectFiles.addAll
+          (compileFiles(outputFolder.getAbsolutePath(), includePaths,
+                        libraryFolder.getAbsolutePath(), false));
+
+        outputFolder = new File(outputFolder, "utility");
+        createFolder(outputFolder);
+
+        objectFiles.addAll
+          (compileFiles(outputFolder.getAbsolutePath(), includePaths,
+                        utilityFolder.getAbsolutePath(), false));
+
+        // other libraries should not see this library's utility/ folder
+        includePaths.remove(includePaths.size() - 1);
+      }
+    } else {
+      System.out.println("\tNo libraries to compile.");
+    }
+
+    return objectFiles;
+  }
+
+  /**
+   * Runs the linker script on the compiled sketch.
+   * @return the .bin file generated by the linker script.
+   */
+  private File linkFiles(List<File> objectFiles) throws RunnerException {
+    System.out.println("\tLinking...");
+
+    File linkerScript = new File(corePath, boardPrefs.get("build.linker"));
+    File elf = new File(buildPath, primaryClassName + ".elf");
+    File bin = new File(buildPath, primaryClassName + ".bin");
+
+    // Run the linker
+    List<String> linkCommand = new ArrayList<String>
+      (Arrays.asList
+       (Base.getArmBasePath() + "arm-none-eabi-g++",
+        "-T" + linkerScript.getAbsolutePath(),
+        "-L" + corePath.getAbsolutePath(),
+        "-mcpu=cortex-m3",
+        "-mthumb",
+        "-Xlinker",
+        "--gc-sections",
+        "--print-gc-sections",
+        "--march=armv7-m",
+        "-Wall",
+        "-o", elf.getAbsolutePath()));
+
+    for (File f: objectFiles) linkCommand.add(f.getAbsolutePath());
+
+    linkCommand.add("-L" + buildPath);
+
+    execAsynchronously(linkCommand);
+
+    // Run objcopy
+    List<String> objcopyCommand = new ArrayList<String>
+      (Arrays.asList
+       (Base.getArmBasePath() + "arm-none-eabi-objcopy",
+        "-v",
+        "-Obinary",
+        elf.getAbsolutePath(),
+        bin.getAbsolutePath()));
+
+    execAsynchronously(objcopyCommand);
+
+    return bin;
+  }
+
+  private void sizeBinary(File binFile) throws RunnerException {
+    System.out.println("\tComputing sketch size...");
+
+    List<String> command = new ArrayList<String>
+      (Arrays.asList(Base.getArmBasePath() + "arm-none-eabi-size",
+                     "--target=binary",
+                     "-A",
+                     binFile.getAbsolutePath()));
+
+    messagesNonError = true;
+    System.out.println();
+    execAsynchronously(command);
+    messagesNonError = false;
+  }
 
   /////////////////////////////////////////////////////////////////////////////
 
-  static private List getCommandCompilerS(String armBasePath, List includePaths,
-    String sourceName, String objectName, Map<String, String> boardPreferences) {
+  private List<String> getCommandCompilerS
+    (List<File> includePaths, String sourceName, String buildPath,
+     List<File> hackObjectPaths) {
 
-    List baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
-      armBasePath + "arm-none-eabi-gcc",
-      "-mthumb",
-      //"-g",
-      "-mcpu=cortex-m3", 
-      "-assembler-with-cpp",
-      "-Wall",
-      "-Os",
-      //      "-g",
-      "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
-      "-D"+ boardPreferences.get("build.vect"),
-      "-DBOARD_"+ boardPreferences.get("build.board"),
-      "-DMCU_"+ boardPreferences.get("build.mcu"),
-      "-DARDUINO=" + Base.REVISION,
-    }));
+    String buildBase = getBuildBase(sourceName);
+    File depsFile = new File(buildBase + ".d");
+    File objFile = new File(buildBase + ".o");
 
-    for (int i = 0; i < includePaths.size(); i++) {
-      baseCommandCompiler.add("-I" + (String) includePaths.get(i));
-    }
+    hackObjectPaths.add(objFile);
 
-    baseCommandCompiler.add(sourceName);
-    baseCommandCompiler.add("-o"+ objectName);
+    List<String> command = new ArrayList<String>();
 
-    return baseCommandCompiler;
+    command.addAll
+      (Arrays.asList
+       (Base.getArmBasePath() + "arm-none-eabi-gcc",
+        "-mcpu=cortex-m3",
+        "-march=armv7-m",
+        "-mthumb",
+        "-DBOARD_" + boardPrefs.get("build.board"),
+        "-DMCU_" + boardPrefs.get("build.mcu"),
+        "-x", "assembler-with-cpp",
+        "-o", objFile.getAbsolutePath(),
+        "-c",
+        sourceName));
+
+    return command;
   }
 
-  
-  static private List getCommandCompilerC(String armBasePath, List includePaths,
-    String sourceName, String objectName, Map<String, String> boardPreferences) {
 
-    List baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
-          armBasePath + "arm-none-eabi-gcc"}));
+  private List<String> getCommandCompilerC
+    (List<File> includePaths, String sourceName, String buildPath,
+     List<File> hackObjectPaths) {
 
-    for (int i = 0; i < includePaths.size(); i++) {
-      baseCommandCompiler.add("-I" + (String) includePaths.get(i));
+    String buildBase = getBuildBase(sourceName);
+    File depsFile = new File(buildBase + ".d");
+    File objFile = new File(buildBase + ".o");
+
+    hackObjectPaths.add(objFile);
+
+    List<String> command = new ArrayList<String>();
+
+    command.addAll
+      (Arrays.asList
+       (Base.getArmBasePath() + "arm-none-eabi-gcc",
+        "-Os",
+        "-g",
+        "-mcpu=cortex-m3",
+        "-mthumb",
+        "-march=armv7-m",
+        "-nostdlib",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Wl,--gc-sections",
+        "-DBOARD_" + boardPrefs.get("build.board"),
+        "-DMCU_" + boardPrefs.get("build.mcu"),
+        "-D" + boardPrefs.get("build.vect"),
+        "-DARDUINO=" + Base.REVISION));
+
+    for (File i: includePaths) {
+      command.add("-I" + i.getAbsolutePath());
     }
 
-    baseCommandCompiler.add("-c"); 
-    baseCommandCompiler.add("-Os");
-    baseCommandCompiler.add("-g");
-    baseCommandCompiler.add("-mcpu=cortex-m3");
-    baseCommandCompiler.add("-mthumb");
-    baseCommandCompiler.add("-march=armv7-m");
-    baseCommandCompiler.add("-nostdlib");
-    baseCommandCompiler.add("-ffunction-sections");
-    baseCommandCompiler.add("-fdata-sections");
-    baseCommandCompiler.add("-Wl,--gc-sections");
-    baseCommandCompiler.add("-DF_CPU=" + boardPreferences.get("build.f_cpu"));
-    baseCommandCompiler.add("-D" + boardPreferences.get("build.vect"));
-    baseCommandCompiler.add("-DBOARD_" + boardPreferences.get("build.board"));
-    baseCommandCompiler.add("-DMCU_" + boardPreferences.get("build.mcu"));
-    baseCommandCompiler.add("-DARDUINO=" + Base.REVISION);
-    baseCommandCompiler.add("-c");
+    command.addAll
+      (Arrays.asList
+       ("-o", objFile.getAbsolutePath(),
+        "-c",
+        sourceName));
 
-    baseCommandCompiler.add(sourceName);
-    baseCommandCompiler.add("-o"+ objectName);
-
-    return baseCommandCompiler;
+    return command;
   }
-	
-  static private List getCommandCompilerCPP(String armBasePath,
-    List includePaths, String sourceName, String objectName,
-    Map<String, String> boardPreferences) {
-    
-    List baseCommandCompilerCPP = new ArrayList(Arrays.asList(new String[] {
-          armBasePath + "arm-none-eabi-gcc"}));
 
-    for (int i = 0; i < includePaths.size(); i++) {
-      baseCommandCompilerCPP.add("-I" + (String) includePaths.get(i));
+  private List<String> getCommandCompilerCPP
+    (List<File> includePaths, String sourceName, String buildPath,
+     List<File> hackObjectPaths) {
+
+    String buildBase = getBuildBase(sourceName);
+    File depsFile = new File(buildBase + ".d");
+    File objFile = new File(buildBase + ".o");
+
+    hackObjectPaths.add(objFile);
+
+    List<String> command = new ArrayList<String>();
+
+    command.addAll
+      (Arrays.asList
+       (Base.getArmBasePath() + "arm-none-eabi-g++",
+        "-Os",
+        "-g",
+        "-mcpu=cortex-m3",
+        "-mthumb",
+        "-march=armv7-m",
+        "-nostdlib",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Wl,--gc-sections",
+        "-DBOARD_" + boardPrefs.get("build.board"),
+        "-DMCU_" + boardPrefs.get("build.mcu")));
+
+    for (File i: includePaths) {
+      command.add("-I" + i.getAbsolutePath());
     }
 
-    baseCommandCompilerCPP.add("-c"); 
-    baseCommandCompilerCPP.add("-Os");
-    baseCommandCompilerCPP.add("-g");
-    baseCommandCompilerCPP.add("-mcpu=cortex-m3");
-    baseCommandCompilerCPP.add("-mthumb");
-    baseCommandCompilerCPP.add("-march=armv7-m");
-    baseCommandCompilerCPP.add("-nostdlib");
-    baseCommandCompilerCPP.add("-ffunction-sections");
-    baseCommandCompilerCPP.add("-fdata-sections");
-    baseCommandCompilerCPP.add("-Wl,--gc-sections");
-    baseCommandCompilerCPP.add("-DF_CPU=" + boardPreferences.get("build.f_cpu"));
-    baseCommandCompilerCPP.add("-D" + boardPreferences.get("build.vect"));
-    baseCommandCompilerCPP.add("-DBOARD_"+ boardPreferences.get("build.board"));
-    baseCommandCompilerCPP.add("-DMCU_"+ boardPreferences.get("build.mcu"));
-    baseCommandCompilerCPP.add("-DARDUINO=" + Base.REVISION);
-    baseCommandCompilerCPP.add("-fno-rtti");
-    baseCommandCompilerCPP.add("-fno-exceptions");
-    baseCommandCompilerCPP.add("-Wall");
-    baseCommandCompilerCPP.add("-c");
+    command.addAll(Arrays.asList("-fno-rtti", "-fno-exceptions", "-Wall"));
 
-    baseCommandCompilerCPP.add(sourceName);
-    baseCommandCompilerCPP.add("-o"+ objectName);
+    command.addAll
+      (Arrays.asList
+       ("-o", objFile.getAbsolutePath(),
+        "-c",
+        sourceName));
 
-    return baseCommandCompilerCPP;
+    return command;
+  }
+
+  private String getBuildBase(String sourceFile) {
+    File f = new File(sourceFile);
+    String s = f.getName();
+    return buildPath + File.separator + s.substring(0, s.lastIndexOf('.'));
   }
 
   /**
@@ -432,9 +475,9 @@ public class ArmCompiler extends Compiler {
         System.err.print(s1);
         return;
       }
-      
+
       //System.out.println("pde / line number: " + lineNumber);
-      
+
       if (fileIndex == 0) {  // main class, figure out which tab
         for (int i = 1; i < sketch.getCodeCount(); i++) {
           if (sketch.getCode(i).isExtension("pde")) {
@@ -444,10 +487,11 @@ public class ArmCompiler extends Compiler {
             }
           }
         }
-        // OLD to do: DAM: if the lineNumber is less than sketch.getCode(0).getPreprocOffset()
-        // we shouldn't subtract anything from it, as the error is above the
-        // location where the function prototypes and #include "WProgram.h"
-        // were inserted.
+        // OLD to do: DAM: if the lineNumber is less than
+        // sketch.getCode(0).getPreprocOffset() we shouldn't subtract
+        // anything from it, as the error is above the location where
+        // the function prototypes and #include "WProgram.h" were
+        // inserted.
         lineNumber -= sketch.getCode(fileIndex).getPreprocOffset();
       }
 
@@ -490,7 +534,7 @@ public class ArmCompiler extends Compiler {
       // are probably associated with the first error message,
       // which is already in the status bar, and are likely to be
       // of interest to the user, so spit them to the console.
-//
+      //
       if (!secondErrorFound) {
         System.err.println(s);
       }
