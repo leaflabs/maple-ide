@@ -1,4 +1,4 @@
-0.0.7 maple-ide
+0.0.8 maple-ide
 
 Fix Linux make.sh, etc. scripts
 Test on Linux.
