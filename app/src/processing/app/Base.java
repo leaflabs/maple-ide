@@ -43,7 +43,7 @@ import processing.core.*;
 public class Base {
   public static final int REVISION = 18;
   public static String VERSION_NAME = "0018";
-  public static final String MAPLE_VERSION_NAME = "0.0.7";
+  public static final String MAPLE_VERSION_NAME = "0.0.8";
   static HashMap<Integer, String> platformNames = new HashMap<Integer, String>();
   static {
     platformNames.put(PConstants.WINDOWS, "windows");
