@@ -1,0 +1,191 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>#define &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="../../index.html" />
+    <link rel="up" title="Complete Language Index" href="../../language-index.html" />
+    <link rel="next" title="double" href="double.html" />
+    <link rel="prev" title="Curly Braces ({, })" href="curly-braces.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="double.html" title="double"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="curly-braces.html" title="Curly Braces ({, })"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" accesskey="U">Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="define">
+<span id="lang-define"></span><h1><tt class="docutils literal"><span class="pre">#define</span></tt><a class="headerlink" href="#define" title="Permalink to this headline">¶</a></h1>
+<p><tt class="docutils literal"><span class="pre">#define</span></tt> is a useful C and C++ feature that allows the programmer
+to give a name to a constant value before the program is compiled.
+The compiler will replace references to these constants with the
+defined value at compile time.</p>
+<p>This can have some unwanted side effects.  In general, the <a class="reference internal" href="const.html#lang-const"><em>const</em></a> keyword is preferred for defining constants.</p>
+<div class="section" id="syntax">
+<h2>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
+<p>The following line would define the name <tt class="docutils literal"><span class="pre">MY_CONSTANT</span></tt> to have value
+<tt class="docutils literal"><span class="pre">value</span></tt>:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="cp">#define MY_CONSTANT value</span>
+</pre></div>
+</div>
+<p>Note that the <tt class="docutils literal"><span class="pre">#</span></tt> is necessary.  It is usually good style for the
+name to be capitalized, although this is not required.</p>
+<p>There is no semicolon after the #define statement. If you include one,
+the compiler will likely throw cryptic errors in unrelated places.
+That is, <strong>don&#8217;t do this</strong>:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="c1">// DON&#39;T DO THIS! THE SEMICOLON SHOULDN&#39;T BE THERE!</span>
+<span class="cp">#define NAME value;</span>
+</pre></div>
+</div>
+<p>Similarly, including an equal sign after the <tt class="docutils literal"><span class="pre">#define</span></tt> line will
+also generate a cryptic compiler error further down the page.  That
+is, <strong>don&#8217;t do this, either</strong>:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="c1">// DON&#39;T DO THIS, EITHER! THE EQUALS SIGN SHOULDN&#39;T BE THERE!</span>
+<span class="cp">#define NAME = value</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="cp">#define LED_PIN 13</span>
+<span class="c1">// The compiler will replace any mention of LED_PIN with</span>
+<span class="c1">// the value 3 at compile time.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="const.html#lang-const"><em>const</em></a></li>
+</ul>
+<div class="admonition-license-and-attribution admonition ">
+<p class="first admonition-title">License and Attribution</p>
+<p class="last">This documentation page was adapted from the <a class="reference external" href="http://arduino.cc/en/Reference/HomePage">Arduino Reference
+Documentation</a>, which
+is released under a <a class="reference external" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0
+License</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ide.html">IDE Anatomy</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="double.html" title="double"
+             >next</a></li>
+        <li class="right" >
+          <a href="curly-braces.html" title="Curly Braces ({, })"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" >Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

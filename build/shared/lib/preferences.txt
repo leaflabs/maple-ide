@@ -63,7 +63,7 @@ last.sketch.count=0
 # by default, check the processing server for any updates
 # (please avoid disabling, this also helps us know basic numbers 
 # on how many people are using Processing)
-update.check = true
+update.check = false
 
 # on windows, automatically associate .pde files with processing.exe
 platform.auto_file_type_associations = true

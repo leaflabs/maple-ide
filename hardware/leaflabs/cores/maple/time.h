@@ -23,7 +23,8 @@
  *****************************************************************************/
 
 /**
- *  @brief Timing and delay functions.
+ * @file time.h
+ * @brief Timing and delay functions.
  */
 
 #ifndef _TIME_H
@@ -41,12 +42,20 @@ extern "C"{
 
 extern volatile uint32 systick_timer_millis;
 
-/* time in milliseconds since boot  */
+/**
+ * Returns time (in milliseconds) since the beginning of program
+ * execution. On overflow, restarts at 0.
+ * @see micros()
+ */
 static inline uint32 millis(void) {
     return systick_timer_millis;
 }
 
-/* Time in microseconds since boot  */
+/**
+ * Returns time (in microseconds) since the beginning of program
+ * execution.  On overflow, restarts at 0.
+ * @see millis()
+ */
 static inline uint32 micros(void) {
     uint32 ms;
     uint32 cycle_cnt;
@@ -59,15 +68,36 @@ static inline uint32 micros(void) {
 
     nvic_globalirq_enable();
 
-    /* MAPLE_RELOAD_VAL is 1 less than the number of cycles it actually
-       takes to complete a systick reload */
+    /* SYSTICK_RELOAD_VAL is 1 less than the number of cycles it
+       actually takes to complete a SysTick reload */
     res = (ms * US_PER_MS) +
-        (MAPLE_RELOAD_VAL + 1 - cycle_cnt)/CYCLES_PER_MICROSECOND;
+        (SYSTICK_RELOAD_VAL + 1 - cycle_cnt)/CYCLES_PER_MICROSECOND;
 
     return res;
 }
 
+/**
+ * Delay for at least the given number of milliseconds.
+ *
+ * Interrupts, etc. may cause the actual number of milliseconds to
+ * exceed ms.  However, this function will return no less than ms
+ * milliseconds from the time it is called.
+ *
+ * @param ms the number of milliseconds to delay.
+ * @see delayMicroseconds()
+ */
 void delay(unsigned long ms);
+
+/**
+ * Delay for at least the given number of microseconds.
+ *
+ * Interrupts, etc. may cause the actual number of microseconds to
+ * exceed us.  However, this function will return no less than us
+ * microseconds from the time it is called.
+ *
+ * @param us the number of microseconds to delay.
+ * @see delay()
+ */
 void delayMicroseconds(uint32 us);
 
 #ifdef __cplusplus

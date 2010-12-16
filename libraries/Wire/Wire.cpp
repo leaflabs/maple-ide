@@ -177,7 +177,7 @@ uint8 TwoWire::endTransmission(void) {
     return SUCCESS;
 }
 
-uint8 TwoWire::requestFrom(uint8 address, uint8 num_bytes) {
+uint8 TwoWire::requestFrom(uint8 address, int num_bytes) {
     if (num_bytes > WIRE_BUFSIZ) num_bytes = WIRE_BUFSIZ;
 
     rx_buf_idx = 0;
@@ -202,7 +202,7 @@ void TwoWire::send(uint8 value) {
     tx_buf[tx_buf_idx++] = value;
 }
 
-void TwoWire::send(uint8* buf, uint8 len) {
+void TwoWire::send(uint8* buf, int len) {
     for (uint8 i = 0; i < len; i++) send(buf[i]);
 }
 

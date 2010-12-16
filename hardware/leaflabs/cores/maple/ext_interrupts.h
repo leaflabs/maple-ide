@@ -22,6 +22,9 @@
  * THE SOFTWARE.
  *****************************************************************************/
 
+#include "libmaple_types.h"
+#include "nvic.h"
+
 /**
  *  @file ext_interrupts.h
  *
@@ -31,18 +34,75 @@
 #ifndef _EXT_INTERRUPTS_H_
 #define _EXT_INTERRUPTS_H_
 
-enum {
-    RISING,
-    FALLING,
-    CHANGE
-};
+/**
+ * The kind of transition on an external pin which should trigger an
+ * interrupt.
+ */
+typedef enum ExtIntTriggerMode_ {
+    RISING, /**< To trigger an interrupt when the pin transitions LOW
+               to HIGH */
+    FALLING, /**< To trigger an interrupt when the pin transitions
+                HIGH to LOW */
+    CHANGE /**< To trigger an interrupt when the pin transitions from
+              LOW to HIGH or HIGH to LOW (i.e., when the pin
+              changes). */
+} ExtIntTriggerMode;
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-void attachInterrupt(uint8 pin, voidFuncPtr, uint32 mode);
+/**
+ *  @brief Registers an interrupt handler on a pin.
+ *
+ *  The interrupt will be triggered on a given transition on the pin,
+ *  as specified by the mode parameter.  The handler runs in interrupt
+ *  context.  The new handler will replace whatever handler is
+ *  currently registered for the pin, if any.
+ *
+ *  @param pin Maple pin number
+ *  @param handler Function to run upon external interrupt trigger.
+ *  The handler should take no arguments, and have void return type.
+ *  @param mode Type of transition to trigger on, e.g. falling, rising, etc.
+ *
+ *  @sideeffect Registers a handler
+ *  @see detachInterrupt()
+ */
+void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode);
+
+/**
+ * @brief Disable any registered external interrupt.
+ * @param pin Maple pin number
+ * @sideeffect unregisters external interrupt handler
+ * @see attachInterrupt()
+ */
 void detachInterrupt(uint8 pin);
+
+/**
+ * Re-enable interrupts.
+ *
+ * Call this after noInterrupts() to re-enable interrupt handling,
+ * after you have finished with a timing-critical section of code.
+ *
+ * @see noInterrupts()
+ */
+static ALWAYS_INLINE void interrupts() {
+    nvic_globalirq_enable();
+}
+
+/**
+ * Disable interrupts.
+ *
+ * After calling this function, all user-programmable interrupts will
+ * be disabled.  You can call this function before a timing-critical
+ * section of code, then call interrupts() to re-enable interrupt
+ * handling.
+ *
+ * @see interrupts()
+ */
+static ALWAYS_INLINE void noInterrupts() {
+    nvic_globalirq_disable();
+}
 
 #ifdef __cplusplus
 }

@@ -295,6 +295,7 @@ public class ArmCompiler extends Compiler {
         "-mthumb",
         "-DBOARD_" + boardPrefs.get("build.board"),
         "-DMCU_" + boardPrefs.get("build.mcu"),
+        "-DMAPLE_IDE",
         "-x", "assembler-with-cpp",
         "-o", objFile.getAbsolutePath(),
         "-c",
@@ -331,6 +332,7 @@ public class ArmCompiler extends Compiler {
         "-DBOARD_" + boardPrefs.get("build.board"),
         "-DMCU_" + boardPrefs.get("build.mcu"),
         "-D" + boardPrefs.get("build.vect"),
+        "-DMAPLE_IDE",
         "-DARDUINO=" + Base.REVISION));
 
     for (File i: includePaths) {
@@ -371,7 +373,8 @@ public class ArmCompiler extends Compiler {
         "-fdata-sections",
         "-Wl,--gc-sections",
         "-DBOARD_" + boardPrefs.get("build.board"),
-        "-DMCU_" + boardPrefs.get("build.mcu")));
+        "-DMCU_" + boardPrefs.get("build.mcu"),
+        "-DMAPLE_IDE"));
 
     for (File i: includePaths) {
       command.add("-I" + i.getAbsolutePath());

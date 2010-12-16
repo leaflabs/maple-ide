@@ -717,11 +717,11 @@ public class Editor extends JFrame implements RunnerListener {
     populateSerialMenu();
     menu.add(serialMenu);
 	  
-    menu.addSeparator();
+    // menu.addSeparator();
 
-    JMenu bootloaderMenu = new JMenu("Burn Bootloader");
-    base.rebuildBurnBootloaderMenu(bootloaderMenu);
-    menu.add(bootloaderMenu);
+    // JMenu bootloaderMenu = new JMenu("Burn Bootloader");
+    // base.rebuildBurnBootloaderMenu(bootloaderMenu);
+    // menu.add(bootloaderMenu);
         
     menu.addMenuListener(new MenuListener() {
       public void menuCanceled(MenuEvent e) {}
@@ -1049,7 +1049,7 @@ public class Editor extends JFrame implements RunnerListener {
       });
     menu.add(item);
 
-    item = new JMenuItem("Development Environment");
+    item = new JMenuItem("Documentation Index");
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           Base.showEnvironment();
@@ -1073,7 +1073,7 @@ public class Editor extends JFrame implements RunnerListener {
       });
     menu.add(item);
 
-    item = new JMenuItem("Visit Arduino.cc");
+    item = new JMenuItem("Visit arduino.cc");
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           Base.openURL("http://arduino.cc/");
@@ -1081,10 +1081,10 @@ public class Editor extends JFrame implements RunnerListener {
       });
     menu.add(item);
 
-    item = new JMenuItem("Visit LeafLabs.com");
+    item = new JMenuItem("Visit leaflabs.com");
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          Base.openURL("http://LeafLabs.com/");
+          Base.openURL("http://leaflabs.com/");
         }
       });
     menu.add(item);
@@ -2077,7 +2077,7 @@ public class Editor extends JFrame implements RunnerListener {
     header.rebuild();
     // reset window title to reflect currently opened sketch
     setTitle(sketch.getName() + " | Maple IDE " + Base.MAPLE_VERSION_NAME +
-             " (Arduino " + Base.VERSION_NAME + ")");
+             " (Arduino " + Base.ARDUINO_VERSION_NAME + ")");
     // Disable untitled setting from previous document, if any
     untitled = false;
 

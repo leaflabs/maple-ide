@@ -1,0 +1,185 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>long &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="../../index.html" />
+    <link rel="up" title="Complete Language Index" href="../../language-index.html" />
+    <link rel="next" title="long() (cast)" href="longcast.html" />
+    <link rel="prev" title="Keywords" href="keywords.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="longcast.html" title="long() (cast)"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="keywords.html" title="Keywords"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" accesskey="U">Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="long">
+<span id="lang-long"></span><h1><tt class="docutils literal"><span class="pre">long</span></tt><a class="headerlink" href="#long" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">long</span></tt> data type stores extended size integer values.  You can
+use a <tt class="docutils literal"><span class="pre">long</span></tt> when your values are too large to fit into an <a class="reference internal" href="int.html#lang-int"><em>int</em></a>.  A <tt class="docutils literal"><span class="pre">long</span></tt> occupies 8 bytes of memory.  This yields a
+range of approximately -9.2×10^18 to 9.2×10^18 (that&#8217;s 9.2 billion
+billion, or about 92 million times the number of stars in the Milky
+Way galaxy).  The exact range of a <tt class="docutils literal"><span class="pre">long</span></tt> on the Maple is from
+-9,223,372,036,854,775,808 to 9,223,372,036,854,775,807, or -2^63 to
+(2^63-1).  A <tt class="docutils literal"><span class="pre">long</span></tt> it is subject to the same <a class="reference internal" href="variables.html#lang-variables-rollover"><em>overflow issues</em></a> as any numeric data type.</p>
+<p>Here&#8217;s an example of declaring a long (see <a class="reference internal" href="../api/constants.html#lang-constants-integers-u-l"><em>integer constants</em></a> for an explanation of the &#8220;L&#8221; at the end of the
+number):</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="c1">// Speed of light in nanometers per second (approximate).</span>
+<span class="kt">long</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">299792458000000000L</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The general syntax for declaring an <tt class="docutils literal"><span class="pre">long</span></tt> variable named <tt class="docutils literal"><span class="pre">var</span></tt>,
+then giving it value <tt class="docutils literal"><span class="pre">val</span></tt>, looks like:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">long</span> <span class="n">var</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This is identical to the <tt class="docutils literal"><span class="pre">int</span></tt> syntax, with <tt class="docutils literal"><span class="pre">long</span></tt> replacing
+<tt class="docutils literal"><span class="pre">int</span></tt>.</p>
+<p>Note that <tt class="docutils literal"><span class="pre">long</span></tt> values will still <a class="reference internal" href="int.html#lang-int-overflow"><em>overflow</em></a>, just like <tt class="docutils literal"><span class="pre">int</span></tt> values, but their much
+larger range makes this less likely to happen.</p>
+<p>The downside to using a <tt class="docutils literal"><span class="pre">long</span></tt> instead of an <tt class="docutils literal"><span class="pre">int</span></tt> (besides the
+extra storage) is that <a class="reference internal" href="arithmetic.html#lang-arithmetic"><em>arithmetic</em></a> operations
+on <tt class="docutils literal"><span class="pre">long</span></tt>s will take slightly longer than on <tt class="docutils literal"><span class="pre">int</span></tt>s.</p>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="char.html#lang-char"><em>char</em></a></li>
+<li><a class="reference internal" href="unsignedchar.html#lang-unsignedchar"><em>unsigned char</em></a></li>
+<li><a class="reference internal" href="int.html#lang-int"><em>int</em></a></li>
+<li><a class="reference internal" href="unsignedint.html#lang-unsignedint"><em>unsigned int</em></a></li>
+<li><a class="reference internal" href="unsignedlong.html#lang-unsignedlong"><em>unsigned long</em></a></li>
+<li><a class="reference internal" href="../api/constants.html#lang-constants-integers"><em>Integer Constants</em></a></li>
+<li><a class="reference internal" href="variables.html#lang-variables"><em>Variables</em></a></li>
+</ul>
+<div class="admonition-license-and-attribution admonition ">
+<p class="first admonition-title">License and Attribution</p>
+<p class="last">This documentation page was adapted from the <a class="reference external" href="http://arduino.cc/en/Reference/HomePage">Arduino Reference
+Documentation</a>, which
+is released under a <a class="reference external" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0
+License</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ide.html">IDE Anatomy</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="longcast.html" title="long() (cast)"
+             >next</a></li>
+        <li class="right" >
+          <a href="keywords.html" title="Keywords"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" >Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,203 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sizeof() &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="../../index.html" />
+    <link rel="up" title="Complete Language Index" href="../../language-index.html" />
+    <link rel="next" title="sqrt()" href="sqrt.html" />
+    <link rel="prev" title="Semicolon (;)" href="semicolon.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="sqrt.html" title="sqrt()"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="semicolon.html" title="Semicolon (;)"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" accesskey="U">Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sizeof">
+<span id="lang-sizeof"></span><h1><tt class="docutils literal"><span class="pre">sizeof()</span></tt><a class="headerlink" href="#sizeof" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">sizeof</span></tt> operator on the Maple returns the number of bytes
+needed to store a value of a given type<a class="footnote-reference" href="#fcharsize" id="id1">[1]</a>.  This can be
+an ordinary numeric type, like <tt class="docutils literal"><span class="pre">int</span></tt>.  It can be something more
+complicated, like a <tt class="docutils literal"><span class="pre">struct</span></tt> or <tt class="docutils literal"><span class="pre">union</span></tt>.  If the argument to
+<tt class="docutils literal"><span class="pre">sizeof</span></tt> is an array, it returns the total number of bytes occupied
+by the array.</p>
+<p>The general syntax looks like this:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="k">sizeof</span><span class="p">(</span><span class="n">type</span><span class="p">)</span>
+<span class="k">sizeof</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">sizeof</span></tt> operator is useful for dealing with arrays (such as
+strings) where it is convenient to be able to change the size of the
+array without breaking other parts of the program.</p>
+<p>This program prints out a text string one character at a time. Try
+changing the text phrase:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">char</span> <span class="n">myStr</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;this is a test&quot;</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="n">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">myStr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">DEC</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot; = &quot;</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">myStr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">BYTE</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that <tt class="docutils literal"><span class="pre">sizeof</span></tt> returns the total number of bytes. So for larger
+variable types such as <tt class="docutils literal"><span class="pre">int</span></tt>, the <a class="reference internal" href="for.html#lang-for"><em>for loop</em></a>
+would look something like this:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">myInts</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// do something with myInts[i]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="fcharsize" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Technically (and pedantically) speaking, <tt class="docutils literal"><span class="pre">sizeof</span></tt>
+returns a multiple of the number of bits a <tt class="docutils literal"><span class="pre">char</span></tt> occupies in
+memory.  However, on the Maple (this goes for most C++
+implementations), a <tt class="docutils literal"><span class="pre">char</span></tt> occupies 8 bits = 1 byte.  All the C++
+standard guarantees, however, is that a <tt class="docutils literal"><span class="pre">char</span></tt> occupies at
+<em>least</em> 8 bits.</td></tr>
+</tbody>
+</table>
+<div class="admonition-license-and-attribution admonition ">
+<p class="first admonition-title">License and Attribution</p>
+<p class="last">This documentation page was adapted from the <a class="reference external" href="http://arduino.cc/en/Reference/HomePage">Arduino Reference
+Documentation</a>, which
+is released under a <a class="reference external" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0
+License</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ide.html">IDE Anatomy</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="sqrt.html" title="sqrt()"
+             >next</a></li>
+        <li class="right" >
+          <a href="semicolon.html" title="Semicolon (;)"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" >Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

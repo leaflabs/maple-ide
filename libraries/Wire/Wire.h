@@ -75,10 +75,10 @@ class TwoWire {
     void beginTransmission(uint8);
     void beginTransmission(int);
     uint8 endTransmission(void);
-    uint8 requestFrom(uint8, uint8);
+    uint8 requestFrom(uint8, int);
     uint8 requestFrom(int, int);
     void send(uint8);
-    void send(uint8*, uint8);
+    void send(uint8*, int);
     void send(int);
     void send(int*, int);
     void send(char*);

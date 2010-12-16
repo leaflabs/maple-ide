@@ -1,0 +1,197 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>interrupts() &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="../../index.html" />
+    <link rel="up" title="Complete Language Index" href="../../language-index.html" />
+    <link rel="next" title="isButtonPressed()" href="isbuttonpressed.html" />
+    <link rel="prev" title="highByte()" href="highbyte.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="isbuttonpressed.html" title="isButtonPressed()"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="highbyte.html" title="highByte()"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" accesskey="U">Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="interrupts">
+<span id="lang-interrupts"></span><h1>interrupts()<a class="headerlink" href="#interrupts" title="Permalink to this headline">¶</a></h1>
+<p>Re-enables interrupts (after they&#8217;ve been disabled by
+<a class="reference internal" href="nointerrupts.html#lang-nointerrupts"><em>noInterrupts()</em></a>).  Interrupts allow certain
+important tasks to happen in the background, and certain interrupts
+are enabled by default.</p>
+<p>Some functions will not work while interrupts are disabled, and both
+incoming and outgoing communication may be ignored. Interrupts can
+slightly disrupt the timing of code, however, and may be disabled for
+particularly critical sections of code.</p>
+<div class="section" id="library-documentation">
+<h2>Library Documentation<a class="headerlink" href="#library-documentation" title="Permalink to this headline">¶</a></h2>
+<dt id=""><span id="project0ext__interrupts_8h_1a31074dfc26429d7bed41a77e734bc8ba"></span>void  <strong>interrupts</strong>()</dt>
+<dd><p class="first">
+<p>Re-enable interrupts. </p>
+        </p>
+<p class="last">
+<p>Call this after <a class="reference internal" href="nointerrupts.html#project0ext__interrupts_8h_1a515203d1dc785590928e02b30545e5fb"><em>noInterrupts()</em></a> to re-enable interrupt handling, after you have finished with a timing-critical section of code.</p>
+<p>
+<dl class="docutils">
+<dt><em>See</em></dt>
+<dd><a class="reference internal" href="nointerrupts.html#project0ext__interrupts_8h_1a515203d1dc785590928e02b30545e5fb"><em>noInterrupts()</em></a> </dd>
+</dl>
+</p>
+        </p>
+</dd>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">void</span> <span class="n">setup</span><span class="p">()</span> <span class="p">{}</span>
+
+<span class="kt">void</span> <span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">noInterrupts</span><span class="p">();</span>
+  <span class="c1">// critical, time-sensitive code here</span>
+  <span class="n">interrupts</span><span class="p">();</span>
+  <span class="c1">// other code here</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="nointerrupts.html#lang-nointerrupts"><em>noInterrupts()</em></a></li>
+<li><a class="reference internal" href="attachinterrupt.html#lang-attachinterrupt"><em>attachInterrupt()</em></a></li>
+<li><a class="reference internal" href="detachinterrupt.html#lang-detachinterrupt"><em>detachInterrupt()</em></a></li>
+<li><a class="reference internal" href="../../timers.html#timers"><em>Timers reference</em></a></li>
+<li><a class="reference internal" href="hardwaretimer.html#lang-hardwaretimer"><em>Timer API</em></a></li>
+<li><a class="reference internal" href="../../external-interrupts.html#external-interrupts"><em>External interrupts</em></a></li>
+</ul>
+<div class="admonition-license-and-attribution admonition ">
+<p class="first admonition-title">License and Attribution</p>
+<p class="last">This documentation page was adapted from the <a class="reference external" href="http://arduino.cc/en/Reference/HomePage">Arduino Reference
+Documentation</a>, which
+is released under a <a class="reference external" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0
+License</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ide.html">IDE Anatomy</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="isbuttonpressed.html" title="isButtonPressed()"
+             >next</a></li>
+        <li class="right" >
+          <a href="highbyte.html" title="highByte()"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" >Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

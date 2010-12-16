@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Maple Bootloader(s) &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="index.html" />
+    <link rel="next" title="Troubleshooting" href="troubleshooting.html" />
+    <link rel="prev" title="GCC for Maple" href="arm-gcc.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="troubleshooting.html" title="Troubleshooting"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="arm-gcc.html" title="GCC for Maple"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="maple-bootloader-s">
+<h1>Maple Bootloader(s)<a class="headerlink" href="#maple-bootloader-s" title="Permalink to this headline">¶</a></h1>
+<p>The firmware which allows the Maple to be reprogrammed via a USB
+connection. Every Maple board comes programmed with this by default,
+and it is not overwritten by regular programs (it lives lower in the
+Flash memory and only runs when the chip is reset).</p>
+<p><strong>Check out the latest source code version:</strong></p>
+<div class="highlight-sh"><div class="highlight"><pre>git clone git://github.com/leaflabs/maple-bootloader.git
+</pre></div>
+</div>
+<p><strong>Visit the github development project</strong>: <a class="reference external" href="http://github.com/leaflabs/maple-bootloader">http://github.com/leaflabs/maple-bootloader</a></p>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#bootloader-schemes-explained" id="id1">Bootloader Schemes Explained</a></li>
+<li><a class="reference internal" href="#arduino" id="id2">Arduino</a></li>
+<li><a class="reference internal" href="#maple-rev-1" id="id3">Maple Rev 1</a></li>
+<li><a class="reference internal" href="#maple-rev3-rev5-dfu" id="id4">Maple Rev3/Rev5 - DFU</a></li>
+<li><a class="reference internal" href="#flashing-a-custom-bootloader" id="id5">Flashing A Custom Bootloader</a><ul>
+<li><a class="reference internal" href="#setup" id="id6">Setup</a></li>
+<li><a class="reference internal" href="#flashing-the-new-bootloader" id="id7">Flashing the new Bootloader</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="bootloader-schemes-explained">
+<h2><a class="toc-backref" href="#id1">Bootloader Schemes Explained</a><a class="headerlink" href="#bootloader-schemes-explained" title="Permalink to this headline">¶</a></h2>
+<p>Maple Rev 3 and Rev 5 (Rev 5 is the version currently shipping)
+represents a drastic remake of the core library as well as the upload
+process. Thes changes to the bootloader, were implemented to resolve
+platform-specific issues on Windows.  Before delving into how the Rev
+1 bootloader worked and how the Rev 5 bootloader works now, we&#8217;ll
+discuss the features common to each and touch a bit on the Arduino
+setup.</p>
+<p>This is a fairly involved explanation, with a lot of details that are
+likely only interesting to a few. If you just want to get the rough
+idea, skim this article. If you want to start hacking on the
+bootloader, get in touch with us to get even more info on how this all
+works.  And finally, you can always <a class="reference external" href="http://github.com/leaflabs/libmaple">check out the code at github</a>!</p>
+</div>
+<div class="section" id="arduino">
+<h2><a class="toc-backref" href="#id2">Arduino</a><a class="headerlink" href="#arduino" title="Permalink to this headline">¶</a></h2>
+<p>Arduino is based off of AVR series microcontrollers, most of which
+lack USB support. Thus, boards like the Duemilanove add USB capability
+via an FTDI USB-to-Serial converter chip. This chip interfaces with
+the AVR over an RS-232 serial interface. When you plug an Arduino into
+a computer, only an FTDI driver is needed. Since the FTDI chip is
+separate from the AVR, you can reset the Arduino without closing this
+USB connection with the FTDI chip.</p>
+<p>To program an Arduino, the host machine sends a command over the USB
+pipe (reset DTR) which in turn resets the AVR. The AVR will boot into
+a bootloader, which waits for a second for any upload commands over
+serial. The host machine can either send those commands, or do
+nothing. If it does nothing, the AVR will quickly jump to user code
+and off you go.  The whole process is quick, the bootloader doesn’t
+live for very long, and will exit almost immediately if no upload
+commands are received.</p>
+</div>
+<div class="section" id="maple-rev-1">
+<h2><a class="toc-backref" href="#id3">Maple Rev 1</a><a class="headerlink" href="#maple-rev-1" title="Permalink to this headline">¶</a></h2>
+<p>Maple is based off the STM32 (ARM cortex M3) series chips, which do
+have embedded USB support. Thus, Maple doesn’t need the extra FTDI
+chip. Firmware is uploaded via the standard DFU protocol (also used by
+iPhone and openMoko). Since DFU is a standard, there is no need for
+custom software running on the host to upload the firmware. Any DFU
+compliant program will work. The maple ide is based around
+<strong class="command">dfu-util</strong>, openMoko’s DFU utility. Using DFU came at a cost,
+however. The USB port must additionally implement a separate serial
+port at the same time (we use the CDC ACM class for serial
+functionality).</p>
+<p>Maple Rev 1 attempted to run both DFU and CDC ACM devices
+simultaneously on the USB peripheral. On Linux, this worked great. The
+OS would service the DFU driver during uploads, and the CDC ACM for
+serial port transactions. There was no reset necessary for uploads. No
+waiting.  The bootloader was always running the background, ready to
+receive commands.</p>
+<p>The problem was that <em>only</em> Linux did this.  Windows refused to attach
+more than one driver to a single USB device without repackaging the
+DFU and CDC ACM into a single IAD Compound Device. It&#8217;s not terribly
+important what this means, except for two things.</p>
+<ol class="arabic simple">
+<li>Four drivers were necessary to make everything work.</li>
+<li>IAD is not supported by OS X.</li>
+</ol>
+<p>Mac, on the other hand, only supported Compound USB, a different trick
+that is not supported by Windows. While a perpetual background
+bootloader was attractive, it became clear, after much toiling, we
+were going to have to write some custom drivers across several
+platforms to make everything work this way.</p>
+</div>
+<div class="section" id="maple-rev3-rev5-dfu">
+<span id="bootloader-rev3"></span><h2><a class="toc-backref" href="#id4">Maple Rev3/Rev5 - DFU</a><a class="headerlink" href="#maple-rev3-rev5-dfu" title="Permalink to this headline">¶</a></h2>
+<p>Maple Rev 3 takes a completely different tack, more along the lines of
+Arduino.  In Rev 3, the device resets into bootloader mode, which
+stays alive for a few moments to receive commands, and then jumps to
+user code. The bootloader is implemented as a DFU device &#8211; just a DFU
+device, no serial port. This requires one driver for Windows
+(<tt class="file docutils literal"><span class="pre">drivers/mapleDrv/dfu</span></tt> in the Windows IDE directory). As part
+of the <a class="reference internal" href="libmaple.html#libmaple"><em>libmaple</em></a> library, user code is automatically
+supplied with serial support via some behind the scenes work that
+happens automatically when you compile (<tt class="docutils literal"><span class="pre">setupUSB()</span></tt> is appended to
+<tt class="docutils literal"><span class="pre">setup()</span></tt>). This user mode code only implements a CDC ACM class USB
+device, giving you functions like <tt class="docutils literal"><span class="pre">Usb.print()</span></tt>. Separating these
+two modes fixed the driver issue, required no complicated compound USB
+device nonsense, and works well across platforms, requiring only two
+drivers (serial and DFU) on Windows.</p>
+<p>However, it is no longer possible to upload code at will, since there
+is no bootloader quietly listening in the background. Instead you have
+to reset the board, then initiate a DFU transaction. This reset is
+performed automatically by the IDE by sending a command over the USB
+serial port. You can generate this reset on your own using a Python
+script or some other scheme. All you need do is:</p>
+<ol class="arabic simple">
+<li>Pulse DTR (high and then low, so that you&#8217;ve created a negative
+edge)</li>
+<li>Write &#8220;1EAF&#8221; in ASCII over the serial pipe. This will cause Maple
+to reset. Only the first 4 bytes after a negative edge of DTR are
+checked for this command, so it&#8217;s important you actually create a
+negative edge, rather than just ensuring DTR is low.</li>
+</ol>
+<p>After the reset, the host OS takes a few moments (.5-2 seconds) to
+re-enumerate the device as DFU. This delay is unpredictable, and its
+the reason the bootloader on Maple Rev3 stays alive for so
+long. Sometimes the bootloader was exiting before the OS had even
+enumerated the device! Once in bootloader mode, however,
+<strong class="command">dfu-util</strong> uploads your sketch into either flash or RAM (DFU
+alternate setting 0 or 1, respectively) and resets the board again.
+This time, however, no DFU transaction is initiated, and the
+bootloader gives way to user code, closing down the DFU pipe and
+bringing up the USB serial.</p>
+</div>
+<div class="section" id="flashing-a-custom-bootloader">
+<span id="bootloader-reflashing"></span><h2><a class="toc-backref" href="#id5">Flashing A Custom Bootloader</a><a class="headerlink" href="#flashing-a-custom-bootloader" title="Permalink to this headline">¶</a></h2>
+<p>The STM32 microprocessor on the Maple comes with a built-in hardware
+bootloader that can be used to flash a new (software) bootloader onto
+the chip.  This section describes how to go about this, using a Maple
+Rev 3 or higher (if you have a Maple Rev 1; you don&#8217;t have a BUT
+button, and won&#8217;t be able to follow these directions.  A workaround is
+detailed in <a class="reference external" href="http://forums.leaflabs.com/topic.php?id=32#post-126">this forum posting</a>).</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This section is directed at users wishing to write a
+custom bootloader for the Maple, or update their bootloader to a
+more recent version.  It&#8217;s generally not necessary to do so, and it
+is possible to make a mistake and e.g. render your Maple unable to
+communicate with the IDE.  Know what you&#8217;re doing, and proceed with
+caution.</p>
+</div>
+<div class="section" id="setup">
+<h3><a class="toc-backref" href="#id6">Setup</a><a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h3>
+<p>In order to follow these instructions, you will need:</p>
+<ul class="simple">
+<li>A binary of the bootloader you want to upload</li>
+<li>Hardware for communicating between the Maple and your computer over
+serial.</li>
+<li><a class="reference external" href="http://python.org">Python</a> version 2.5 or higher, with the
+<a class="reference external" href="http://pyserial.sourceforge.net/">PySerial</a> library installed.</li>
+</ul>
+<p><strong>Step 1: Obtain a bootloader binary</strong>. The first thing you&#8217;ll need to
+do is to compile your bootloader binary.  Note that an ASCII
+representation of the binary, such as the Intel .hex format, will not
+suffice.  For example, you can run (on a <a class="reference internal" href="unix-toolchain.html#unix-toolchain"><em>suitably configured
+system</em></a>) the following to obtain a binary of the
+bootloader currently used on the Maple:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>git checkout git://github.com/leaflabs/maple-bootloader.git
+<span class="nv">$ </span><span class="nb">cd </span>maple-bootloader
+<span class="nv">$ </span>make
+<span class="nv">$ </span>ls -lh build/maple-boot.bin <span class="c"># this is the compiled bootloader binary</span>
+</pre></div>
+</div>
+<p><strong>Step 2: Connect Maple Serial1 to your computer</strong>.
+There are a variety of ways of doing this.  We use Sparkfun&#8217;s <a class="reference external" href="http://www.sparkfun.com/products/718">FTDI
+breakout boards</a>, but you
+could use another Maple, an Arduino, etc. &#8211; anything that allows your
+computer to communicate with the Maple you want to reprogram over a
+serial interface.</p>
+<p>If you do use an FTDI breakout board, first make sure your Maple is
+disconnected from an external power source, be it battery, USB, or
+barrel jack.  Then, connect the FTDI board&#8217;s TX pin to <tt class="docutils literal"><span class="pre">Serial1</span></tt>&#8216;s
+RX pin (pin 8), FTDI RX to <tt class="docutils literal"><span class="pre">Serial1</span></tt> TX (pin 7), FTDI ground to
+Maple&#8217;s GND, and its 3.3V pin to Maple&#8217;s Vin (use the Maple&#8217;s
+silkscreen for help locating these pins).  At this point, you&#8217;re ready
+to plug the FTDI board into your computer (via USB).</p>
+<p>The <tt class="docutils literal"><span class="pre">Serial1</span></tt> pins are documented <a class="reference internal" href="lang/api/serial.html#lang-serial"><em>here</em></a>.</p>
+<p><strong>Step 3: Put your Maple into serial bootloader mode</strong>.  Do this by
+pressing the RESET button, then <em>while RESET is held down</em>, pressing
+and holding the BUT button.  Next, <em>making sure to keep BUT held
+down</em>, release the RESET button and wait for a few seconds before
+releasing BUT.</p>
+<p><strong>Step 4: Obtain stm32loader.py</strong>.  The
+script <tt class="docutils literal"><span class="pre">stm32loader.py</span></tt> is provided with libmaple.  If you have set
+up the <a class="reference internal" href="unix-toolchain.html#unix-toolchain"><em>Unix toolchain</em></a>, it is available in
+libmaple/support/stm32loader.py.  Otherwise, you can download it
+directly from <a class="reference external" href="https://github.com/leaflabs/libmaple/raw/master/support/stm32loader.py">github</a>
+(click the link, then save the file somewhere on your system).</p>
+</div>
+<div class="section" id="flashing-the-new-bootloader">
+<h3><a class="toc-backref" href="#id7">Flashing the new Bootloader</a><a class="headerlink" href="#flashing-the-new-bootloader" title="Permalink to this headline">¶</a></h3>
+<p>We&#8217;ll use <tt class="docutils literal"><span class="pre">new-boot.bin</span></tt>, <tt class="docutils literal"><span class="pre">ser-port</span></tt>, and <tt class="docutils literal"><span class="pre">stm32loader.py</span></tt> to
+respectively refer to the absolute paths to the bootloader binary
+(from Step 1), the serial port device file or COMM port (from Steps 2
+and 3), and the stm32loader.py script.</p>
+<p>You can run</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python stm32loader.py -h
+</pre></div>
+</div>
+<p>to obtain usage information.  The incantation for uploading a
+bootloader binary <tt class="docutils literal"><span class="pre">new-bootloader.bin</span></tt> is</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python stm32loader.py -p ser-port -evw new-boot.bin
+</pre></div>
+</div>
+<p>If all goes well, you&#8217;ll see a bunch of output, then &#8220;Verification
+OK&#8221;.  If something goes wrong, the <a class="reference external" href="http://forums.leaflabs.com">forum</a> is probably your best bet
+for obtaining help, with IRC (irc.freenode.net, #leafblowers) being
+another option.  If all else fails, you can always <a class="reference external" href="http://leaflabs.com/contact/">contact us
+directly</a>!</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">IDE Anatomy</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Bootloader</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bootloader-schemes-explained">Bootloader Schemes Explained</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#arduino">Arduino</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#maple-rev-1">Maple Rev 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#maple-rev3-rev5-dfu">Maple Rev3/Rev5 - DFU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#flashing-a-custom-bootloader">Flashing A Custom Bootloader</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="troubleshooting.html" title="Troubleshooting"
+             >next</a></li>
+        <li class="right" >
+          <a href="arm-gcc.html" title="GCC for Maple"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

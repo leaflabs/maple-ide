@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Bitwise Operators (&amp;, |, ^, ~) &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="../../index.html" />
+    <link rel="up" title="Complete Language Index" href="../../language-index.html" />
+    <link rel="next" title="Boolean Operators" href="boolean.html" />
+    <link rel="prev" title="Bit Shift Operators (&lt;&lt;, &gt;&gt;)" href="bitshift.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="boolean.html" title="Boolean Operators"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="bitshift.html" title="Bit Shift Operators (&lt;&lt;, &gt;&gt;)"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" accesskey="U">Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="bitwise-operators">
+<span id="lang-bitwisemath"></span><h1>Bitwise Operators (<tt class="docutils literal"><span class="pre">&amp;</span></tt>, <tt class="docutils literal"><span class="pre">|</span></tt>, <tt class="docutils literal"><span class="pre">^</span></tt>, <tt class="docutils literal"><span class="pre">~</span></tt>)<a class="headerlink" href="#bitwise-operators" title="Permalink to this headline">¶</a></h1>
+<p>The bitwise operators perform their calculations at the bit level of
+variables. They help solve a wide range of common programming
+problems.</p>
+<p>Much of the material here is adapted for Maple from an (Arduino)
+<a class="reference external" href="http://www.arduino.cc/playground/Code/BitMath">tutorial on bitwise math</a>.  Another great
+resource is the Wikipedia article on <a class="reference external" href="http://en.wikipedia.org/wiki/Bitwise_operation">bitwise operations</a>.</p>
+<p>Below are descriptions and syntax for all of the operators.</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#bitwise-and" id="id1">Bitwise AND (<tt class="docutils literal"><span class="pre">&amp;</span></tt>)</a></li>
+<li><a class="reference internal" href="#bitwise-or" id="id2">Bitwise OR (<tt class="docutils literal"><span class="pre">|</span></tt>)</a></li>
+<li><a class="reference internal" href="#bitwise-xor" id="id3">Bitwise XOR (<tt class="docutils literal"><span class="pre">^</span></tt>)</a></li>
+<li><a class="reference internal" href="#bitwise-not" id="id4">Bitwise NOT (<tt class="docutils literal"><span class="pre">~</span></tt>)</a></li>
+<li><a class="reference internal" href="#uses" id="id5">Uses</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See Also</a></li>
+</ul>
+</div>
+<div class="section" id="bitwise-and">
+<span id="lang-bitwisemath-and"></span><h2><a class="toc-backref" href="#id1">Bitwise AND (<tt class="docutils literal"><span class="pre">&amp;</span></tt>)</a><a class="headerlink" href="#bitwise-and" title="Permalink to this headline">¶</a></h2>
+<p>The bitwise AND operator in C++ is a single ampersand, <tt class="docutils literal"><span class="pre">&amp;</span></tt>, used
+between two other integer expressions. Bitwise AND operates on each
+bit position of the surrounding expressions independently, according
+to this rule: if both input bits are 1, the resulting output is 1,
+otherwise the output is 0. Another way of expressing this is:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="mi">0</span>  <span class="mi">0</span>  <span class="mi">1</span>  <span class="mi">1</span>    <span class="n">operand1</span>
+<span class="mi">0</span>  <span class="mi">1</span>  <span class="mi">0</span>  <span class="mi">1</span>    <span class="n">operand2</span>
+<span class="o">----------</span>
+<span class="mi">0</span>  <span class="mi">0</span>  <span class="mi">0</span>  <span class="mi">1</span>    <span class="p">(</span><span class="n">operand1</span> <span class="o">&amp;</span> <span class="n">operand2</span><span class="p">)</span> <span class="o">=</span> <span class="n">result</span>
+</pre></div>
+</div>
+<p>On the Maple, the type <tt class="docutils literal"><span class="pre">int</span></tt> is a 32-bit value, so using <tt class="docutils literal"><span class="pre">&amp;</span></tt>
+between two <tt class="docutils literal"><span class="pre">int</span></tt> expressions causes 32 simultaneous AND operations
+to occur. In a code fragment like:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span>  <span class="mi">92</span><span class="p">;</span>    <span class="c1">// in binary: 00000000000000000000000001011100</span>
+<span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">101</span><span class="p">;</span>    <span class="c1">// in binary: 00000000000000000000000001100101</span>
+<span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">;</span>  <span class="c1">// result:    00000000000000000000000001000100,</span>
+                <span class="c1">//    (or 68 in decimal).</span>
+</pre></div>
+</div>
+<p>Each of the 32 bits in <tt class="docutils literal"><span class="pre">a</span></tt> and <tt class="docutils literal"><span class="pre">b</span></tt> are processed using bitwise
+AND, and all 32 resulting bits are stored in <tt class="docutils literal"><span class="pre">c</span></tt>, resulting in the
+value 1000100 in binary, which is 68 in decimal.</p>
+</div>
+<div class="section" id="bitwise-or">
+<span id="lang-bitwisemath-or"></span><h2><a class="toc-backref" href="#id2">Bitwise OR (<tt class="docutils literal"><span class="pre">|</span></tt>)</a><a class="headerlink" href="#bitwise-or" title="Permalink to this headline">¶</a></h2>
+<p>The bitwise OR operator in C++ is the vertical bar symbol, <tt class="docutils literal"><span class="pre">|</span></tt>. Like
+the <tt class="docutils literal"><span class="pre">&amp;</span></tt> operator, <tt class="docutils literal"><span class="pre">|</span></tt> operates independently on each bit in its
+two surrounding integer expressions, but what it does is
+different. The bitwise OR of two bits is 1 if either or both of the
+input bits is 1, otherwise it is 0.  For example:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="mi">0</span>  <span class="mi">0</span>  <span class="mi">1</span>  <span class="mi">1</span>    <span class="n">operand1</span>
+<span class="mi">0</span>  <span class="mi">1</span>  <span class="mi">0</span>  <span class="mi">1</span>    <span class="n">operand2</span>
+<span class="o">----------</span>
+<span class="mi">0</span>  <span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">1</span>    <span class="p">(</span><span class="n">operand1</span> <span class="o">|</span> <span class="n">operand2</span><span class="p">)</span> <span class="o">=</span> <span class="n">result</span>
+</pre></div>
+</div>
+<p>Here is an example of bitwise OR used in a snippet of C++ code (using
+<tt class="docutils literal"><span class="pre">char</span></tt>, which takes up 8 bits of memory, instead of <tt class="docutils literal"><span class="pre">int</span></tt>, which
+uses 32):</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">char</span> <span class="n">a</span> <span class="o">=</span>  <span class="mi">92</span><span class="p">;</span>    <span class="c1">// in binary: 01011100</span>
+<span class="kt">char</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">101</span><span class="p">;</span>    <span class="c1">// in binary: 01100101</span>
+<span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">|</span> <span class="n">b</span><span class="p">;</span>  <span class="c1">// result:    01111101, or 125 in decimal.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="bitwise-xor">
+<span id="lang-bitwisemath-xor"></span><h2><a class="toc-backref" href="#id3">Bitwise XOR (<tt class="docutils literal"><span class="pre">^</span></tt>)</a><a class="headerlink" href="#bitwise-xor" title="Permalink to this headline">¶</a></h2>
+<p>There is a somewhat unusual operator in C++ called bitwise EXCLUSIVE
+OR, also known as bitwise XOR. (In English, this is usually pronounced
+&#8220;zor&#8221; or &#8220;ex-or&#8221;). The bitwise XOR operator is written using the caret
+symbol, <tt class="docutils literal"><span class="pre">^</span></tt>. This operator is very similar to the bitwise OR
+operator <tt class="docutils literal"><span class="pre">|</span></tt>, except it evaluates to 0 for a given bit position when
+both of the input bits for that position are 1:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="mi">0</span>  <span class="mi">0</span>  <span class="mi">1</span>  <span class="mi">1</span>    <span class="n">operand1</span>
+<span class="mi">0</span>  <span class="mi">1</span>  <span class="mi">0</span>  <span class="mi">1</span>    <span class="n">operand2</span>
+<span class="o">----------</span>
+<span class="mi">0</span>  <span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">0</span>    <span class="p">(</span><span class="n">operand1</span> <span class="o">^</span> <span class="n">operand2</span><span class="p">)</span> <span class="o">=</span> <span class="n">result</span>
+</pre></div>
+</div>
+<p>Another way to look at bitwise XOR is that each bit in the result
+is a 1 if the input bits are different, or 0 if they are the same.</p>
+<p>Here is a simple example:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>     <span class="c1">// binary (ignoring extra bits): 1100</span>
+<span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>     <span class="c1">// binary:                       1010</span>
+<span class="kt">int</span> <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">^</span> <span class="n">y</span><span class="p">;</span>  <span class="c1">// binary:                       0110, or decimal 6</span>
+</pre></div>
+</div>
+<p>The ^ operator is often used to toggle (i.e. change from 0 to 1, or 1
+to 0) some of the bits in an integer expression. In a bitwise OR
+operation if there is a 1 in the mask bit, that bit is inverted; if
+there is a 0, the bit is not inverted and stays the same. Below is a
+program to blink digital pin 13 (the LED pin on Maple):</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="c1">// Blink Maple LED pin</span>
+
+<span class="kt">int</span> <span class="n">led_pin</span> <span class="o">=</span> <span class="mi">13</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">toggle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// demo for Exclusive OR</span>
+<span class="kt">void</span> <span class="n">setup</span><span class="p">(){</span>
+    <span class="n">pinMode</span><span class="p">(</span><span class="n">led_pin</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">loop</span><span class="p">(){</span>
+    <span class="n">toggle</span> <span class="o">=</span> <span class="n">toggle</span> <span class="o">^</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">led_pin</span><span class="p">,</span> <span class="n">toggle</span><span class="p">);</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="bitwise-not">
+<span id="lang-bitwisemath-not"></span><h2><a class="toc-backref" href="#id4">Bitwise NOT (<tt class="docutils literal"><span class="pre">~</span></tt>)</a><a class="headerlink" href="#bitwise-not" title="Permalink to this headline">¶</a></h2>
+<p>The bitwise NOT operator in C++ is the tilde character <tt class="docutils literal"><span class="pre">~</span></tt>. Unlike
+<tt class="docutils literal"><span class="pre">&amp;</span></tt> and <tt class="docutils literal"><span class="pre">|</span></tt>, the bitwise NOT operator is applied to a single
+operand to its right. Bitwise NOT changes each bit to its opposite: 0
+becomes 1, and 1 becomes 0. For example:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="mi">0</span>  <span class="mi">1</span>    <span class="n">operand1</span>
+<span class="o">----</span>
+<span class="mi">1</span>  <span class="mi">0</span>   <span class="o">~</span><span class="n">operand1</span> <span class="o">=</span> <span class="n">result</span>
+</pre></div>
+</div>
+<p>Another example:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">char</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">103</span><span class="p">;</span>    <span class="c1">// binary:  01100111</span>
+<span class="kt">char</span> <span class="n">b</span> <span class="o">=</span> <span class="o">~</span><span class="n">a</span><span class="p">;</span>     <span class="c1">// binary:  10011000 = -104</span>
+</pre></div>
+</div>
+<p>You might be surprised to see a negative number like -104 as the
+result of this operation. This is because the highest bit in an int
+variable is the so-called &#8220;sign bit&#8221;. If the highest bit is 1, the
+number is interpreted as negative. This encoding of positive and
+negative numbers is referred to as <em>two&#8217;s complement</em>. For more
+information, see the Wikipedia article on <a class="reference external" href="http://en.wikipedia.org/wiki/Twos_complement">two&#8217;s
+complement.</a></p>
+<p>As an aside, it is interesting to note that (under two&#8217;s complement
+arithmetic) for any integer <tt class="docutils literal"><span class="pre">x</span></tt>, <tt class="docutils literal"><span class="pre">~x</span></tt> is the same as <tt class="docutils literal"><span class="pre">-x-1</span></tt>.</p>
+<p>At times, the sign bit in a signed integer expression can cause
+some unwanted surprises.</p>
+</div>
+<div class="section" id="uses">
+<h2><a class="toc-backref" href="#id5">Uses</a><a class="headerlink" href="#uses" title="Permalink to this headline">¶</a></h2>
+<p>One of the most common uses of bitwise operations is to select or
+manipulate a particular bit (or bits) from an integer value, often
+called <a class="reference external" href="http://en.wikipedia.org/wiki/Mask_%28computing%29">bit masking</a>. See the
+linked Wikipedia article for more information and examples.</p>
+<p>If you really want to see bit-twiddling techniques in their full
+glory, you could do much worse than to get yourself a copy of
+<a class="reference external" href="http://www.hackersdelight.org/">Hacker&#8217;s Delight</a>.</p>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first"><a class="reference internal" href="boolean.html#lang-boolean"><em>Boolean operations</em></a> (<tt class="docutils literal"><span class="pre">&amp;&amp;</span></tt>, <tt class="docutils literal"><span class="pre">||</span></tt>)</p>
+</li>
+<li><dl class="first docutils">
+<dt><a class="reference internal" href="compoundbitwise.html#lang-compoundbitwise"><em>Compound bitwise operations</em></a> (<tt class="docutils literal"><span class="pre">&amp;=</span></tt>,</dt>
+<dd><p class="first last"><tt class="docutils literal"><span class="pre">|=</span></tt>, <tt class="docutils literal"><span class="pre">^=</span></tt>).</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition-license-and-attribution admonition ">
+<p class="first admonition-title">License and Attribution</p>
+<p class="last">This documentation page was adapted from the <a class="reference external" href="http://arduino.cc/en/Reference/HomePage">Arduino Reference
+Documentation</a>, which
+is released under a <a class="reference external" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0
+License</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ide.html">IDE Anatomy</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="boolean.html" title="Boolean Operators"
+             >next</a></li>
+        <li class="right" >
+          <a href="bitshift.html" title="Bit Shift Operators (&lt;&lt;, &gt;&gt;)"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" >Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,217 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>delayMicroseconds() &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="../../index.html" />
+    <link rel="up" title="Complete Language Index" href="../../language-index.html" />
+    <link rel="next" title="detachInterrupt()" href="detachinterrupt.html" />
+    <link rel="prev" title="delay()" href="delay.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="detachinterrupt.html" title="detachInterrupt()"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="delay.html" title="delay()"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" accesskey="U">Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="delaymicroseconds">
+<span id="lang-delaymicroseconds"></span><h1>delayMicroseconds()<a class="headerlink" href="#delaymicroseconds" title="Permalink to this headline">¶</a></h1>
+<p>Pauses the program for the amount of time (in microseconds)
+specified as parameter. There are a thousand microseconds in a
+millisecond, and a million microseconds in a second.</p>
+<div class="section" id="library-documentation">
+<h2>Library Documentation<a class="headerlink" href="#library-documentation" title="Permalink to this headline">¶</a></h2>
+<dt id=""><span id="project0time_8h_1ab9e7a63dabe4e122e188f5c41d0c531e"></span>void  <strong>delayMicroseconds</strong>(uint32 us)</dt>
+<dd><p class="first">
+<p>Delay for at least the given number of microseconds. </p>
+        </p>
+<p class="last">
+<p>Interrupts, etc. may cause the actual number of microseconds to exceed us. However, this function will return no less than us microseconds from the time it is called.</p>
+<p><p><em>Parameters</em></p>
+<ul class="breatheparameterlist">
+<li><tt class="first docutils literal"><span class="pre">us</span></tt> - 
+<p>the number of microseconds to delay. </p>
+</li>
+</ul>
+
+
+<dl class="docutils">
+<dt><em>See</em></dt>
+<dd><a class="reference internal" href="delay.html#project0time_8h_1a6bc5f943544a887f8b23cadfb26a5e30"><em>delay()</em></a> </dd>
+</dl>
+</p>
+        </p>
+</dd>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>The following example configures pin number 8 to work as an output
+pin, and sends a train of pulses with a period of roughly 100
+microseconds:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">int</span> <span class="n">outPin</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="n">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">outPin</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>      <span class="c1">// sets the digital pin as output</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outPin</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>   <span class="c1">// sets the pin on</span>
+  <span class="n">delayMicroseconds</span><span class="p">(</span><span class="mi">50</span><span class="p">);</span>        <span class="c1">// pauses for 50 microseconds</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outPin</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>    <span class="c1">// sets the pin off</span>
+  <span class="n">delayMicroseconds</span><span class="p">(</span><span class="mi">50</span><span class="p">);</span>        <span class="c1">// pauses for 50 microseconds</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="caveats-and-known-issues">
+<h2>Caveats and Known Issues<a class="headerlink" href="#caveats-and-known-issues" title="Permalink to this headline">¶</a></h2>
+<p>The longest time <tt class="docutils literal"><span class="pre">delayMicroseconds()</span></tt> can delay is bounded by its
+argument type and the STM32 clock rate to be (2^32 - 1) / 12
+microseconds, or less than 6 minutes.  For longer pauses, use of
+<a class="reference internal" href="delay.html#lang-delay"><em>delay()</em></a> is possible.</p>
+</div>
+<div class="section" id="arduino-compatibility">
+<h2>Arduino Compatibility<a class="headerlink" href="#arduino-compatibility" title="Permalink to this headline">¶</a></h2>
+<p>While we have made every effort we could to ensure that the timing of
+delayMicroseconds is as accurate as possible, we cannot guarantee it
+will behave as the Arduino implementation down to the microsecond,
+especially for smaller values of <tt class="docutils literal"><span class="pre">us</span></tt>.</p>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="millis.html#lang-millis"><em>millis</em></a></li>
+<li><a class="reference internal" href="micros.html#lang-micros"><em>micros</em></a></li>
+<li><a class="reference internal" href="delay.html#lang-delay"><em>delay</em></a></li>
+</ul>
+<div class="admonition-license-and-attribution admonition ">
+<p class="first admonition-title">License and Attribution</p>
+<p class="last">This documentation page was adapted from the <a class="reference external" href="http://arduino.cc/en/Reference/HomePage">Arduino Reference
+Documentation</a>, which
+is released under a <a class="reference external" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0
+License</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ide.html">IDE Anatomy</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="detachinterrupt.html" title="detachInterrupt()"
+             >next</a></li>
+        <li class="right" >
+          <a href="delay.html" title="delay()"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" >Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

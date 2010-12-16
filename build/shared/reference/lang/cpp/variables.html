@@ -1,0 +1,301 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Variables &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="../../index.html" />
+    <link rel="up" title="Complete Language Index" href="../../language-index.html" />
+    <link rel="next" title="void" href="void.html" />
+    <link rel="prev" title="unsigned long" href="unsignedlong.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="void.html" title="void"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="unsignedlong.html" title="unsigned long"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" accesskey="U">Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="variables">
+<span id="lang-variables"></span><h1>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h1>
+<p>A variable is a way of naming and storing a value for later use by
+the program, such as data from a sensor or an intermediate value
+used in a calculation.</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#declaring-variables" id="id2">Declaring Variables</a></li>
+<li><a class="reference internal" href="#naming-variables" id="id3">Naming Variables</a></li>
+<li><a class="reference internal" href="#variable-scope" id="id4">Variable Scope</a></li>
+<li><a class="reference internal" href="#initializing-variables" id="id5">Initializing Variables</a></li>
+<li><a class="reference internal" href="#variable-rollover" id="id6">Variable Rollover</a></li>
+<li><a class="reference internal" href="#using-variables" id="id7">Using Variables</a></li>
+<li><a class="reference internal" href="#see-also" id="id8">See Also</a></li>
+</ul>
+</div>
+<div class="section" id="declaring-variables">
+<span id="lang-variables-declaring"></span><h2><a class="toc-backref" href="#id2">Declaring Variables</a><a class="headerlink" href="#declaring-variables" title="Permalink to this headline">¶</a></h2>
+<p>Before they are used, all variables have to be <em>declared</em>. Declaring a
+variable means defining its type, giving it a name, and (optionally)
+giving it an initial value (this is often referred to as
+<em>initializing</em> the variable).  Variables do not have to be initialized
+(given a value) when they are declared, but it is good style to give
+them an initial value whenever possible.</p>
+<p>Here is an example of declaring a variable named <tt class="docutils literal"><span class="pre">inputVariable1</span></tt>
+with type <a class="reference internal" href="int.html#lang-int"><em>int</em></a> (the <tt class="docutils literal"><span class="pre">int</span></tt> type is used to store
+integers, like -2, -1, 0, 1, etc.):</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">int</span> <span class="n">inputVariable1</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>In the above declaration, we did not give the variable an initial
+value.  Here is another example, where we declare an <tt class="docutils literal"><span class="pre">int</span></tt> variable
+named <tt class="docutils literal"><span class="pre">inputVariable2</span></tt>, with an initial value of <tt class="docutils literal"><span class="pre">0</span></tt>:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">int</span> <span class="n">inputVariable2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The Maple environment comes ready to use with many useful types of
+variables.  See the <a class="reference internal" href="built-in-types.html#lang-built-in-types"><em>built-in types</em></a> page
+for more information.</p>
+<p>Here are a few examples of declaring variables of different types:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">int</span> <span class="n">lightSensVal</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">currentLetter</span><span class="p">;</span>
+<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">speedOfLight</span> <span class="o">=</span> <span class="mi">186000</span><span class="n">UL</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">errorMessage</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;choose another option&quot;</span><span class="p">};</span> <span class="c1">// see string</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="naming-variables">
+<h2><a class="toc-backref" href="#id3">Naming Variables</a><a class="headerlink" href="#naming-variables" title="Permalink to this headline">¶</a></h2>
+<p>The rules for naming a variable are simple.  Names for variables can
+contain letters, numbers, and underscores (the underscore is the
+<tt class="kbd docutils literal"><span class="pre">_</span></tt> character), and cannot begin with a number.  So
+<tt class="docutils literal"><span class="pre">temperature_reading</span></tt>, <tt class="docutils literal"><span class="pre">tempReading</span></tt>, <tt class="docutils literal"><span class="pre">tempReading1</span></tt>, and
+<tt class="docutils literal"><span class="pre">tempReading2</span></tt> are all valid variable names, but <tt class="docutils literal"><span class="pre">4_temp_readings</span></tt>
+is not, because it begins with a number.</p>
+<p>You cannot choose a name for a variable that is one of the C++
+<a class="reference internal" href="keywords.html#lang-keywords"><em>keywords</em></a>.</p>
+<p>Variable names are case-sensitive, so &#8220;tempreading&#8221; and &#8220;tempReading&#8221;
+are different variables.  However, it is very bad style to write code
+that chooses variables which are the same up to case.</p>
+<p>You should give your variables descriptive names, so as to make your
+code more readable. Variable names like <tt class="docutils literal"><span class="pre">tiltSensor</span></tt> or
+<tt class="docutils literal"><span class="pre">pushButton</span></tt> help you (and anyone else reading your code) understand
+what the variable represents. Variable names like <tt class="docutils literal"><span class="pre">var</span></tt> or
+<tt class="docutils literal"><span class="pre">value</span></tt>, on the other hand, do little to make your code readable.</p>
+</div>
+<div class="section" id="variable-scope">
+<span id="lang-variables-scope"></span><h2><a class="toc-backref" href="#id4">Variable Scope</a><a class="headerlink" href="#variable-scope" title="Permalink to this headline">¶</a></h2>
+<p>An important choice that programmers face is where (in the program
+text) to declare variables. The specific place that variables are
+declared influences how various functions in a program will &#8220;see&#8221; the
+variable.  This is called variable <em>scope</em>.  See the <a class="reference internal" href="scope.html#lang-scope"><em>scope
+reference</em></a> for more information.</p>
+</div>
+<div class="section" id="initializing-variables">
+<span id="lang-variables-initializing"></span><h2><a class="toc-backref" href="#id5">Initializing Variables</a><a class="headerlink" href="#initializing-variables" title="Permalink to this headline">¶</a></h2>
+<p>Variables may be <em>initialized</em> (assigned a starting value) when they
+are declared or not. It is always good programming practice however to
+double check that a variable has valid data in it before it is used.
+Using a variable before you give it a value is a common source of
+bugs.</p>
+</div>
+<div class="section" id="variable-rollover">
+<span id="lang-variables-rollover"></span><h2><a class="toc-backref" href="#id6">Variable Rollover</a><a class="headerlink" href="#variable-rollover" title="Permalink to this headline">¶</a></h2>
+<p>Every (numeric) type has a valid <em>range</em>.  The range of a type is the
+smallest and largest value that a variable of that type can store.
+For example, the <a class="reference internal" href="int.html#lang-int"><em>int</em></a> type has a range of
+-2,147,483,648 to 2,147,483,647 <a class="footnote-reference" href="#frange" id="id1">[1]</a>.</p>
+<p>When variables are made to exceed their range&#8217;s maximum value, they
+&#8220;roll over&#8221; back to their minimum value.  Note that this happens in
+both directions.  It&#8217;s like in the game <em>Pac-Man</em> &#8211; when Pac-Man goes
+past the right edge of the screen, he reappears on the left, and when
+he goes past the left side of the screen, he reappears on the right:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">147</span><span class="p">,</span><span class="mi">483</span><span class="p">,</span><span class="mi">648</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// x now contains -2,147,483,647; rolled over &quot;left to right&quot;</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span><span class="mi">147</span><span class="p">,</span><span class="mi">483</span><span class="p">,</span><span class="mi">647</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// x now contains -2,147,483,648; rolled over &quot;right to left&quot;</span>
+</pre></div>
+</div>
+<p>Each numeric type&#8217;s reference page includes its range.  See the
+<a class="reference internal" href="built-in-types.html#lang-built-in-types"><em>built-in types</em></a> reference for links to each
+type&#8217;s reference page.</p>
+</div>
+<div class="section" id="using-variables">
+<h2><a class="toc-backref" href="#id7">Using Variables</a><a class="headerlink" href="#using-variables" title="Permalink to this headline">¶</a></h2>
+<p>Once variables have been declared, they are given values using the
+<a class="reference internal" href="assignment.html#lang-assignment"><em>assignment operator</em></a>, which is a single equals
+sign, <tt class="docutils literal"><span class="pre">=</span></tt>. The assignment operator tells the program to store the
+value on the right side of the equals sign into the variable on the
+left side:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="n">inputVariable1</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>             <span class="c1">// sets variable named inputVariable1 to 7</span>
+<span class="n">inputVariable2</span> <span class="o">=</span> <span class="n">analogRead</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// sets variable named inputVariable2 to</span>
+                                <span class="c1">// the (digitized) input voltage read from</span>
+                                <span class="c1">//  analog pin #2</span>
+</pre></div>
+</div>
+<p>Once a variable has been set (assigned a value), you can test its
+value to see if it meets certain conditions, or you can use its value
+directly. For instance, the following code tests whether the
+inputVariable2 is less than 100, then sets a delay based on
+inputVariable2 (which, at that point, is at least 100):</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="k">if</span> <span class="p">(</span><span class="n">inputVariable2</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">inputVariable2</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">delay</span><span class="p">(</span><span class="n">inputVariable2</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id8">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="scope.html#lang-scope"><em>Scope</em></a></li>
+<li><a class="reference internal" href="built-in-types.html#lang-built-in-types"><em>Built-in Types</em></a></li>
+</ul>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="frange" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><p class="first">This range might seem a little weird at first.  The
+reasons for this range of values have to do with the fact that an
+<tt class="docutils literal"><span class="pre">int</span></tt> occupies 32 bits of memory, and the facts</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="mi">2</span><span class="o">^</span><span class="mi">31</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">147</span><span class="p">,</span><span class="mi">483</span><span class="p">,</span><span class="mi">648</span>
+<span class="mi">2</span><span class="o">^</span><span class="mi">31</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span><span class="mi">147</span><span class="p">,</span><span class="mi">483</span><span class="p">,</span><span class="mi">647</span>
+</pre></div>
+</div>
+<p class="last">Why 2^31 instead of 2^32?  Well, that has to do with <a class="reference external" href="http://en.wikipedia.org/wiki/Two%27s_complement">how ints are
+(usually) stored</a> on computers.</p>
+</td></tr>
+</tbody>
+</table>
+<div class="admonition-license-and-attribution admonition ">
+<p class="first admonition-title">License and Attribution</p>
+<p class="last">This documentation page was adapted from the <a class="reference external" href="http://arduino.cc/en/Reference/HomePage">Arduino Reference
+Documentation</a>, which
+is released under a <a class="reference external" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0
+License</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ide.html">IDE Anatomy</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="void.html" title="void"
+             >next</a></li>
+        <li class="right" >
+          <a href="unsignedlong.html" title="unsigned long"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" >Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

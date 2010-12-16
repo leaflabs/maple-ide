@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>attachInterrupt() &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="../../index.html" />
+    <link rel="up" title="Complete Language Index" href="../../language-index.html" />
+    <link rel="next" title="bit()" href="bit.html" />
+    <link rel="prev" title="analogWrite()" href="analogwrite.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="bit.html" title="bit()"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="analogwrite.html" title="analogWrite()"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" accesskey="U">Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="attachinterrupt">
+<span id="lang-attachinterrupt"></span><h1>attachInterrupt()<a class="headerlink" href="#attachinterrupt" title="Permalink to this headline">¶</a></h1>
+<p>Used to specify a function to call when an external interrupt (like an
+GPIO changing from LOW to HIGH, a button getting pressed, etc.)
+occurs.</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#library-documentation" id="id1">Library Documentation</a></li>
+<li><a class="reference internal" href="#discussion" id="id2">Discussion</a></li>
+<li><a class="reference internal" href="#using-interrupts" id="id3">Using Interrupts</a></li>
+<li><a class="reference internal" href="#example" id="id4">Example</a></li>
+<li><a class="reference internal" href="#arduino-compatibility" id="id5">Arduino Compatibility</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See also</a></li>
+</ul>
+</div>
+<div class="section" id="library-documentation">
+<h2><a class="toc-backref" href="#id1">Library Documentation</a><a class="headerlink" href="#library-documentation" title="Permalink to this headline">¶</a></h2>
+<dt id=""><span id="project0class_hardware_timer_1ae1965408f7b2ed72eaf37f35590a1e36"></span>void  <strong>attachInterrupt</strong>(int channel, voidFuncPtr handler)</dt>
+<dd><p class="first">
+<p>Attach an interrupt handler to the given channel. </p>
+        </p>
+<p class="last">
+<p>This interrupt handler will be called when the timer&#8217;s counter reaches the given channel compare value.</p>
+<p>The argument should be a function which takes no arguments and has no return value; i.e. it should have signature</p>
+<p>void (*handler)(void);</p>
+<p>Note: The function (often called an interrupt service routine, or ISR) should attempt to return as quickly as possible. Blinking the LED, some logic, PWM updates, and Serial writes are fine; writing to SerialUSB or waiting for user input can take a long time and other compare interrupts won&#8217;t fire. Tip: if you have a <a class="reference internal" href="delay.html#project0time_8h_1a6bc5f943544a887f8b23cadfb26a5e30"><em>delay()</em></a> in your interrupt routine, you&#8217;re probably doing it wrong.</p>
+<p><p><em>Parameters</em></p>
+<ul class="breatheparameterlist">
+<li><tt class="first docutils literal"><span class="pre">channel</span></tt> - 
+<p>the channel to attach the ISR to, from 1 to 4. </p>
+</li>
+<li><tt class="first docutils literal"><span class="pre">handler</span></tt> - 
+<p>The ISR to attach to the given channel. </p>
+</li>
+</ul>
+
+
+<dl class="docutils">
+<dt><em>See</em></dt>
+<dd>voidFuncPtr </dd>
+</dl>
+</p>
+        </p>
+</dd>
+<dt id=""><span id="project0ext__interrupts_8h_1abacafe8ae080fe4515ae6927ce1003fc"></span><strong>ExtIntTriggerMode enum</strong></dt>
+<dd><p class="first">
+<p>The kind of transition on an external pin which should trigger an interrupt. </p>
+        </p>
+<p>
+        </p>
+<p><em>Values:</em></p>
+<ul class="breatheenumvalues last">
+<li><tt class="first docutils literal"><span class="pre">RISING</span></tt> - 
+<p>To trigger an interrupt when the pin transitions LOW to HIGH. </p>
+          
+          </li>
+<li><tt class="first docutils literal"><span class="pre">FALLING</span></tt> - 
+<p>To trigger an interrupt when the pin transitions HIGH to LOW. </p>
+          
+          </li>
+<li><tt class="first docutils literal"><span class="pre">CHANGE</span></tt> - 
+<p>To trigger an interrupt when the pin transitions from LOW to HIGH or HIGH to LOW (i.e., when the pin changes). </p>
+          
+          </li>
+</ul>
+</dd>
+<dt id=""><span id="project0libmaple__types_8h_1a44181537ab6ea5631069dcd97b51bcff"></span>typedef void(*  <strong>voidFuncPtr</strong>)(void)</dt>
+<dd><p class="first">
+        </p>
+<p class="last">
+        </p>
+</dd>
+</div>
+<div class="section" id="discussion">
+<h2><a class="toc-backref" href="#id2">Discussion</a><a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h2>
+<p>Because the function will run in interrupt context, inside of it,
+<a class="reference internal" href="delay.html#lang-delay"><em>delay()</em></a> won&#8217;t work, and the value returned by
+<a class="reference internal" href="millis.html#lang-millis"><em>millis()</em></a> will not increment. Serial data received while
+in the function may be lost. You should declare as <tt class="docutils literal"><span class="pre">volatile</span></tt> any
+global variables that you modify within the attached function.</p>
+<p>There are a few constraints you should be aware of if you&#8217;re using
+more than one interrupt at a time; the <a class="reference internal" href="../../external-interrupts.html#external-interrupts"><em>External Interrupts</em></a> page
+has the details.</p>
+</div>
+<div class="section" id="using-interrupts">
+<h2><a class="toc-backref" href="#id3">Using Interrupts</a><a class="headerlink" href="#using-interrupts" title="Permalink to this headline">¶</a></h2>
+<p>Interrupts are useful for making things happen automatically in
+microcontroller programs, and can help solve timing problems. A
+good task for using an interrupt might be reading a rotary encoder,
+or monitoring user input.</p>
+<p>If you wanted to insure that a program always caught the pulses
+from a rotary encoder, never missing a pulse, it would make it very
+tricky to write a program to do anything else, because the program
+would need to constantly poll the sensor lines for the encoder, in
+order to catch pulses when they occurred. Other sensors have a
+similar interface dynamic too, such as trying to read a sound
+sensor that is trying to catch a click, or an infrared slot sensor
+(photo-interrupter) trying to catch a coin drop. In all of these
+situations, using an interrupt can free the microcontroller to get
+some other work done while not missing the doorbell.</p>
+</div>
+<div class="section" id="example">
+<h2><a class="toc-backref" href="#id4">Example</a><a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">int</span> <span class="n">maple_led_pin</span> <span class="o">=</span> <span class="mi">13</span><span class="p">;</span>
+<span class="k">volatile</span> <span class="kt">int</span> <span class="n">state</span> <span class="o">=</span> <span class="n">LOW</span><span class="p">;</span> <span class="c1">// must declare volatile, since it&#39;s</span>
+                          <span class="c1">// modified within the blink handler</span>
+
+<span class="kt">void</span> <span class="n">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">maple_led_pin</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">attachInterrupt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">blink</span><span class="p">,</span> <span class="n">CHANGE</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">maple_led_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">blink</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">state</span> <span class="o">=</span> <span class="o">!</span><span class="n">state</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="arduino-compatibility">
+<h2><a class="toc-backref" href="#id5">Arduino Compatibility</a><a class="headerlink" href="#arduino-compatibility" title="Permalink to this headline">¶</a></h2>
+<p>Most Arduino boards have two external interrupts: numbers 0 (on
+digital pin 2) and 1 (on digital pin 3). The Arduino Mega has an
+additional four: numbers 2 (pin 21), 3 (pin 20), 4 (pin 19), and 5
+(pin 18).  On the Maple, you don&#8217;t have to remember which interrupt
+number goes with which pin &#8211; just tell <tt class="docutils literal"><span class="pre">attachInterrupt()</span></tt> the pin
+you want.</p>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="detachinterrupt.html#lang-detachinterrupt"><em>detachInterrupt</em></a></li>
+<li><a class="reference internal" href="../../external-interrupts.html#external-interrupts"><em>External Interrupts</em></a></li>
+</ul>
+<div class="admonition-license-and-attribution admonition ">
+<p class="first admonition-title">License and Attribution</p>
+<p class="last">This documentation page was adapted from the <a class="reference external" href="http://arduino.cc/en/Reference/HomePage">Arduino Reference
+Documentation</a>, which
+is released under a <a class="reference external" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0
+License</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ide.html">IDE Anatomy</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="bit.html" title="bit()"
+             >next</a></li>
+        <li class="right" >
+          <a href="analogwrite.html" title="analogWrite()"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" >Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

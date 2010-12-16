@@ -1,0 +1,196 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Comments &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="../../index.html" />
+    <link rel="up" title="Complete Language Index" href="../../language-index.html" />
+    <link rel="next" title="Comparison Operators (==, !=, &lt;, &gt;, &lt;=, &gt;=)" href="comparison.html" />
+    <link rel="prev" title="char() (cast)" href="charcast.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="comparison.html" title="Comparison Operators (==, !=, &lt;, &gt;, &lt;=, &gt;=)"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="charcast.html" title="char() (cast)"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" accesskey="U">Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="comments">
+<span id="lang-comments"></span><h1>Comments<a class="headerlink" href="#comments" title="Permalink to this headline">¶</a></h1>
+<p>Comments are lines in the program that are used to inform yourself or
+others about the way the program works. They are ignored by the
+compiler, and not exported to the processor, so they don&#8217;t take up any
+space in RAM or Flash.</p>
+<p>One use for comments is to help you understand (or remember) how your
+program works, or to inform others how your program works.  There are
+two different ways of making comments.</p>
+<p id="lang-comments-singleline"><strong>Single line comment</strong>: Anything following two slashes, <tt class="docutils literal"><span class="pre">//</span></tt>, until
+the end of the line, is a comment:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>  <span class="c1">// the rest of this line is a comment</span>
+</pre></div>
+</div>
+<p id="lang-comments-multiline"><strong>Multi-line comment</strong>: Anything in between a pair of <tt class="docutils literal"><span class="pre">/*</span></tt> and <tt class="docutils literal"><span class="pre">*/</span></tt>
+is a comment:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="cm">/* &lt;-- a slash-star begins a multi-line comment</span>
+
+<span class="cm">all of this in the multi-line comment - you can use it to comment</span>
+<span class="cm">out whole blocks of code</span>
+
+<span class="cm">if (gwb == 0){   // single line comment is OK inside a multi-line comment</span>
+<span class="cm">x = 3;</span>
+<span class="cm">}</span>
+
+<span class="cm">// don&#39;t forget the &quot;closing&quot; star-slash - they have to be balanced:</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>Note that it&#8217;s okay to use single-line comments within a multi-line
+comment, but you can&#8217;t use multi-line comments within a multi-line
+comment.  Here&#8217;s an example:</p>
+<div class="highlight-cpp"><pre>/* ok, i started a multi-line comment
+
+x = 3; /* this next star-slash ENDS the multi-line comment: */
+
+x = 4; // this line is outside of the multi-line comment
+
+// next line is also outside of the comment, and causes a compile error:
+*/</pre>
+</div>
+<div class="section" id="programming-tip">
+<h2>Programming Tip<a class="headerlink" href="#programming-tip" title="Permalink to this headline">¶</a></h2>
+<p>When experimenting with code, &#8220;commenting out&#8221; parts of your program
+is a convenient way to remove lines that may be buggy.  This leaves
+the lines in the code, but turns them into comments, so the compiler
+just ignores them. This can be especially useful when trying to locate
+a problem, or when a program refuses to compile and the compiler error
+is cryptic or unhelpful.</p>
+<div class="admonition-license-and-attribution admonition ">
+<p class="first admonition-title">License and Attribution</p>
+<p class="last">This documentation page was adapted from the <a class="reference external" href="http://arduino.cc/en/Reference/HomePage">Arduino Reference
+Documentation</a>, which
+is released under a <a class="reference external" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0
+License</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ide.html">IDE Anatomy</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="comparison.html" title="Comparison Operators (==, !=, &lt;, &gt;, &lt;=, &gt;=)"
+             >next</a></li>
+        <li class="right" >
+          <a href="charcast.html" title="char() (cast)"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" >Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

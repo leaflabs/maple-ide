@@ -42,8 +42,8 @@ import processing.core.*;
  */
 public class Base {
   public static final int REVISION = 18;
-  public static String VERSION_NAME = "0018";
-  public static final String MAPLE_VERSION_NAME = "0.0.8";
+  public static String ARDUINO_VERSION_NAME = "0018";
+  public static final String MAPLE_VERSION_NAME = "0.0.9";
   static HashMap<Integer, String> platformNames = new HashMap<Integer, String>();
   static {
     platformNames.put(PConstants.WINDOWS, "windows");
@@ -123,10 +123,10 @@ public class Base {
 //    System.out.println("env is now " + clib.getenv("DYLD_LIBRARY_PATH"));
 
     try {
-      File versionFile = getContentFile("lib/version.txt");
-      if (versionFile.exists()) {
-        VERSION_NAME = PApplet.loadStrings(versionFile)[0];
-      }
+      // File versionFile = getContentFile("lib/version.txt");
+      // if (versionFile.exists()) {
+      //   VERSION_NAME = PApplet.loadStrings(versionFile)[0];
+      // }
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -234,9 +234,8 @@ public class Base {
     try {
       Class.forName("com.sun.jdi.VirtualMachine");
     } catch (ClassNotFoundException cnfe) {
-      Base.showPlatforms();
       Base.showError("Please install JDK 1.5 or later",
-                     "Arduino requires a full JDK (not just a JRE)\n" +
+                     "Maple requires a full JDK (not just a JRE)\n" +
                      "to run. Please install JDK 1.5 or later.\n" +
                      "More information can be found in the reference.", cnfe);
     }
@@ -1265,7 +1264,7 @@ public class Base {
 
           g.setFont(new Font("SansSerif", Font.PLAIN, 11));
           g.setColor(Color.white);
-          g.drawString(Base.VERSION_NAME, 50, 30);
+          g.drawString(Base.MAPLE_VERSION_NAME, 50, 30);
         }
       };
     window.addMouseListener(new MouseAdapter() {
@@ -1754,38 +1753,25 @@ public class Base {
   }
 
   static public void showGettingStarted() {
-    Base.showReference("quickstart.html");
+    showReference("maple-quickstart.html");
   }
 
   static public void showReference() {
-    //Base.openURL("http://www.leaflabs.com/docs/maple-ide/language/");
     showReference("language.html");
   }
 
-
   static public void showEnvironment() {
-    //Base.openURL("http://www.leaflabs.com/docs/maple-ide/");
     showReference("index.html");
   }
 
-
-  static public void showPlatforms() {
-    Base.openURL("http://www.leaflabs.com/docs/maple-ide/");
-    //showReference("environment" + File.separator + "platforms.html");
-  }
-
-
   static public void showTroubleshooting() {
-    //Base.openURL("http://www.leaflabs.com/docs/maple-ide/troubleshooting/");
     showReference("troubleshooting.html");
   }
 
 
   static public void showFAQ() {
-    //Base.openURL("http://www.leaflabs.com/docs/");
     showReference("troubleshooting.html");
   }
-  
 
   // .................................................................
 

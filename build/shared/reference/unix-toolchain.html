@@ -1,550 +1,553 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-"http://www.w3.org/TR/html4/strict.dtd"> <html> <head><title>Maple Reference
-Documentation</title> <meta http-equiv="Content-Type"
-content="text/html;charset=utf-8" > <link rel="stylesheet" href="minimal.css"
-type="text/css"> </head><body> 
-<!-- minimalist html; this is designed to be copy/pasted into a website -->
-<!-- STARTDOC -->
-<h1>libmaple Unix Toolchain Quickstart</h1>
 
-You'll need a Maple board, a mini-b USB cable, a functional computer,
-and possibly root access to that computer.  This guide assumes you've
-had success with the IDE on your machine and that you are fairly
-comfortable with the Unix command line; some previous experience with
-editing your shell startup script (.bashrc, .tcshrc, etc.) and
-using <a href="http://www.gnu.org/software/make/">make</a> is
-recommended. For generic installation/setup issues
-the <a href="./install.html">install </a>
-and <a href="./troubleshooting.html">troubleshooting</a> pages may be
-helpful.  If all else fails
-try <a href="http://google.com/?q=maple+help">google</a>,
-our <a href="http://forums.leaflabs.com">forum</a>,
-or <a href="http://leaflabs.com/contact">contact us directly</a>!
 
-<p>
-We currently have instructions for Linux and OS X Snow Leopard.  If
-you're on another Unix platform, Windows, or an earlier version of OS
-X, we're guessing that you can translate/port these directions on your
-own. As a jumping off point, you can find stripped down distributions
-of the CodeSourcery GCC compiler tools (including win32 versions) in
-the same download directory as the Linux ones mentioned below.  If
-you <i>do</i> have success on other platforms, please post in the
-forums so we can fold your tips into this document!
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<ul>
-  <li><a href="#linux">Linux setup</a>
-  <li><a href="#osx">OS X setup</a>
-  <li><a href="#test">Test compilation</a>
-  <li><a href="#upload">Upload a program</a>
-  <li><a href="#communicate">Communicate over USB-serial interface</a>
-  <li><a href="#startingyourown">Starting your own projects</a>
-  <li><a href="#openocd">Debug with OpenOCD</a>
-  <li><a href="#codeblocks">Do it all with Code::Blocks</a>
-  <li><a href="#goforth">Go forth exuberantly!</a>
-</ul>
-
-<h2><a name="linux">Linux Setup</a></h2> These instructions are
-oriented towards Linux users using a contemporary Debian-based
-distribution.
-
-<h3>1. Collect and Install Tools</h3>
-
-First I'll give the commands to run, then explain:
-
-<pre class="code">
-$ sudo aptitude install build-essential git-core wget screen dfu-util \
-                        openocd python python-serial 
-</pre>
-
-You'll want to install a bunch of developer "basics" like <code>make</code>,
-<code>tar</code>, etc. A good catch-all for these tools is the
-"build-essential" meta-package on most debian platforms: installing this fake
-package will pull in dozens of useful tools without bogging your system down
-too much. <code>git-core</code> is the name of the git package; git is a
-distributed code versioning system we use to track changes in our source code.
-<code>wget</code> is a simple tool to download files over http from the command
-line and is optional (you could pull in the required downloads using a
-browser). <code>screen</code> is a really cool virtual terminal program; in the
-context of Maple we use it to connect to serial port devices.
-
-<p> <code>dfu-util</code> is a tool from the <a
-href="http://openmoko.com">OpenMoko</a> project that we use to upload programs
-to the Maple over USB.
-
-<p> <code>openocd</code> is a JTAG control program used in conjunction with an
-ARM JTAG device to do in circuit debugging (pause/resume program execution,
-upload and download code, read out register status, etc). (optional)
-
-<p> 
-Lastly, our reset script (which sends control signals over the USB-serial
-connection to restart and enter the bootloader) is written in Python and
-requires the PySerial library (the <code>python-serial</code> package; this
-could also be installed with easy_install).
-
-<h3>2. Fetch libmaple and Compiler Toolchain</h3>
-
-<pre class="code">
-$ cd ~ 
-$ git clone git://github.com/leaflabs/libmaple.git libmaple 
-$ cd libmaple 
-$ wget http://static.leaflabs.com/pub/codesourcery/\
-$ arm-2009q3-68-arm-none-eabi-toolchain-linux32.tar.gz tar xvf arm-*.tar.gz
-$ export PATH=$PATH:~/libmaple/arm/bin # or wherever these tools ended up 
-</pre>
-
-<p> 
-Fairly straight forward... do a git clone of the libmaple repository to some
-directory, then download and extract the ARM compiler toolchain. 
-
-<p> 
-The <code>arm/bin/</code> directory will needs to be added to PATH; you can
-check that this worked by entering <code>arm-none-</code> and hitting tab to
-auto-complete (bash should show a bunch of results). If you want to move that
-toolchain somewhere else and add it in a .bashrc script or whatever make sure
-to preserve the directory layout as the binaries will make relative path calls
-and references.
-
-<h3><a name="udev">3. Install udev Rules</a></h3> 
-
-<pre class="code">
-$ groups # make sure it includes plugdev; if not add yourself to it 
-$ sudo cp support/scripts/45-maple.rules /etc/udev/rules.d/45-maple.rules 
-$ sudo /etc/init.d/udev restart 
-</pre>
-
-<p> 
-As a security precaution on linux, unknown USB devices can only be accessed by
-the superuser. This udev script identifies the Maple based on it's vendor and
-product IDs, mounts it to /dev/maple, and grants read/write permissions to the
-<code>plugdev</code> group. After restarting udev you'll need to fully unplug
-or power cycle any Maples connected to the computer.
-
-<h3>All done?</h3>
-Great! Go ahead and <a href="#test">test everything out</a>.
-
-<h2><a name="osx">OS X Setup</a></h2>
-
-These instructions have been tested successfully on OS X 10.6.4.  As
-stated previously, this document assumes a general level of Unix
-aptitude on the part of the reader; if you're uncomfortable using
-Terminal (or if you don't know what that means), then you should
-probably stick with using
-the <a href="http://leaflabs.com/docs/maple-ide/">Maple IDE</a> to
-develop programs.
-
-Some of these software packages might be available
-on <a href="http://www.macports.org/">MacPorts</a>.  The author had
-some bad experiences with MacPorts a few years ago, though, and hasn't
-touched it since.  Of course, your mileage may vary.
-
-<h3>1. Collect and Install Tools</h3>
-You will need the following tools to get started:
-
-<ol>
-  <li><a href="http://developer.apple.com/technologies/xcode.html">XCode</a>:
-  If you're reading this, you've probably already got this.  Provides
-  compilers and other basic tools of the trade.  It's a free download,
-  but requires registration (gross, we know).
-  <li>Git: All of our code is tracked by a distributed versioning
-  system called git.
-  A <a href="http://code.google.com/p/git-osx-installer/">Mac
-  installer</a> is available.
-  <li>dfu-util: A tool
-  from <a href="http://www.openmoko.com/">OpenMoko</a> that we use to
-  upload programs to the Maple over USB.  If you're feeling
-  masochistic, there are instructions
-  for <a href="http://wiki.openmoko.org/wiki/Dfu-util#Mac">building
-  dfu-util from source</a>.
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-  <p>
-  However, if you've got better things to do, you can steal
-  a <code>dfu-util</code> binary from a program
-  called <a href="http://www.handheld-linux.com/wiki.php?page=Openmoko%20Flasher">Openmoko
-  Flasher</a>.  To do this,
-  first <a href="http://projects.goldelico.com/p/omflasher/downloads/">download
-  Openmoko Flasher</a>, then copy the .app into your Applications
-  folder (or wherever you like).  Let's pretend you saved the .app to
-  the directory
+    <title>Unix Toolchain Quickstart &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="index.html" />
+    <link rel="up" title="libmaple Reference" href="libmaple.html" />
+    <link rel="next" title="GCC for Maple" href="arm-gcc.html" />
+    <link rel="prev" title="libmaple Reference" href="libmaple.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="arm-gcc.html" title="GCC for Maple"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="libmaple.html" title="libmaple Reference"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
 
-<pre class="code">/Applications/OpenMoko Flasher.app</pre>
+          <li><a href="libmaple.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">libmaple</span></tt> Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
 
-  Then the dfu-util binary resides in
-
-<pre class="code">/Applications/OpenMoko Flasher.app/Contents/Mac OS/dfu-util</pre>
-
-  To get access to it from the command line, just make a symbolic link
-  to the binary from some place on your PATH:
-
-<pre class="code">
-$ ln -s /Applications/OpenMoko\ Flasher.app/Contents/Mac\ OS/dfu-util \
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="unix-toolchain-quickstart">
+<span id="unix-toolchain"></span><h1>Unix Toolchain Quickstart<a class="headerlink" href="#unix-toolchain-quickstart" title="Permalink to this headline">¶</a></h1>
+<p>This is a tutorial for using the Maple with a standard Unix toolchain.
+It&#8217;s not necessary to do this in order to program the Maple; you can
+always use our <a class="reference external" href="maple-ide-install">IDE</a> instead.</p>
+<p>You&#8217;ll need a Maple board, a mini-b USB cable, a functional computer,
+and root access to that computer. This guide assumes you&#8217;ve had
+success with the IDE on your machine and that you are fairly
+comfortable with the Unix command line; some previous experience with
+editing your shell startup script (.bashrc, .tcshrc, etc.) and using
+<a class="reference external" href="http://www.gnu.org/software/make/">make</a> is recommended. For
+generic installation/setup issues, the <a class="reference external" href="http://leaflabs.com/docs/libmaple/install/">IDE install</a> and
+<a class="reference internal" href="troubleshooting.html#troubleshooting"><em>Troubleshooting</em></a> pages may be helpful. If all else fails, try
+our <a class="reference external" href="http://forums.leaflabs.com">forum</a>, or <a class="reference external" href="http://leaflabs.com/contact/">contact us directly</a>!</p>
+<p>We currently have instructions for 32- and 64-bit Linux and OS X Snow
+Leopard. If you&#8217;re on another Unix platform, Windows, or an earlier
+version of OS X, we&#8217;re guessing that you can translate/port these
+directions on your own. As a jumping off point, you might want to
+begin with these <a class="reference external" href="http://static.leaflabs.com/pub/codesourcery/">stripped down distributions</a> of the <a class="reference external" href="http://www.codesourcery.com/sgpp/features.html">CodeSourcery
+GCC compiler tools</a>
+(including win32 versions). If you do have success on other platforms,
+please post in the forums, so we can fold your tips into this
+document!</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#setup" id="id3">Setup</a><ul>
+<li><a class="reference internal" href="#linux" id="id4">Linux</a></li>
+<li><a class="reference internal" href="#os-x" id="id5">OS X</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#test-compilation" id="id6">Test compilation</a></li>
+<li><a class="reference internal" href="#upload-a-program" id="id7">Upload a program</a></li>
+<li><a class="reference internal" href="#communicate-over-usb-serial-interface" id="id8">Communicate over USB-serial interface</a></li>
+<li><a class="reference internal" href="#starting-your-own-projects" id="id9">Starting your own projects</a></li>
+<li><a class="reference internal" href="#debug-with-openocd" id="id10">Debug with OpenOCD</a></li>
+<li><a class="reference internal" href="#do-it-all-with-code-blocks" id="id11">Do it all with Code::Blocks</a></li>
+<li><a class="reference internal" href="#go-forth-exuberantly" id="id12">Go forth exuberantly!</a></li>
+</ul>
+</div>
+<div class="section" id="setup">
+<span id="toolchain-linux-setup"></span><h2><a class="toc-backref" href="#id3">Setup</a><a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="linux">
+<h3><a class="toc-backref" href="#id4">Linux</a><a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h3>
+<p>These instructions are oriented towards Linux users using a
+contemporary Debian-based distribution.</p>
+<p><strong>1. Collect and Install Tools</strong></p>
+<p>First I&#8217;ll give the commands to run, then explain:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>sudo aptitude install build-essential git-core wget screen dfu-util <span class="se">\</span>
+                        openocd python python-serial
+</pre></div>
+</div>
+<p>You&#8217;ll want to install a bunch of developer &#8220;basics&#8221; like
+<strong class="command">make</strong>, <strong class="command">tar</strong>, etc.  A good catch-all for these
+tools is the &#8220;build-essential&#8221; meta-package on most debian platforms:
+installing this fake package will pull in dozens of useful tools
+without bogging your system down too much. <tt class="docutils literal"><span class="pre">git-core</span></tt> is the name of
+the git package; <a class="reference external" href="http://git-scm.com/">Git</a> is a distributed code
+versioning system we use to track changes in our source
+code. <strong class="command">wget</strong> is a simple tool to download files over http
+from the command line, and is optional (you could pull in the required
+downloads using a browser). <strong class="command">screen</strong> is a really cool virtual
+terminal program; in the context of Maple, we use it to connect to
+serial port devices.</p>
+<p><strong class="command">dfu-util</strong> is a tool from the <a class="reference external" href="http://openmoko.com/">OpenMoko</a> project that we use
+to upload programs to the Maple over USB.</p>
+<p><strong class="command">openocd</strong> is a <a class="reference external" href="http://en.wikipedia.org/wiki/Joint_Test_Action_Group">JTAG</a> control
+program used in conjunction with an ARM JTAG device to do in circuit
+debugging (pause/resume program execution, upload and download code,
+read out register status, etc). (optional)</p>
+<p>Lastly, our reset script (which sends control signals over the
+USB-serial connection to restart and enter the bootloader) is written
+in Python and requires the <a class="reference external" href="http://pyserial.sourceforge.net/">PySerial</a> library (the <tt class="docutils literal"><span class="pre">python-serial</span></tt>
+package; this could also be installed with <a class="reference external" href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a>).</p>
+<p><strong>2. Fetch libmaple and Compiler Toolchain</strong></p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> ~
+<span class="nv">$ </span>git clone git://github.com/leaflabs/libmaple.git libmaple
+<span class="nv">$ </span><span class="nb">cd </span>libmaple
+<span class="nv">$ </span>wget http://static.leaflabs.com/pub/codesourcery/gcc-arm-none-eabi-latest-linux32.tar.gz
+<span class="nv">$ </span>tar xvf arm-*-linux32.tar.gz
+<span class="nv">$ </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:~/libmaple/arm/bin <span class="c"># or wherever these tools ended up</span>
+</pre></div>
+</div>
+<p>This step is fairly straightforward: do a git clone of the <a class="reference external" href="http://github.com/leaflabs/libmaple">libmaple
+repository</a> to some directory,
+then download and extract the ARM compiler toolchain.</p>
+<p>The <tt class="file docutils literal"><span class="pre">arm/bin/</span></tt> directory will need to be added to <tt class="docutils literal"><span class="pre">PATH</span></tt>; you
+can check that this worked by entering <tt class="docutils literal"><span class="pre">arm-none-</span></tt> and hitting tab
+to auto-complete (bash should show a bunch of results).  Regardless of
+where you put the toolchain, make sure to preserve its internal
+directory layout, as the binaries make relative path calls and
+references.</p>
+<p id="toolchain-udev"><strong>3. Install udev Rules</strong></p>
+<p>From the libmaple directory,</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>groups <span class="c"># make sure it includes plugdev; if not add, yourself to it</span>
+<span class="nv">$ </span>sudo cp support/scripts/45-maple.rules /etc/udev/rules.d/45-maple.rules
+<span class="nv">$ </span>sudo /etc/init.d/udev restart
+</pre></div>
+</div>
+<p>As a security precaution on linux, unknown USB devices can only be
+accessed by the superuser. This udev script identifies the Maple based
+on its vendor and product IDs, mounts it to <tt class="file docutils literal"><span class="pre">/dev/maple</span></tt>, and
+grants read/write permissions to the <tt class="docutils literal"><span class="pre">plugdev</span></tt> group. After
+restarting <strong class="command">udev</strong> you&#8217;ll need to fully unplug or power cycle
+any Maples connected to the computer.</p>
+<p><strong>So far, so good?</strong></p>
+<p>Great! Test your setup by <a class="reference internal" href="#toolchain-test"><em>compiling a sample program</em></a>.</p>
+</div>
+<div class="section" id="os-x">
+<span id="toolchain-osx-setup"></span><h3><a class="toc-backref" href="#id5">OS X</a><a class="headerlink" href="#os-x" title="Permalink to this headline">¶</a></h3>
+<p>These instructions have been tested successfully on OS X 10.6.4. As
+stated previously, this document assumes a general level of Unix
+aptitude on the part of the reader; if you&#8217;re uncomfortable using
+Terminal (or if you don&#8217;t know what that means), then you should
+probably stick with using the <a class="reference external" href="http://leaflabs.com/docs/maple-ide/">Maple IDE</a> to develop programs. Some of
+these software packages might be available on <a class="reference external" href="http://www.macports.org/">MacPorts</a>. The author had some bad experiences with
+MacPorts a few years ago, though, and hasn&#8217;t touched it since. Of
+course, your mileage may vary.</p>
+<p><strong>1. Collect and Install Tools</strong></p>
+<p>You will need the following tools to get started:</p>
+<blockquote>
+<p>1. <a class="reference external" href="http://developer.apple.com/technologies/xcode.html">XCode</a>: If
+you&#8217;re reading this, you&#8217;ve probably already got this. Provides
+compilers and other basic tools of the trade. It&#8217;s a free download,
+but requires registration (gross, we know).</p>
+<p>2. <a class="reference external" href="http://git-scm.com/">Git</a>: All of our code is tracked by a
+distributed versioning system called git. A <a class="reference external" href="http://code.google.com/p/git-osx-installer/downloads/list?can=3">Mac installer</a>
+is available.</p>
+<p>3. <strong class="command">dfu-util</strong>: A tool from <a class="reference external" href="http://openmoko.com/">OpenMoko</a> that we use to upload
+programs to the Maple over USB. If you&#8217;re feeling masochistic, there
+are instructions for <a class="reference external" href="http://wiki.openmoko.org/wiki/Dfu-util#Mac">building dfu-util from source</a>.</p>
+<p>However, if you&#8217;ve got better things to do, you can steal a dfu-util
+binary from a program called <a class="reference external" href="http://www.handheld-linux.com/wiki.php?page=Openmoko%20Flasher">Openmoko Flasher</a>. To
+do this, first <a class="reference external" href="http://projects.goldelico.com/p/omflasher/downloads/">download Openmoko Flasher</a>, then copy
+the .app into your <tt class="file docutils literal"><span class="pre">/Applications</span></tt> folder (or wherever you
+like). Let&#8217;s pretend you saved the .app to the directory</p>
+<blockquote>
+<tt class="file docutils literal"><span class="pre">/Applications/OpenMoko</span> <span class="pre">Flasher.app</span></tt></blockquote>
+<p>Then the <strong class="command">dfu-util</strong> binary resides in</p>
+<blockquote>
+<tt class="file docutils literal"><span class="pre">/Applications/OpenMoko</span> <span class="pre">Flasher.app/Contents/Mac</span> <span class="pre">OS/dfu-util</span></tt></blockquote>
+<p>To get access to it from the command line, just make a symbolic link
+to the binary from some place on your <tt class="docutils literal"><span class="pre">PATH</span></tt>:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>ln -s /Applications/OpenMoko<span class="se">\ </span>Flasher.app/Contents/Mac<span class="se">\ </span>OS/dfu-util <span class="se">\</span>
         /somewhere/on/your/PATH/dfu-util
-</pre>
-
-  Note that just copying the binary doesn't work, as it relies on
-  dynamically linked libraries found elsewhere in the .app bundle.
-  (You can alternatively pull all of the relevant pieces out of the
-  .app and save them somewhere, but you're on your own).  To make sure
-  this worked, try plugging in your Maple, making sure it's in
-  bootloader mode (you can do this by pressing RESET, then quickly
-  pressing BUT and holding it for several seconds), then running
-
-<pre class="code">
-$ dfu-util -l
-</pre>
-
-  If you see some lines that look like
-
-<pre class="code">
-Found DFU: [0x1eaf:0x0003] devnum=0, cfg=0, intf=0, alt=0, name="DFU Program RAM 0x20000C00"
-Found DFU: [0x1eaf:0x0003] devnum=0, cfg=0, intf=0, alt=1, name="DFU Program FLASH 0x08005000"
-</pre>
-
-  then you're all set.
-
-  <li>PySerial: our reset script (which sends control signals over the
-  USB-serial connection to restart and enter the bootloader) is
-  written in Python and requires
-  the <a href="http://pyserial.sourceforge.net/">PySerial library</a>.
-  <a href="http://pypi.python.org/pypi/pyserial">Download the latest
-  version</a>.  After you download and untar, install it with
-
-<pre class="code">$ cd /path/to/pyserial-x.y
-$ python setup.py build
-$ sudo python setup.py install
-</pre>
-
-  The package is also available via <code>easy_install</code>, so if
-  you're comfortable using that, you could also install it with
-
-<pre class="code">$ easy_install pyserial</pre>
-</ol>
-
-<h3>2. Fetch libmaple and Compiler Toolchain</h3>
-You first need to clone libmaple:
-
-<pre class="code">$ cd ~
-$ git clone git://github.com/leaflabs/libmaple.git libmaple</pre>
-
-  Then you need to get the cross-compilers we use to build a project.
-  These are just modified versions of GCC; you can
-  <a href="http://static.leaflabs.com/pub/codesourcery/arm-2010q1-188-arm-none-eabi-toolchain-macosx32.tar.gz">download
-  them for OS X here</a>.  Assuming you saved this file
-  to <code>~/Downloads/arm-2010q1-188-arm-none-eabi-toolchain-macosx32.tar.gz</code>,
-  you can then unpack the archive and let OS X know where the
-  compilers live with
-
-<pre class="code">
-$ cd ~/Downloads
-$ tar -xvzf arm-2010q1-188-arm-none-eabi-toolchain-macosx32.tar.gz
-$ mv arm ~/libmaple/arm
-</pre>  
-
-  After that's done, you'll probably want to update your shell startup
-  script to stick <code>~/libmaple/arm/bin</code> into
-  your <code>PATH</code>.
-
-<h3>All done?</h3> 
-
-Great!  Go ahead and <a href="#test">test everything out</a>.
-
-</ol>
-
-<h2><a name="test">Test compilation</a></h2>
-
-Get back into the libmaple directory (this tutorial assumes you put
-it in ~/libmaple) and test that you've installed all the
-compilation tools correctly:
-
-<pre class="code">$ cd ~/libmaple
-$ cp main.cpp.example main.cpp
-$ make clean
-$ make</pre>
-
-If it all worked out, you should end up seeing something like this at the end:
-
-<pre class="code">
-find build -iname *.o | xargs arm-none-eabi-size -t
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Just copying the binary somewhere doesn&#8217;t work, as it relies on
+dynamically linked libraries found elsewhere in the .app
+bundle. It&#8217;s possible to pull just the relevant pieces out of the
+.app, but you&#8217;re on your own.</p>
+</div>
+<p>To make sure this worked, try plugging in your Maple, making sure
+it&#8217;s in bootloader mode (you can do this by pressing RESET, then
+quickly pressing BUT and holding it for several seconds), then
+running</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>dfu-util -l
+</pre></div>
+</div>
+<p>If you see some lines that look like</p>
+<div class="highlight-sh"><div class="highlight"><pre>Found DFU: <span class="o">[</span>0x1eaf:0x0003<span class="o">]</span> <span class="nv">devnum</span><span class="o">=</span>0, <span class="nv">cfg</span><span class="o">=</span>0, <span class="nv">intf</span><span class="o">=</span>0, <span class="nv">alt</span><span class="o">=</span>0, <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;DFU Program RAM 0x20000C00&quot;</span>
+Found DFU: <span class="o">[</span>0x1eaf:0x0003<span class="o">]</span> <span class="nv">devnum</span><span class="o">=</span>0, <span class="nv">cfg</span><span class="o">=</span>0, <span class="nv">intf</span><span class="o">=</span>0, <span class="nv">alt</span><span class="o">=</span>1, <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;DFU Program FLASH 0x08005000&quot;</span>
+</pre></div>
+</div>
+<p>then you&#8217;re all set.</p>
+<p>4. PySerial: our reset script (which sends control signals over the
+USB-serial connection to restart and enter the bootloader) is written
+in Python and requires the <a class="reference external" href="http://pyserial.sourceforge.net/">PySerial</a> library. Download the <a class="reference external" href="http://pypi.python.org/pypi/pyserial">latest
+version</a>. After you download
+and untar, install it with</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> /path/to/pyserial-x.y
+<span class="nv">$ </span>python setup.py build
+<span class="nv">$ </span>sudo python setup.py install
+</pre></div>
+</div>
+<p>The package is also available via <strong class="command">easy_install</strong>, so if
+you&#8217;re comfortable using that, you could also install it with</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>easy_install pyserial
+</pre></div>
+</div>
+</blockquote>
+<p><strong>2. Fetch libmaple and Compiler Toolchain</strong></p>
+<p>You first need to clone libmaple:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> ~
+<span class="nv">$ </span>git clone git://github.com/leaflabs/libmaple.git libmaple
+</pre></div>
+</div>
+<p>Then you need to get the cross-compilers we use to build a
+project. These are just modified versions of GCC; you can <a class="reference external" href="http://static.leaflabs.com/pub/codesourcery/gcc-arm-none-eabi-latest-osx32.tar.gz">download
+them for OS X here</a>. Assuming
+you saved this file to</p>
+<blockquote>
+<tt class="file docutils literal"><span class="pre">~/Downloads/gcc-blah-blah-osx32.tar.gz</span></tt></blockquote>
+<p>you can then unpack the archive and let OS X know where the compilers
+live with</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> ~/Downloads
+<span class="nv">$ </span>tar -xvzf gcc-blah-blah-macosx32.tar.gz
+<span class="nv">$ </span>mv arm ~/libmaple/arm
+<span class="nv">$ </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:~/libmaple/arm/bin
+</pre></div>
+</div>
+<p>After that&#8217;s done, you&#8217;ll probably want to update your shell startup
+script so <tt class="file docutils literal"><span class="pre">~/libmaple/arm/bin</span></tt> stays in your <tt class="docutils literal"><span class="pre">PATH</span></tt>.</p>
+<p><strong>So far, so good?</strong></p>
+<p>Great! Go on to the next section, where you test everything out.</p>
+</div>
+</div>
+<div class="section" id="test-compilation">
+<span id="toolchain-test"></span><h2><a class="toc-backref" href="#id6">Test compilation</a><a class="headerlink" href="#test-compilation" title="Permalink to this headline">¶</a></h2>
+<p>Get back into the libmaple directory (this tutorial assumes you put it
+in <tt class="file docutils literal"><span class="pre">~/libmaple</span></tt>) and test that you&#8217;ve installed all the compilation
+tools correctly:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> ~/libmaple
+<span class="nv">$ </span>cp main.cpp.example main.cpp
+<span class="nv">$ </span>make clean
+<span class="nv">$ </span>make
+</pre></div>
+</div>
+<p>If it all works out, you should end up seeing something like this:</p>
+<div class="highlight-sh"><div class="highlight"><pre>find build -iname *.o | xargs arm-none-eabi-size -t
    text    data     bss     dec     hex filename
     482       4      24     510     1fe build/wirish/comm/HardwareSerial.o
     260       0       0     260     104 build/wirish/comm/HardwareSPI.o
      60       0       0      60      3c build/wirish/wirish.o
 
-[...]
+<span class="o">[</span>...<span class="o">]</span>
 
    2196       0       1    2197     895 build/libmaple/usb/usb_lib/usb_core.o
    1904       0       0    1904     770 build/libmaple/usb/usb_lib/usb_regs.o
      56       0       0      56      38 build/libmaple/usb/usb_lib/usb_init.o
     344       0       0     344     158 build/libmaple/usb/usb_hardware.o
    6637       0      58    6695    1a27 build/main.o
-  21499     201     391   22091    564b (TOTALS)
+  21499     201     391   22091    564b <span class="o">(</span>TOTALS<span class="o">)</span>
 
 Final Size:
 arm-none-eabi-size build/maple.out
    text    data     bss     dec     hex filename
   21824     200     552   22576    5830 build/maple.out
 Flash build
-</pre>
-
-  That's it!  You're all set.  The "dec" field at the end gives the
-  total program size in bytes. The long listing of object files above
-  the Final Size helps to identify bloated code; as you write larger
-  projects, you may find that they use too much space.  If that
-  happens, the file-by-file listing will help you track down the
-  fatties porking up your program.
-
-<h2><a name="upload">Upload a program</a></h2>
-
-<pre class="code">
-$ cd ~/libmaple
-$ cp examples/test-session.cpp main.cpp
-$ make clean
-$ make
-$ make install
-</pre>
-<p>
-Ok, let's blow away the little example program and upload the
-interactive test session. If you're on Linux, then before
-executing <code>make install</code> you'll want to have the udev rules
-setup <a href="#udev">as described above</a> and have the Maple
-plugged in.
-
-<p>
-A number of things can go wrong at this stage; simple debugging steps
-include using the perpetual bootloader mode, restarting Maple a couple
-times, make-ing clean, etc.  If nothing works,
-the <a href="http://forums.leaflabs.com">forum</a> is your friend.
-
-<h2><a name="communicate">Communicate over USB-serial interface</a></h2>
-
-Okay, now that we've flashed the interactive test session to the
-Maple, let's test it out.  The device for the maple should look
-something like "/dev/ttyACMXXX" on Linux or "/dev/tty.usbmodemXXX" on
-OS X, but it might have a slightly different name on your system.  To
-open up a session, run
-
-<pre class="code">
-$ screen /dev/tty-whatever-it-is
-</pre>
-
-If the interactive test program built and uploaded correctly, you
-should be able to connect with <code>screen</code>. Type 'h' or hit
-the space bar to get a response; there are a number of commands which
-demonstrate Maple peripheral features.
-
-As of August 2010, the HardwareSerial library is blocking, so using
-any commands which would write to the USART Serial ports will cause
-the program to hang.
-
-To exit the screen session, type C-a C-\ (control-a, followed by
-control-backslash), and type "y" when prompted if you're sure.
-
-<h2><a name="startingyourown">Starting your own projects</a></h2>
-
-So everything worked, and you want to start your own project?  Great!
-It's easy.  Just set the environment
-variable <code>LIB_MAPLE_HOME</code> in your shell startup script to
-point to the libmaple repository you cloned (this tutorial assumes you
-put it in <code>~/libmaple</code>).  For example, if you
-use <code>bash</code> as your shell, just put this line in your
-<code>~/.bashrc</code> or <code>~/.bash_profile</code>:
-
-<pre class="code">
-export LIB_MAPLE_HOME=~/libmaple
-</pre>
-
-Now, in order to start your own projects, just grab a copy of the
-<code>Makefile</code> and skeleton <code>main.cpp</code> we provided
-in the libmaple repository, and you're good to go:
-
-<pre class="code">
-$ cd
-$ mkdir my-awesome-project
-$ cp ~/libmaple/Makefile ~/libmaple/build-targets.mk my-awesome-project
-$ cp ~/libmaple/main.cpp.example my-awesome-project/main.cpp
-</pre>
-
-(TEMPORARY: The file <code>build-targets.mk</code> is where the rule
-to build the object file for <code>main.cpp</code> lives. If you have
-multiple source files, you'll probably need to look at it and edit as
-appropriate.  We're sorry about that and will update the Makefile
-structure later to remove this pain point.)
-
-Then hack away!  You can <code>make</code>, <code>make clean</code>,
-and <code>make install</code> from your new
-directory <code>my-awesome-project</code> just like you did in the
-libmaple repository.
-
-<h2><a name="openocd">Debug with OpenOCD</a></h2>
-
-TODO. For now see <a href="http://fun-tech.se/stm32/OpenOCD/index.php">this
-great guide</a> from fun-tech.se. 
-
-
-<h2><a name="codeblocks">Do it all with Code::Blocks</a></h2>
-
-Optional.  Code::Blocks is a generic cross platform IDE. We don't
-personally use it for development so we haven't worked out all the
-kinks (eg, debugging isn't integrated), but it might be helpful for
-people who are allergic to <a href="http://www.vim.org/">vim</a>
-and/or <a href="http://www.gnu.org/software/emacs/">Emacs</a>.
-
-The simple configuration described here just calls down to the Makefile, so
-follow the above directions to get the command line tools configured (you'll
-definitely need the arm-none-eabi-* tools on your path by default), then
-<a href="http://www.codeblocks.org/downloads/26">install
-Code::Blocks</a>.  You can do this on Linux with:
-
-<pre class="code">
-$ sudo aptitude install codeblocks 
-</pre>
-
-The first time it runs you'll maybe want to disable all the glitzy "Getting
-Started" crap (when will they learn?). We've added a .cbp "projects" file to
-the libmaple repository: you can try using that one by copying it from
-<code>support/codeblocks/libmaple.cbp</code> to the top level directory, but no
-promises (it might be missing new source files etc). It's probably worth
-reading through these instructions as well to get a feel for how it all works. 
-
-<p> 
-To create your own "libmaple" project, start with an "Empty Project" with the
-"Folder to create project in" set to your libmaple directory. Make sure that
-the "Resulting filename" is in the top level directory as well.  
-
-<br><br>
-<div class="centerimg"> 
-<img src="./img/codeblocks_newproject.png" > 
+</pre></div>
+</div>
+<p>Woo! It worked. The <tt class="docutils literal"><span class="pre">dec</span></tt> field at the end gives the total program
+size in bytes. The long listing of object files above the <tt class="docutils literal"><span class="pre">Final</span>
+<span class="pre">Size</span></tt> helps to identify bloated code.  As you write larger projects,
+you may find that they use too much space. If that happens, the
+file-by-file listing will help you track down the fatties porking up
+your program.</p>
+</div>
+<div class="section" id="upload-a-program">
+<span id="toolchain-upload"></span><h2><a class="toc-backref" href="#id7">Upload a program</a><a class="headerlink" href="#upload-a-program" title="Permalink to this headline">¶</a></h2>
+<p>Ok, let&#8217;s blow away the little example program and upload the
+interactive test session to your Maple.  This will let you interact
+textually with the Maple via USB-serial. If you&#8217;re on Linux, then
+before executing <strong class="command">make install</strong>, you&#8217;ll want to have the udev
+rules setup <a class="reference internal" href="#toolchain-udev"><em>as described above</em></a>.  Plug in your Maple
+using the mini-b USB cable; then run</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> ~/libmaple
+<span class="nv">$ </span>cp examples/test-session.cpp main.cpp
+<span class="nv">$ </span>make clean
+<span class="nv">$ </span>make
+<span class="nv">$ </span>make install
+</pre></div>
+</div>
+<p>A number of things can go wrong at this stage.  Simple debugging steps
+include using <a class="reference internal" href="troubleshooting.html#troubleshooting-perpetual-bootloader"><em>perpetual bootloader mode</em></a>, restarting the Maple a couple
+times, <strong class="command">make clean</strong>, etc. If nothing works, the <a class="reference external" href="http://forums.leaflabs.com">forum</a> is
+your friend.</p>
+</div>
+<div class="section" id="communicate-over-usb-serial-interface">
+<span id="toolchain-serialusb"></span><h2><a class="toc-backref" href="#id8">Communicate over USB-serial interface</a><a class="headerlink" href="#communicate-over-usb-serial-interface" title="Permalink to this headline">¶</a></h2>
+<p>Okay, now that we&#8217;ve flashed the interactive test session to the
+Maple, let&#8217;s test it out. The device for the maple should look
+something like <tt class="file docutils literal"><span class="pre">/dev/ttyACMXXX</span></tt> on Linux or
+<tt class="file docutils literal"><span class="pre">/dev/tty.usbmodemXXX</span></tt> on OS X, but it might have a slightly
+different name on your system. To open up a session, run</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>screen /dev/tty-whatever-it-is
+</pre></div>
+</div>
+<p>If the interactive test program built and uploaded correctly, you
+should be able to connect without any errors reported by
+<strong class="command">screen</strong>. Type <tt class="docutils literal"><span class="pre">h</span></tt> or hit the space bar to get a response;
+there are a number of commands which demonstrate Maple peripheral
+features. As of October 2010, the HardwareSerial library is blocking,
+so using any commands which would write to the USART Serial ports will
+cause the program to hang. To exit the screen session, type <tt class="kbd docutils literal"><span class="pre">C-a</span>
+<span class="pre">C-\</span></tt> (control-a, followed by control-backslash), and type <tt class="docutils literal"><span class="pre">y</span></tt> when
+prompted if you&#8217;re sure.</p>
+<p>Using <strong class="command">screen</strong> in this way sometimes messes up your session.
+If your shell starts acting up after you exit screen, you should be
+able to fix it with</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>reset <span class="o">&amp;&amp;</span> clear
+</pre></div>
+</div>
+</div>
+<div class="section" id="starting-your-own-projects">
+<span id="toolchain-projects"></span><h2><a class="toc-backref" href="#id9">Starting your own projects</a><a class="headerlink" href="#starting-your-own-projects" title="Permalink to this headline">¶</a></h2>
+<p>So everything worked, and you want to start your own project? Great!
+It&#8217;s easy. Just set the environment variable <tt class="docutils literal"><span class="pre">LIB_MAPLE_HOME</span></tt> in
+your shell startup script to point to the libmaple repository you
+cloned (this tutorial assumes you put it in <tt class="file docutils literal"><span class="pre">~/libmaple</span></tt>). For
+example, if you use bash as your shell, just put this line in your
+<tt class="file docutils literal"><span class="pre">~/.bashrc</span></tt> or <tt class="file docutils literal"><span class="pre">~/.bash_profile</span></tt>:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nb">export </span><span class="nv">LIB_MAPLE_HOME</span><span class="o">=</span>~/libmaple
+</pre></div>
+</div>
+<p>Now, in order to start your own projects, just grab a copy of the
+<tt class="file docutils literal"><span class="pre">Makefile</span></tt> and skeleton <tt class="file docutils literal"><span class="pre">main.cpp</span></tt> we provided in the
+libmaple repository, and you&#8217;re good to go:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span>
+<span class="nv">$ </span>mkdir my-awesome-project
+<span class="nv">$ </span>cp ~/libmaple/Makefile ~/libmaple/build-targets.mk my-awesome-project
+<span class="nv">$ </span>cp ~/libmaple/main.cpp.example my-awesome-project/main.cpp
+</pre></div>
+</div>
+<p>(TEMPORARY: The file <tt class="file docutils literal"><span class="pre">build-targets.mk</span></tt> is where the rule to
+build the object file for <tt class="file docutils literal"><span class="pre">main.cpp</span></tt> lives. If you have multiple
+source files, you&#8217;ll probably need to look at it and edit as
+appropriate. We&#8217;re sorry about that and will update the Makefile
+structure later to remove this pain point.) Then hack away! You can
+<strong class="command">make</strong>, <strong class="command">make clean</strong>, and <strong class="command">make install</strong>
+from your new directory <tt class="file docutils literal"><span class="pre">my-awesome-project</span></tt> just like you did
+in the libmaple repository.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>We update the libmaple repository fairly frequently with bugfixes
+and other improvements.  In order get access to these in your local
+copy of the repository, you should periodically update it with:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> <span class="nv">$LIB_MAPLE_HOME</span>
+<span class="nv">$ </span>git pull
+</pre></div>
+</div>
+<p class="last">The <a class="reference external" href="http://github.com/leaflabs/libmaple/commits/master">commits page</a> for the
+github repository is a good place to watch for bleeding-edge
+updates; our <a class="reference external" href="http://leaflabs.com/blog/">blog</a> is the place to
+watch for major releases.  We keep releases of libmaple and the
+Maple IDE in lockstep, so any IDE updates will have corresponding
+library updates.</p>
+</div>
+</div>
+<div class="section" id="debug-with-openocd">
+<span id="toolchain-openocd"></span><h2><a class="toc-backref" href="#id10">Debug with OpenOCD</a><a class="headerlink" href="#debug-with-openocd" title="Permalink to this headline">¶</a></h2>
+<p>TODO. For now see <a class="reference external" href="http://fun-tech.se/stm32/OpenOCD/index.php">this great guide</a> from fun-tech.se, and
+the <tt class="docutils literal"><span class="pre">jtag</span></tt> Makefile target.</p>
+</div>
+<div class="section" id="do-it-all-with-code-blocks">
+<span id="toolchain-codeblocks"></span><h2><a class="toc-backref" href="#id11">Do it all with Code::Blocks</a><a class="headerlink" href="#do-it-all-with-code-blocks" title="Permalink to this headline">¶</a></h2>
+<p>Optional. <a class="reference external" href="http://www.codeblocks.org/">Code::Blocks</a> is a generic
+cross platform IDE.  We don&#8217;t personally use it for development, so we
+haven&#8217;t worked out all the kinks (e.g., debugging isn&#8217;t integrated),
+but it might be helpful for people who are allergic to <a class="reference external" href="http://www.vim.org/">vim</a> and/or <a class="reference external" href="http://www.gnu.org/software/emacs/">Emacs</a>. The simple configuration
+described here just calls down to the <tt class="file docutils literal"><span class="pre">Makefile</span></tt>, so follow the
+above directions to get the command line tools configured (you&#8217;ll
+definitely need the arm-none-eabi-* tools on your <tt class="docutils literal"><span class="pre">PATH</span></tt>), then
+<a class="reference external" href="http://www.codeblocks.org/downloads/26">install Code::Blocks</a>. You
+can do this on Linux with:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>sudo aptitude install codeblocks
+</pre></div>
+</div>
+<p>The first time it runs you&#8217;ll maybe want to disable all the glitzy
+&#8220;Getting Started&#8221; crap (when will they learn?). We&#8217;ve added a .cbp
+&#8220;projects&#8221; file to the libmaple repository: you can try using that one
+by copying it from <tt class="file docutils literal"><span class="pre">support/codeblocks/libmaple.cbp</span></tt> to the top
+level directory, but no promises (it might be missing new source files
+etc). It&#8217;s probably worth reading through these instructions as well
+to get a feel for how it all works.</p>
+<p>To create your own &#8220;libmaple&#8221; project, start with an &#8220;Empty Project&#8221;
+with the &#8220;Folder to create project in&#8221; set to your
+<tt class="docutils literal"><span class="pre">LIB_MAPLE_HOME</span></tt>. Make sure that the &#8220;Resulting filename&#8221; is in the
+top level directory as well.</p>
+<img alt="Code::Blocks new project wizard" class="align-center" src="_images/codeblocks_newproject.png" />
+<p>Select the &#8220;GNU GCC Compiler&#8221; (it won&#8217;t be used, anyway) and disable
+the &#8220;Debug&#8221; configuration in the next window. Now you should have a
+project with no files; add files by right clicking on the project in
+the left panel file hierarchy and &#8220;Add files recursively&#8221;. Import both
+the <tt class="file docutils literal"><span class="pre">wirish</span></tt> and <tt class="file docutils literal"><span class="pre">libmaple</span></tt> directories recursively, then
+add <tt class="file docutils literal"><span class="pre">main.cpp</span></tt> separately.</p>
+<img alt="Code::Blocks targets options" class="align-center" src="_images/codeblocks_makefile.png" />
+<p>Next we have to configure the Makefile targets. Go to the
+&#8220;Properties...&#8221; menu under &#8220;Project&#8221; and check the &#8220;This is a custom
+Makefile&#8221; box. Then go to the &#8220;Build targets&#8221; tab and create &#8220;ram&#8221; and
+&#8220;flash&#8221; targets, both of type &#8220;Console application&#8221; and without the
+Auto-generated filename prefixes or extensions. Set the Output
+filename to <tt class="file docutils literal"><span class="pre">support/codeblocks/program_flash.sh</span></tt> and
+<tt class="file docutils literal"><span class="pre">support/codeblocks/program_ram.sh</span></tt> respectively; these scripts
+just call the program_ram/program_flash make targets and are a hack to
+get the &#8220;run&#8221; button to upload code to the Maple. The IDE will warn
+that these files will be overwritten, but they won&#8217;t be. For both the
+&#8220;flash&#8221; and &#8220;ram&#8221; targets, click the &#8220;Build options...&#8221; button (below
+&#8220;Virtual targets...&#8221; etc) and go to the far right tab (&#8220;&#8216;Make&#8217;
+commands&#8221;). Edit the Clean project/target line so it&#8217;s just &#8220;clean&#8221;
+(not &#8220;clean$target&#8221;), and set the &#8220;Build project/target&#8221; and &#8220;Compile
+single file&#8221; commands to <tt class="docutils literal"><span class="pre">$make</span> <span class="pre">-f</span> <span class="pre">$makefile</span> <span class="pre">MAPLE_TARGET=$target</span></tt>
+and <tt class="docutils literal"><span class="pre">$make</span> <span class="pre">-f</span> <span class="pre">$makefile</span> <span class="pre">MAPLE_TARGET=$target</span> <span class="pre">$file</span></tt>, respectively.</p>
+<img alt="Code::Blocks make targets" class="align-center" src="_images/codeblocks_maketargets.png" />
+<p>Save all these changes, go back to the main IDE window, and try to
+build/run. &#8220;Build&#8221; will compile everything, &#8220;Run&#8221; will run the upload
+script in a terminal window (if there are problems they will flash by
+very quickly; you can start Code::Blocks in a terminal window and
+check the output in that base window if necessary), and &#8220;Rebuild&#8221; will
+clean before rebuilding.</p>
+<img alt="Success!" class="align-center" src="_images/codeblocks_build.png" />
+</div>
+<div class="section" id="go-forth-exuberantly">
+<span id="toolchain-exuberantly"></span><h2><a class="toc-backref" href="#id12">Go forth exuberantly!</a><a class="headerlink" href="#go-forth-exuberantly" title="Permalink to this headline">¶</a></h2>
+<p>Let us know what you come up with! Use #leaflabs on Twitter, post in
+the <a class="reference external" href="http://forums.leaflabs.com">forum</a>, track us down in the real world, whatever. We love
+projects!</p>
+</div>
 </div>
 
-<p>
-Select the "GNU GCC Compiler" (it won't be used anyways) and disable the
-"Debug" configuration in the next window. Now you should have a project with no
-files; add files by right clicking on the project in the left panel file
-hierarchy and "Add files recursively". Import both the wirish and libmaple
-directories recursively, then add main.cpp separately. 
 
-<br><br>
-<div class="centerimg"> 
-<img src="./img/codeblocks_makefile.png" > 
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">IDE Anatomy</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="libmaple.html">Command-Line Tools &amp; APIs</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">Unix Toolchain Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arm-gcc.html">Guide to using GCC&#8217;s ARM target</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
 </div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="arm-gcc.html" title="GCC for Maple"
+             >next</a></li>
+        <li class="right" >
+          <a href="libmaple.html" title="libmaple Reference"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
 
-<p> 
-Next we have to configure the Makefile targets. Go to the "Properties..." menu
-under "Project" and check the "This is a custom Makefile" box. Then go to the
-"Build targets" tab and create "ram" and "flash" targets, both of type "Console
-application" and without the Auto-generated filename prefixes or extensions.
-Set the Output filename to <code>support/codeblocks/program_flash.sh</code> and
-<code>support/codeblocks/program_ram.sh</code> respectively; these scripts just
-call the program_ram/program_flash make targets and are a hack to get the "run"
-button to upload code to the Maple. The IDE will warn that these files will be
-overwritten, but they won't be. For both the "flash" and "ram" targets, click
-the "Build options..." button (below "Virtual targets..." etc) and go to the
-far right tab ("'Make' commands"). Edit the Clean project/target line so it's
-just "clean" (not "clean$target"), and set the "Build project/target" and
-"Compile single file" commands to <code>$make -f $makefile
-MAPLE_TARGET=$target</code> and <code>$make -f $makefile MAPLE_TARGET=$target
-$file</code> respectively.
-
-<br><br>
-<div class="centerimg"> 
-<img src="./img/codeblocks_maketargets.png" > 
-</div>
-
-<p>
-Save all these changes, go back to the main IDE window, and try to build/run.
-"Build" will compile everything, "Run" will run the upload script in a terminal
-window (if there are problems they will flash by very quickly; you can start
-Code::Blocks in a terminal window and check the output in that base window if
-necessary), and "Rebuild" will clean before rebuilding. 
-
-<br><br>
-<div class="centerimg"> 
-<img src="./img/codeblocks_build.png" > 
-<br>Success!
-</div>
-
-<h2><a name="goforth">Go forth exuberantly!</a></h2>
-
-<p>
-Let us know what you come up with! Use #leaflabs on Twitter, post in
-the <a href="http://forums.leaflabs.com">forums</a>, track us down in
-the real world, whatever. We love projects!
-
-<h2>Appendix</h2>
-
-Further information about our repository structure.  This section is
-optional.  Read it only if you're curious about how things work under
-the hood.
-
-<p>
-Our repository setup is a little unconventional. Usually libraries get
-compiled down to a binary archive which other programs link (or pull
-from) using hints from source code header files. With that structure
-the "library" code and build process is separated from the individual
-"program". At this point we frequently end up customizing the
-"library" part of the code to suit the "program", so we left it all
-mixed together.
-
-<p> 
-The <code>main.cpp</code> file in the top directory is often the only "program"
-part of the code (of course it could reference arbitrary other source and
-header files if it helped break up a larger project). At a minimum it must
-declare an <code>int main(void)</code> function; our
-<code>main.cpp.example</code> files takes on a structure identical to Arduino
-"sketches" with <code>setup()</code> and <code>loop()</code> functions.
-
-<p> 
-A second layer of confusion is the separation between the
-<code>libmaple/</code> directory and the <code>wirish/</code> directory.  The
-<code>libmaple/</code> directory contains our low-level, C-only library for
-accessing STM32 hardware peripherals. The <code>wirish/</code> directory
-contains C++ code implementing the "Arduino programming language" (called
-Wiring); our implementation is not 100% compatible, it's just "Wiring-ish".
-When we casually refer to "libmaple" we usually mean both parts together. As
-you may imagine, mixing C and C++ code together so close to the metal can get
-pretty sticky; if you look through our code there are lots of
-<code>#ifdefs</code> and other nonsense to ensure the compiler doesn't throw up
-on it.
-
-<p> 
-A last, important chunk of libmaple which isn't immediately obvious are the
-linker scripts in <code>support/ld/</code> which are essential for actually
-building binary files. Hopefully you won't have to modify those unless you're
-porting the entire library, through it can be educational to read through the
-interrupt jump table. 
-
-<p> 
-The <code>Makefile</code> can build and upload to RAM or FLASH; the RAM target
-is useful for rapid development because it uploads a little faster and doesn't
-burn up FLASH write cycles, but programs in RAM won't persist after a power
-cycle and there is significantly less memory available for more elaborate
-programs. The target is determined by an environment variable,
-<code>MAPLE_TARGET</code>) which defaults to FLASH. It can be modified by
-editing the Makefile, specifying in the command (eg, <code>make
-MAPLE_TARGET=ram</code>), or with the <code>ram</code> and <code>flash</code>
-targets, which modify the environment variable locally.  The <code>make
-sketch</code> (or just <code>make</code>) target just builds .bin files;
-<code>make install</code> will build and upload the program. If you forget you
-can just <code>make help</code>, which dumps a table of targets.  You might
-also find the <code>make cscope</code> or <code>make ctags</code> targets
-helpful as well if you use those tools.
-
-
-<div class="box">
-<h3><i>About this Document</i></h3>
-A more recent version of this document may be available from the 
-<a href="http://leaflabs.com">LeafLabs website</a>. Our documentation is
-versioned on <a href="http://github.com">github</a>; you can track changes
-to the master branch at <a href="http://github.com/leaflabs/maple-ide/tree/master/build/shared/reference/">this link</a>.
-<p>
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
-<img alt="Creative Commons License" style="border-width:0" 
-    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
-<br /><i>This documentation is released under a 
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
-Creative Commons Attribution-Share Alike 3.0</a> license.</i>
-<p>
-Translations are welcomed; give us a ping to make sure we aren't in the
-process of revising or editing first.
-</div>
-<!-- ENDDOC -->
-</body></html>
+          <li><a href="libmaple.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">libmaple</span></tt> Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

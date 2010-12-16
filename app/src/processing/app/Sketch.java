@@ -1556,7 +1556,7 @@ public class Sketch {
 
     String contents =
       "Manifest-Version: 1.0\n" +
-      "Created-By: Processing " + Base.VERSION_NAME + "\n" +
+      "Created-By: MapleIDE " + Base.MAPLE_VERSION_NAME + "\n" +
       "Main-Class: " + name + "\n";  // TODO not package friendly
     zos.write(contents.getBytes());
     zos.closeEntry();

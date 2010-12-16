@@ -1,46 +1,4 @@
-0.0.8 maple-ide
-
-Fix Linux make.sh, etc. scripts
-Test on Linux.
-
-AVR
-
-Ethernet library:
- - integrate DHCP support
- - client.connect() returns 0 when connection is successful?  http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1238295170
- - call Server.begin() from Ethernet.begin() instead of in user's sketch?
- - add method for receiving notification of new client connections to a server
- - add method for receiving notification of data written to a client
- - add method for receiving notification of client disconnections
-Incorporate mikalhart's new SoftwareSerial library.
-Consider making abs() not a macro.  See: http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1234908504
-Improve shiftOut() performance: http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1216659239/0
-Add String library.
-Add Encoder library.
-Bootloader:
- - disable watch dog timer
- - fix eeprom writing: http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1202157667/15
-Support pin change interrupts.
-Switch pwm output on pins 5 and 6 to phase-correct mode, if possible.
-Add parameter to shiftOut() for specifying a number of bits.
-Add parameter to Serial.print[ln](x, BIN) for specifying number of bits.
-Support PROGMEM strings in Serial.print(): http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1227919972
-Should Serial.print(b) send the ASCII digits of the byte?
-Add weak attribute to signal handlers: http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1203798214
-Floating point support in the map() function.
-Fix delayMicroseconds(0).
-Add sleep function(s).
-Add SPI library.
-Add OneWire library.
-Add pulseOut(), etc. functions from Wiring.
-Switch to ServoTimer2 library?  http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1222201226/0#5
-Add ContinuousServo class that inherits from Servo?
-LiquidCrystal library:
- - support going to the next line with println().
-Supporting EEMEM directive by changing compiler command line: http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1202157667
-Include Arduino as AVR-ISP sketch in hardware/firmwares.
-Move type definitions into WConstants.h.
-Change core and libraries to use Arduino types (e.g. byte, boolean).
+0.0.9 maple-ide
 
 COMPUTER
 

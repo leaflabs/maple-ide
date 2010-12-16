@@ -1,160 +1,294 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-"http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head><title>Maple Reference Documentation</title>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-<link rel="stylesheet" href="minimal.css" type="text/css">
-</head><body> 
-<!-- minimalist html; this is designed to be copy/pasted into a website -->
-<!-- STARTDOC -->
-<h1>Maple Reference Documentation: PWM</h1>
-<p>
-Pulse Width Modulation is a basic technique to create repeated square waves
-(digital high/low voltage transitions) of user defined length and duty cycle.
-It can be used as a way to encode an "analog" signal on a single 
-digital (high/low) line using the time between transitions ("pulse width") 
-as the variable; this technique is commonly used to send servo position 
-and motor speed commands. Another use is to use to the ratio of "high" and
-"low" time to approximate a voltage output; this technique can be used to
-dim an LED or even (with careful filtering) generate audio waveforms. 
 
-<ul>
-  <li><a href="#overview">Overview</a>
-  <li><a href="#background">Background</a>
-  <li><a href="#functions">Function Reference</a>
-  <li><a href="#links">Recommended Reading</a>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PWM &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="index.html" />
+    <link rel="next" title="GPIO" href="gpio.html" />
+    <link rel="prev" title="I2C" href="i2c.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="gpio.html" title="GPIO"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="i2c.html" title="I2C"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pwm">
+<span id="id1"></span><h1>PWM<a class="headerlink" href="#pwm" title="Permalink to this headline">¶</a></h1>
+<p>Pulse Width Modulation (PWM) is a basic technique to create repeated square
+waves (digital high/low voltage transitions) of user defined length
+and duty cycle. It can be used as a way to encode an &#8220;analog&#8221; signal
+on a single digital (high/low) line using the time between transitions
+(&#8220;pulse width&#8221;) as the variable; this technique is commonly used to
+send servo position and motor speed commands. Another use is to use to
+the ratio of &#8220;high&#8221; and &#8220;low&#8221; time to approximate a voltage output;
+this technique can be used to dim an LED or even (with careful
+filtering) generate audio waveforms.</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#overview" id="id2">Overview</a></li>
+<li><a class="reference internal" href="#background" id="id3">Background</a></li>
+<li><a class="reference internal" href="#function-reference" id="id4">Function Reference</a></li>
+<li><a class="reference internal" href="#recommended-reading" id="id5">Recommended Reading</a></li>
 </ul>
-
-<h2><a name="overview">Overview</a></h2>
-<p>
-The Maple has a large number of 16-bit PWM outputs, each connected to one of 4
-timers. Some configuration, such as the clock rate or prescaling, must be
-common to the entire timer; see the <a href="./timers.html">timer docs</a> for
-more information!
-<p>
-Note that unlike the Arduino, the Maple does not have PWM functionality on
-pin D10; all other pins are <a href="./compatibility.html">compatible</a>. 
-<p>
-The following table shows which <a href="./timers.html">timer</a> generates
-which PWM outputs. See the <a href="./gpio.html#pins">pin mapping table</a> to
-track down exactly which timer <i>channel</i> corresponds to each pin.
-
-<table>
-  <tr><th>Timer     <th>PWM Headers
-  <tr><td>Timer1    <td>D6,D7,D8
-  <tr><td>Timer2    <td>D0,D1,D2,D3
-  <tr><td>Timer3    <td>D11,D12,D27,D28
-  <tr><td>Timer4    <td>D5,D9,D14,D24
-</table>
-
-<h2><a name="background">Background</a></h2>
-<p>
-In it's simplest form the device is a single counter with two variables. The
-counter starts at zero and the output starts at "high". The counter increments
-every clock cycle until it reaches the first variable number, at which point
-the output goes "low". The counter continues incrementing until it reaches the
-second variable at which point the output goes "high" again and the counter
-resets to zero. The time spent with output high is called the pulse duration or
-duty; the total time before repeat is the period.
-
-<p>
-This simple functionality could be approximated in software by setting a GPIO
-high or low, but the beauty of PWM is that the usercode simply has to configure
-the device and set the two variables and the device will function on it's own;
-no further microprocessor cycles will be consumed and a repeated HIGH/LOW
-waveform will spew out.
-
-<p>
-The Maple has 16-bit PWM resolution, which means that the counter and variables
-can be as large as 65535, as opposed to 255 with 8-bit resolution. With a 72MHz
-clock rate, a PWM output could have maximum period of about one millisecond;
-using a prescaler (clock divider) in front of the counter and can increase this
-maximum period (eg, an 8x prescaler would result in around an 8ms maximum duty
-cycle). The setting the period variable to something other than the maximum 
-value gives further control over the total length of the waveform, but 
-effectively limits the resolution with which the duty can be modified: the duty
-must be lower than or equal to the period.
-
-<p>
-Here are some commonly used PWM configurations (note: double check our math!):
-
-<table>
-  <tr><th>Purpose<th>Period (ms)<th>Duty (ms)<th>Prescaler<th>Period<th>Duty
-  <tr><td>LED Throb
-      <td>0.020ms
-      <td>0 to 0.020ms
-      <td>1 (none)
-      <td>65535 (default)
-      <td>0 to 767
-  <tr><td>Servo Control
-      <td>20ms
-      <td>1.25 (0deg) <br>1.50ms (90deg) <br>1.75 (180deg)
-      <td>21 <br>21 <br>21
-      <td>65535 (default) <br>65535 (default) <br>65535 (default)
-      <td>4096 <br>4915 <br>5734
-</table>
-
-<h2><a name="functions">Function Reference</a></h2>
-<dl>
-  <dt><code>pinMode(pin_num, PWM)</code>
-  <dd>This command is usually called from <code>setup()</code> to tell the
-  microcontroller that <code>pin_num</code> should be configured to PWM output.
-  PWM implies regular driven OUTPUT (not open drain etc).
-
-  <dt><code>pwmWrite(pin_num, value)</code>
-  <dd>This command sets the PWM duty. User code is expected to determine and
-  honor the maximum value (based on the configured period). As a convenience,
-  <code>analogWrite</code> is an alias of <code>pwmWrite</code> to ease porting
-  Arduino code, though period and duty will have to be recalibrated (see
-  <a href="./compatibility.html">compatibility.html</a>).
-
-  <dt><code>Timer1.setPrescaleFactor(prescale)</code>
-  <dd>Find the appropriate timer for a given PWM header using the table above,
-  then set the prescaler. This function is normally called once from
-  <code>setup()</code>, but the timer can be reconfigured with a new prescaler
-  at any time. The default prescaler is 1 (eg, no prescaling). 
-
-  <dt><code>Timer1.setOverflow(overflow)</code>
-  <dd>This function sets the period ("reload" or "overflow") value for an
-  entire PWM timer bank. The value is 16bit (0 to 65535) and determines the
-  maximum value that can be written with <code>pwmWrite()</code> corresponding
-  to 100% duty cycle.  This also affects the PWM frequency: the higher reload
-  is, the lower the PWM frequency will be.
-
-</dl>
-
-<h2><a name="links">Recommended Reading</a></h2>
-
-<ul>
-  <li><a href="http://en.wikipedia.org/wiki/Pulse-width_modulation">
-      Wikipedia Article on Pulse-width modulation</a>
-  <li><a href="http://www.arduino.cc/en/Tutorial/PWM">
-      Arduino tutorial on PWM</a>
-  <li>"<a href="http://www.arcfn.com/2009/07/secrets-of-arduino-pwm.html">
-     Secrets of Arduino PWM</a>" by Ken Shirriff
-  <li>STMicro documentation for STM32F103RB microcontroller:<ul>
-    <li><a href="http://www.st.com/mcu/devicedocs-STM32F103RB-110.html">All</a>
-    <li><a href="http://www.st.com/stonline/products/literature/ds/13587.pdf">Datasheet (pdf)</a>
-    <li><a href="http://www.st.com/stonline/products/literature/rm/13902.pdf">Reference Manual (pdf)</a>
-    </ul>
-</ul>
-
-<div class="box">
-<h3><i>About this Document</i></h3>
-A more recent version of this document may be available from the 
-<a href="http://leaflabs.com">LeafLabs website</a>. Our documentation is
-versioned on <a href="http://github.com">github</a>; you can track changes
-to the master branch at <a href="http://github.com/leaflabs/maple-ide/tree/master/build/shared/reference/">this link</a>.
-<p>
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
-<img alt="Creative Commons License" style="border-width:0" 
-    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
-<br /><i>This documentation is released under a 
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
-Creative Commons Attribution-Share Alike 3.0</a> license.</i>
-<p>
-Translations are welcomed; give us a ping to make sure we aren't in the
-process of revising or editing first.
 </div>
-<!-- ENDDOC -->
-</body></html>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id2">Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The Maple has a large number of 16-bit PWM outputs, each connected to
+one of 4 timers.  Some configuration, such as the clock rate or
+prescaling, must be common to the entire timer; see the <a class="reference internal" href="timers.html#timers"><em>timer
+documentation</em></a> for more information.</p>
+<p>Note that unlike the Arduino, the Maple does not have PWM
+functionality on pin D10; all other pins are <a class="reference internal" href="compatibility.html#compatibility"><em>compatible</em></a>.</p>
+<p>The following table shows which timer can generate which PWM
+outputs. See the <a class="reference internal" href="gpio.html#pin-mapping-mega-table"><em>pin mapping table</em></a> to
+track down exactly which timer <em>channel</em> corresponds to each pin.</p>
+<table border="1" class="docutils" id="pwm-timer-table">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Timer</th>
+<th class="head">PWM Headers</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Timer1</td>
+<td>D6,D7,D8</td>
+</tr>
+<tr><td>Timer2</td>
+<td>D0,D1,D2,D3</td>
+</tr>
+<tr><td>Timer3</td>
+<td>D11,D12,D27,D28</td>
+</tr>
+<tr><td>Timer4</td>
+<td>D5,D9,D14,D24</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="background">
+<h2><a class="toc-backref" href="#id3">Background</a><a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>In its simplest form, the device is a single counter with two
+variables.  The counter starts at zero, and the output starts at
+&#8220;high&#8221;.  The counter increments every clock cycle until it reaches the
+first variable number, at which point the output goes &#8220;low&#8221;.  The
+counter continues incrementing until it reaches the second variable at
+which point the output goes &#8220;high&#8221; again and the counter resets to
+zero. The time spent with output high is called the <strong>pulse duration</strong>
+or <strong>duty</strong>; the total time before repeat is the <strong>period</strong>.</p>
+<p>This simple functionality could be approximated in software by setting
+a GPIO high or low, but the beauty of PWM is that user code simply has
+to configure the device and set the two variables and the device will
+function on its own; no further microprocessor cycles will be
+consumed, and a repeated high/low waveform will spew out.</p>
+<p>The Maple has 16-bit PWM resolution, which means that the counter and
+variables can be as large as 65535, as opposed to 255 with 8-bit
+resolution. With a 72MHz clock rate, a PWM output could have maximum
+period of about one millisecond; using a <a class="reference internal" href="lang/api/hardwaretimer.html#lang-hardwaretimer-setprescalefactor"><em>prescaler</em></a> (clock divider) in front of
+the counter can increase this maximum period.  Setting the
+<a class="reference internal" href="lang/api/hardwaretimer.html#lang-hardwaretimer-setperiod"><em>period</em></a> to something other than
+the maximum value gives further control over the total length of the
+waveform.  However, this effectively limits the resolution with which
+the duty can be modified: the duty must be less than or equal to the
+period.</p>
+<p>Here are some commonly used PWM configurations (note that servos are
+notoriously variable, especially the lower cost models):</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="16%" />
+<col width="17%" />
+<col width="14%" />
+<col width="23%" />
+<col width="9%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head"><strong>Purpose</strong></th>
+<th class="head"><strong>Period</strong>
+(ms)</th>
+<th class="head"><strong>Duty</strong>
+(ms)</th>
+<th class="head">Prescaler</th>
+<th class="head">Period</th>
+<th class="head">Duty</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>LED throb</td>
+<td>0.020</td>
+<td>0&#8211;0.020</td>
+<td>1 (none)</td>
+<td>65535 (default)</td>
+<td>0&#8211;767</td>
+</tr>
+<tr><td>Servo control</td>
+<td>20</td>
+<td><p class="first">1.25 (0°)</p>
+<p>1.50 (90°)</p>
+<p class="last">1.75 (180°)</p>
+</td>
+<td><p class="first">21</p>
+<p>21</p>
+<p class="last">21</p>
+</td>
+<td><p class="first">65535 (default)</p>
+<p>65535 (default)</p>
+<p class="last">65535 (default)</p>
+</td>
+<td><p class="first">4096</p>
+<p>4915</p>
+<p class="last">5734</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="function-reference">
+<h2><a class="toc-backref" href="#id4">Function Reference</a><a class="headerlink" href="#function-reference" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="lang/api/pinmode.html#lang-pinmode"><em>pinMode()</em></a></li>
+<li><a class="reference internal" href="lang/api/pwmwrite.html#lang-pwmwrite"><em>pwmWrite()</em></a></li>
+<li><a class="reference internal" href="lang/api/hardwaretimer.html#lang-hardwaretimer"><em>Timer API</em></a> (especially <a class="reference internal" href="lang/api/hardwaretimer.html#lang-hardwaretimer-setoverflow"><em>setOverflow()</em></a>, <a class="reference internal" href="lang/api/hardwaretimer.html#lang-hardwaretimer-setprescalefactor"><em>setPrescaleFactor()</em></a>, and <a class="reference internal" href="lang/api/hardwaretimer.html#lang-hardwaretimer-setperiod"><em>setPeriod()</em></a>).</li>
+<li><a class="reference internal" href="timers.html#timers"><em>Timers reference</em></a>.</li>
+</ul>
+</div>
+<div class="section" id="recommended-reading">
+<h2><a class="toc-backref" href="#id5">Recommended Reading</a><a class="headerlink" href="#recommended-reading" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Pulse-width_modulation">Wikipedia Article on Pulse-width modulation</a></li>
+<li><a class="reference external" href="http://www.arduino.cc/en/Tutorial/PWM">Arduino tutorial on PWM</a></li>
+<li><a class="reference external" href="http://www.arcfn.com/2009/07/secrets-of-arduino-pwm.html">Secrets of Arduino PWM</a> by Ken
+Shirriff</li>
+<li><a class="reference external" href="http://www.arcfn.com/2009/07/secrets-of-arduino-pwm.html">So You Want To Use PWM, Eh?</a> at Non-Lexical Vocables</li>
+<li>STMicro documentation for STM32F103RB microcontroller:<ul>
+<li><a class="reference external" href="http://www.st.com/stonline/products/literature/ds/13587.pdf">Datasheet</a> (pdf)</li>
+<li><a class="reference external" href="http://www.st.com/stonline/products/literature/rm/13902.pdf">Reference Manual</a> (pdf)</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">IDE Anatomy</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errata.html">Known Problems</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="gpio.html" title="GPIO"
+             >next</a></li>
+        <li class="right" >
+          <a href="i2c.html" title="I2C"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

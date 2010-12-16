@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Arithmetic Operators (+, -, *, /) &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="../../index.html" />
+    <link rel="up" title="Complete Language Index" href="../../language-index.html" />
+    <link rel="next" title="Arrays" href="array.html" />
+    <link rel="prev" title="waitForButtonPress()" href="../api/waitforbuttonpress.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="array.html" title="Arrays"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../api/waitforbuttonpress.html" title="waitForButtonPress()"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" accesskey="U">Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="arithmetic-operators">
+<span id="lang-arithmetic"></span><h1>Arithmetic Operators (<tt class="docutils literal"><span class="pre">+</span></tt>, <tt class="docutils literal"><span class="pre">-</span></tt>, <tt class="docutils literal"><span class="pre">*</span></tt>, <tt class="docutils literal"><span class="pre">/</span></tt>)<a class="headerlink" href="#arithmetic-operators" title="Permalink to this headline">¶</a></h1>
+<p>The operators <tt class="docutils literal"><span class="pre">+</span></tt>, <tt class="docutils literal"><span class="pre">-</span></tt>, <tt class="docutils literal"><span class="pre">*</span></tt>, and <tt class="docutils literal"><span class="pre">/</span></tt> respectively evaluate to
+the sum, difference, product, or quotient (respectively) of the two
+operands. The operation is conducted using the data type of the
+operands, so, for example, <tt class="docutils literal"><span class="pre">9</span> <span class="pre">/</span> <span class="pre">4</span></tt> gives <tt class="docutils literal"><span class="pre">2</span></tt> since 9 and 4 are
+<a class="reference internal" href="int.html#lang-int"><em>int variables</em></a>.</p>
+<p>This also means that the operation can overflow if the result is
+larger than that which can be stored in the data type (e.g. adding 1
+to an <a class="reference internal" href="int.html#lang-int"><em>int</em></a> with the value 2,147,483,647 gives
+-2,147,483,648).</p>
+<p id="lang-arithmetic-typeconversion">If the operands are of different types, the &#8220;larger&#8221; type is used for
+the calculation.  If one of the numbers (operands) are of the type
+<strong>float</strong> or of type <strong>double</strong>, floating point math will be used for
+the calculation.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The specifics of these rules are beyond the scope of this
+documentation; for more information, see <a class="reference external" href="http://www2.research.att.com/~bs/3rd.html">The C++ Programming
+Language</a>, by Bjarne
+Stroustroup, Appendix C, especially §§C.4-C.6, or <a class="reference external" href="http://en.wikibooks.org/wiki/C%2B%2B_Programming/Programming_Languages/C%2B%2B/Code/Statements/Variables/Type_Casting#Automatic_type_conversion">this WikiBooks
+entry on C++ type conversion</a>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For more information on how computers represent integers,
+see the Wikipedia page on <a class="reference external" href="http://en.wikipedia.org/wiki/Two's_complement">two&#8217;s complement</a>.</p>
+</div>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#examples" id="id1">Examples</a></li>
+<li><a class="reference internal" href="#syntax" id="id2">Syntax</a></li>
+<li><a class="reference internal" href="#parameters" id="id3">Parameters</a></li>
+<li><a class="reference internal" href="#programming-tips" id="id4">Programming Tips</a></li>
+<li><a class="reference internal" href="#arduino-compatibility" id="id5">Arduino Compatibility</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See Also</a></li>
+</ul>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id1">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">7</span><span class="p">;</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">*</span> <span class="mi">6</span><span class="p">;</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">r</span> <span class="o">/</span> <span class="mi">5</span><span class="p">;</span>
+</pre></div>
+</div>
+</blockquote>
+</div>
+<div class="section" id="syntax">
+<h2><a class="toc-backref" href="#id2">Syntax</a><a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="n">result</span> <span class="o">=</span> <span class="n">value1</span> <span class="o">+</span> <span class="n">value2</span><span class="p">;</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">value1</span> <span class="o">-</span> <span class="n">value2</span><span class="p">;</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">value1</span> <span class="o">*</span> <span class="n">value2</span><span class="p">;</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">value1</span> <span class="o">/</span> <span class="n">value2</span><span class="p">;</span>
+</pre></div>
+</div>
+</blockquote>
+</div>
+<div class="section" id="parameters">
+<h2><a class="toc-backref" href="#id3">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<p><strong>value1</strong>: any numeric variable or constant</p>
+<p><strong>value2</strong>: any numeric variable or constant</p>
+</div>
+<div class="section" id="programming-tips">
+<h2><a class="toc-backref" href="#id4">Programming Tips</a><a class="headerlink" href="#programming-tips" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Know that <a class="reference internal" href="../api/constants.html#lang-constants-integers"><em>integer constants</em></a>
+default to <a class="reference internal" href="int.html#lang-int"><em>int</em></a>, so some constant calculations
+may overflow (e.g., 200000 * 5000000 will yield a negative result).</li>
+<li>Choose variable sizes that are large enough to hold the largest
+results from your calculations.</li>
+<li>Know at what point your variable will &#8220;roll over&#8221; and also what
+happens in the other direction e.g. (0 - 1) for unsigned arithmetic,
+or (0 - -2,147,483,648) for signed arithmetic.</li>
+<li>For math that requires fractions, float variables may be used, but
+be aware of their drawbacks: large size and slow computation speeds
+(the STM32 has no floating point hardware, so all floating point
+calculations have to be done in software).</li>
+<li>Use cast operator, e.g. <tt class="docutils literal"><span class="pre">(int)myFloat</span></tt> to convert one variable type
+to another on the fly.</li>
+</ul>
+</div>
+<div class="section" id="arduino-compatibility">
+<h2><a class="toc-backref" href="#id5">Arduino Compatibility</a><a class="headerlink" href="#arduino-compatibility" title="Permalink to this headline">¶</a></h2>
+<p>Since the STM32 processor on the Maple is a 32-bit machine, the int
+type overflows at a much higher value on Maple than on Arduino.  In
+particular, on Maple, ints do not overflow (become negative) until
+they reach 2,147,483,648; on the Arduino, they overflow at 32,767.
+Because of this, programs running on Maple are much less likely to run
+into overflow issues.  The following table summarizes the sizes and
+ranges of integer datatypes on the Maple (the ranges of long long
+types are approximate):</p>
+<table border="1" class="docutils" id="lang-arithmetic-int-sizes">
+<colgroup>
+<col width="18%" />
+<col width="27%" />
+<col width="38%" />
+<col width="18%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Datatype</th>
+<th class="head">Unsigned range</th>
+<th class="head">Signed range</th>
+<th class="head">Size (bytes)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">char</span></tt></td>
+<td>0 &#8212; 255</td>
+<td>-128 &#8212; 127</td>
+<td>1</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">short</span></tt></td>
+<td>0 &#8212; 65,535</td>
+<td>-32,768 &#8212; 32,767</td>
+<td>2</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">int</span></tt></td>
+<td>0 &#8212; 4,294,967,295</td>
+<td>-2,147,483,648 &#8212; 2,147,483,647</td>
+<td>4</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">long</span></tt></td>
+<td>0 &#8212; 4,294,967,295</td>
+<td>-2,147,483,648 &#8212; 2,147,483,647</td>
+<td>4</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">long</span> <span class="pre">long</span></tt></td>
+<td>0 &#8212; 1.8*10<sup>19</sup> (approx.)</td>
+<td>-9.2*10<sup>18</sup> &#8212; 9.2*10<sup>18</sup> (approx.)</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The individual sizes (in bits) of various available types are
+defined in <a class="reference external" href="http://github.com/leaflabs/libmaple/blob/master/libmaple/libmaple_types.h">libmaple_types.h</a>.</li>
+<li><a class="reference internal" href="sizeof.html#lang-sizeof"><em>sizeof</em></a>()</li>
+</ul>
+<div class="admonition-license-and-attribution admonition ">
+<p class="first admonition-title">License and Attribution</p>
+<p class="last">This documentation page was adapted from the <a class="reference external" href="http://arduino.cc/en/Reference/HomePage">Arduino Reference
+Documentation</a>, which
+is released under a <a class="reference external" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0
+License</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ide.html">IDE Anatomy</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="array.html" title="Arrays"
+             >next</a></li>
+        <li class="right" >
+          <a href="../api/waitforbuttonpress.html" title="waitForButtonPress()"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" >Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

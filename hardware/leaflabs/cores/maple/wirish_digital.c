@@ -22,8 +22,8 @@
  * THE SOFTWARE.
  *****************************************************************************/
 
-/**
- *  @brief Arduino-compatible digital I/O implementation.
+/*
+ * Arduino-compatible digital I/O implementation.
  */
 
 #include "wirish.h"
@@ -31,6 +31,7 @@
 
 void pinMode(uint8 pin, WiringPinMode mode) {
     uint8 outputMode;
+    boolean pwm = false;
 
     if (pin >= NR_GPIO_PINS) {
         return;
@@ -58,9 +59,11 @@ void pinMode(uint8 pin, WiringPinMode mode) {
         break;
     case PWM:
         outputMode = GPIO_MODE_AF_OUTPUT_PP;
+        pwm = true;
         break;
     case PWM_OPEN_DRAIN:
         outputMode = GPIO_MODE_AF_OUTPUT_OD;
+        pwm = true;
         break;
     default:
         ASSERT(0);
@@ -68,6 +71,20 @@ void pinMode(uint8 pin, WiringPinMode mode) {
     }
 
     gpio_set_mode(PIN_MAP[pin].port, PIN_MAP[pin].pin, outputMode);
+
+    if (PIN_MAP[pin].timer_num != TIMER_INVALID) {
+        /* enable/disable timer channels if we're switching into or
+           out of pwm  */
+        if (pwm) {
+            timer_set_mode(PIN_MAP[pin].timer_num,
+                           PIN_MAP[pin].timer_chan,
+                           TIMER_PWM);
+        } else {
+            timer_set_mode(PIN_MAP[pin].timer_num,
+                           PIN_MAP[pin].timer_chan,
+                           TIMER_DISABLED);
+        }
+    }
 }
 
 
@@ -85,4 +102,36 @@ void digitalWrite(uint8 pin, uint8 val) {
     }
 
     gpio_write_bit(PIN_MAP[pin].port, PIN_MAP[pin].pin, val);
+}
+
+void togglePin(uint8 pin) {
+    gpio_toggle_pin(PIN_MAP[pin].port, PIN_MAP[pin].pin);
+}
+
+uint8 isButtonPressed() {
+    if (digitalRead(BOARD_BUTTON_PIN)) {
+        while (digitalRead(BOARD_BUTTON_PIN))
+            ;
+        return true;
+    }
+    return false;
+}
+
+uint8 waitForButtonPress(uint32 timeout) {
+    uint32 start = millis();
+    uint32 time;
+    if (timeout == 0) {
+        while (!isButtonPressed())
+            ;
+        return true;
+    }
+    do {
+        time = millis();
+        /* properly handle wrap-around */
+        if ((start > time && time + (0xffffffffU - start) > timeout) ||
+            time - start > timeout) {
+            return false;
+        }
+    } while (!isButtonPressed());
+    return true;
 }

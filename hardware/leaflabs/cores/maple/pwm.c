@@ -38,13 +38,11 @@ void pwmWrite(uint8 pin, uint16 duty_cycle) {
         return;
     }
 
-    ccr = PIN_MAP[pin].timer_channel;
+    ccr = PIN_MAP[pin].timer_ccr;
 
-    if (ccr == TIMER_INVALID) {
+    if (ccr == 0) {
         return;
     }
 
     timer_pwm_write_ccr(ccr, duty_cycle);
 }
-
-

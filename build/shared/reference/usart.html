@@ -1,101 +1,171 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-"http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head><title>Maple Reference Documentation</title>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-<link rel="stylesheet" href="minimal.css" type="text/css">
-</head><body> 
-<!-- minimalist html; this is designed to be copy/pasted into a website -->
-<!-- STARTDOC -->
-<h1>Maple Reference Documentation: USART</h1>
 
-<ul>
-  <li><a href="#hardware">Hardware/Circuit Design</a>
-  <li><a href="#compat">Compatible Devices and Specifications</a>
-  <li><a href="#functions">Function Reference</a>
-</ul>
 
-<h2><a name="hardware">Hardware/Circuit Design</a></h2>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-The Maple has 3 separate USART devices: Serial1, Serial2, and Serial3. In the
-most simple use case the RX and TX pins are used to send data at a
-predetermined baudrate with the line voltage level relative to ground. 
-<table>
-  <tr><th>Port      <th>Function         <th>Pin
-  <tr><td>Serial1   <td>TX <br>RX <br>CK 
-                    <td>D7 <br>D8 <br>D6
-
-  <tr><td>Serial2   <td>TX <br>RX <br>CK <br>CTS <br>RTS         
-                    <td>D1 <br>D0 <br>D10 <br>D2 <br>D3
-
-  <tr><td>Serial3   <td>TX <br>RX <br>CK <br>CTS <br>RTS         
-                    <td>D29 <br>D30 <br>D31 <br>D32 <br>D33
-</table>
-
-<h2><a name="compat">Compatible Devices and Specifications</a></h2>
-
-We have successfully used the Maple USART ports with an FT232R-based USB-serial
-converter at up to 115200 baud; higher speeds should certainly be possible. 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>USART &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="index.html" />
+    <link rel="next" title="Timers" href="timers.html" />
+    <link rel="prev" title="SPI" href="spi.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="timers.html" title="Timers"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="spi.html" title="SPI"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
  
-<h2><a name="functions">Function Reference</a></h2>
+      </ul>
+    </div>  
 
-In the following replace "SerialN" with Serial1, Serial2, or Serial3.
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="usart">
+<span id="id1"></span><h1>USART<a class="headerlink" href="#usart" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#hardware-circuit-design" id="id2">Hardware/Circuit Design</a></li>
+<li><a class="reference internal" href="#compatible-devices-and-specifications" id="id3">Compatible Devices and Specifications</a></li>
+<li><a class="reference internal" href="#recommended-reading" id="id4">Recommended Reading</a></li>
+</ul>
+</div>
+<div class="section" id="hardware-circuit-design">
+<h2><a class="toc-backref" href="#id2">Hardware/Circuit Design</a><a class="headerlink" href="#hardware-circuit-design" title="Permalink to this headline">¶</a></h2>
+<p>The Maple has 3 separate USART devices. In the most simple use case,
+the RX and TX pins are used to send data at a predetermined baudrate
+with the line voltage level relative to ground.  Their usage is
+documented in the <a class="reference internal" href="lang/api/serial.html#lang-serial"><em>Serial Ports</em></a> language reference
+page.</p>
+</div>
+<div class="section" id="compatible-devices-and-specifications">
+<h2><a class="toc-backref" href="#id3">Compatible Devices and Specifications</a><a class="headerlink" href="#compatible-devices-and-specifications" title="Permalink to this headline">¶</a></h2>
+<p>We have successfully used the Maple USART ports with an FT232R-based
+USB-serial converter at up to 115200 baud; higher speeds should
+certainly be possible.</p>
+</div>
+<div class="section" id="recommended-reading">
+<h2><a class="toc-backref" href="#id4">Recommended Reading</a><a class="headerlink" href="#recommended-reading" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Universal_asynchronous_receiver/transmitter">Wikipedia article on Universal asynchronous receiver/transmitter (USART)</a></li>
+<li><a class="reference external" href="http://arduino.cc/en/Reference/Serial">Arduino reference on Serial</a></li>
+<li>STMicro documentation for STM32F103RB microcontroller:<ul>
+<li><a class="reference external" href="http://www.st.com/stonline/products/literature/ds/13587.pdf">Datasheet</a> (pdf)</li>
+<li><a class="reference external" href="http://www.st.com/stonline/products/literature/rm/13902.pdf">Reference Manual</a> (pdf)</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 
-<dl>
-  <dt><code>SerialN.begin(baudrate)</code>
-  <dd><code>begin()</code> is usually called in <code>setup()</code> to
-  configure the baudrate of the given serial port and to set up the header pins
-  appropriately. It can be called at any time to reconfigure a port or to
-  change the baudrate. 9600 baud is the generic speed most widely supported by
-  other devices and terminals.
 
-  <dt><code>SerialN.print(...)</code><br>
-      <code>SerialN.println(...)</code>
-  <dd>Writes data into the port buffer to be transmitted as soon as possible.
-  Accepts strings (character arrays). If a raw integer is passed the
-  corresponding ASCII character will be transmitted; to print out a number in
-  human readable form add a second parameter with the base system. Eg, to print
-  out the decimal number '1234' use <code>print(1234,DEC)</code>; to print out
-  the binary number '1001' use <code>print(9,BIN)</code>. 
-
-  <dt><code>SerialN.available()</code><br>
-      <code>SerialN.read()</code>
-  <dd><code>read()</code> will return any data that has been received over the
-  port and <code>available()</code> will tell if any such data actually exists,
-  and if so how many bytes. If there is no data <code>read()</code> will
-  block/fail, so the usual program structure is to poll with
-  <code>available()</code> and only <code>read()</code> if there's something
-  ready. 
-</dl>
-
-<h2><a name="links">Recommended Reading</a></h2>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
 <ul>
-  <li><a href="http://en.wikipedia.org/wiki/Universal_asynchronous_receiver/transmitter">Wikipedia article on Universal asynchronous receiver/transmitter (USART)</a>
-  <li><a href="http://arduino.cc/en/Reference/Serial">Arduino reference on Serial</a>
-  <li>STMicro documentation for STM32F103RB microcontroller:<ul>
-    <li><a href="http://www.st.com/mcu/devicedocs-STM32F103RB-110.html">All</a>
-    <li><a href="http://www.st.com/stonline/products/literature/ds/13587.pdf">Datasheet (pdf)</a>
-    <li><a href="http://www.st.com/stonline/products/literature/rm/13902.pdf">Reference Manual (pdf)</a>
-    </ul>
+<li class="toctree-l1"><a class="reference internal" href="maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">IDE Anatomy</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errata.html">Known Problems</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spi.html">SPI</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-index.html">Complete Language Index</a></li>
 </ul>
 
-
-<div class="box">
-<h3><i>About this Document</i></h3>
-A more recent version of this document may be available from the 
-<a href="http://leaflabs.com">LeafLabs website</a>. Our documentation is
-versioned on <a href="http://github.com">github</a>; you can track changes
-to the master branch at <a href="http://github.com/leaflabs/maple-ide/tree/master/build/shared/reference/">this link</a>.
-<p>
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
-<img alt="Creative Commons License" style="border-width:0" 
-    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
-<br /><i>This documentation is released under a 
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
-Creative Commons Attribution-Share Alike 3.0</a> license.</i>
-<p>
-Translations are welcomed; give us a ping to make sure we aren't in the
-process of revising or editing first.
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
 </div>
-<!-- ENDDOC -->
-</body></html>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="timers.html" title="Timers"
+             >next</a></li>
+        <li class="right" >
+          <a href="spi.html" title="SPI"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

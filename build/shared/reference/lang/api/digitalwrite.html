@@ -1,0 +1,223 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>digitalWrite() &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="../../index.html" />
+    <link rel="up" title="Complete Language Index" href="../../language-index.html" />
+    <link rel="next" title="HardwareSPI" href="hardwarespi.html" />
+    <link rel="prev" title="digitalRead()" href="digitalread.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="hardwarespi.html" title="HardwareSPI"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="digitalread.html" title="digitalRead()"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" accesskey="U">Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="digitalwrite">
+<span id="lang-digitalwrite"></span><h1>digitalWrite()<a class="headerlink" href="#digitalwrite" title="Permalink to this headline">¶</a></h1>
+<p>Write a <a class="reference internal" href="constants.html#lang-constants-high"><em>HIGH</em></a> or a <a class="reference internal" href="constants.html#lang-constants-low"><em>LOW</em></a> value to a pin configured as <a class="reference internal" href="constants.html#lang-constants-output"><em>OUTPUT</em></a>.</p>
+<div class="section" id="library-documentation">
+<h2>Library Documentation<a class="headerlink" href="#library-documentation" title="Permalink to this headline">¶</a></h2>
+<dt id=""><span id="project0io_8h_1ae5ca477e74e72720fd7b2b7b3abfda8f"></span>void  <strong>digitalWrite</strong>(uint8 pin, uint8 value)</dt>
+<dd><p class="first">
+<p>Writes a (digital) value to a pin. </p>
+        </p>
+<p class="last">
+<p>The pin must have its mode set to <tt class="docutils literal"><span class="pre">OUTPUT</span></tt> or <tt class="docutils literal"><span class="pre">OUTPUT_OPEN_DRAIN</span></tt>.</p>
+<p><p><em>Parameters</em></p>
+<ul class="breatheparameterlist">
+<li><tt class="first docutils literal"><span class="pre">pin</span></tt> - 
+<p>Pin to write to. One of: 0-38 (pin numbers as labeled on silkscreen), or D0-D38 (symbols for same) </p>
+</li>
+<li><tt class="first docutils literal"><span class="pre">value</span></tt> - 
+<p>Either LOW (write a 0) or HIGH (write a 1). </p>
+</li>
+</ul>
+
+
+<dl class="docutils">
+<dt><em>See</em></dt>
+<dd><a class="reference internal" href="pinmode.html#project0io_8h_1ae4c31233dfda1c1f966e3665b9cbd98c"><em>pinMode()</em></a> </dd>
+</dl>
+</p>
+        </p>
+</dd>
+</div>
+<div class="section" id="discussion">
+<h2>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h2>
+<p>If the pin has been configured as an <tt class="docutils literal"><span class="pre">OUTPUT</span></tt> with <a class="reference internal" href="pinmode.html#lang-pinmode"><em>pinMode()</em></a> its voltage will be set to the corresponding value:
+3.3V for <tt class="docutils literal"><span class="pre">HIGH</span></tt>, and 0V (ground) for <tt class="docutils literal"><span class="pre">LOW</span></tt>.</p>
+<p>If the pin is configured as an <tt class="docutils literal"><span class="pre">INPUT</span></tt>, writing a <tt class="docutils literal"><span class="pre">HIGH</span></tt> value
+with <tt class="docutils literal"><span class="pre">digitalWrite()</span></tt> will enable an internal pullup resistor.
+Writing <tt class="docutils literal"><span class="pre">LOW</span></tt> will disable the pullup. The pullup resistor is enough
+to light an LED dimly, so if LEDs appear to work, but very dimly, this
+is a likely cause. The remedy is to set the pin to an output with the
+<a class="reference internal" href="pinmode.html#lang-pinmode"><em>pinMode()</em></a> function.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Pin 13 is harder to use as an input than the other pins
+because it has an LED and resistor soldered to it in series. If you
+enable its internal pull-up resistor, it will likely hang at around
+1.1V instead of the expected 3.3V because the onboard LED and
+series resistor pull the voltage level down. If you must use pin 13
+as a digital input, use an external pull-down resistor.</p>
+</div>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>The following example sets pin 13 to <tt class="docutils literal"><span class="pre">HIGH</span></tt>, makes a one-second-long
+delay, sets the pin back to <tt class="docutils literal"><span class="pre">LOW</span></tt>, and delays again, causing a
+blinking pattern:</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">int</span> <span class="n">ledPin</span> <span class="o">=</span> <span class="mi">13</span><span class="p">;</span>                 <span class="c1">// LED connected to digital pin 13</span>
+
+<span class="kt">void</span> <span class="n">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">ledPin</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>      <span class="c1">// sets the digital pin as output</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPin</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>   <span class="c1">// sets the LED on</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>                  <span class="c1">// waits for a second</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPin</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>    <span class="c1">// sets the LED off</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>                  <span class="c1">// waits for a second</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="pinmode.html#lang-pinmode"><em>pinMode</em></a></li>
+<li><a class="reference internal" href="digitalread.html#lang-digitalread"><em>digitalRead</em></a></li>
+</ul>
+<div class="admonition-license-and-attribution admonition ">
+<p class="first admonition-title">License and Attribution</p>
+<p class="last">This documentation page was adapted from the <a class="reference external" href="http://arduino.cc/en/Reference/HomePage">Arduino Reference
+Documentation</a>, which
+is released under a <a class="reference external" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0
+License</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ide.html">IDE Anatomy</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="hardwarespi.html" title="HardwareSPI"
+             >next</a></li>
+        <li class="right" >
+          <a href="digitalread.html" title="digitalRead()"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" >Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

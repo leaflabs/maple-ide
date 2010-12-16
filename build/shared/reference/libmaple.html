@@ -1,0 +1,180 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>libmaple Reference &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="index.html" />
+    <link rel="next" title="Unix Toolchain Quickstart" href="unix-toolchain.html" />
+    <link rel="prev" title="External Interrupts" href="external-interrupts.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="unix-toolchain.html" title="Unix Toolchain Quickstart"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="external-interrupts.html" title="External Interrupts"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="libmaple-reference">
+<span id="libmaple"></span><h1><tt class="docutils literal"><span class="pre">libmaple</span></tt> Reference<a class="headerlink" href="#libmaple-reference" title="Permalink to this headline">¶</a></h1>
+<img alt="libmaple screenshot" class="align-center" src="_images/libmaple-screenshot-small.png" />
+<p><a class="reference external" href="libmaple-libmaple">LeafLabs libmaple</a> is the low level library we
+have developed for for the ARM Cortex-M3 chips manufactured by
+STMicroelectronics used in the Maple boards (the <a class="reference external" href="http://www.st.com/stonline/stappl/productcatalog/app?path=/pages/stcom/PcStComPartNumberSearch.searchPartNumber&amp;search=stm32f103">STM32F103x</a>
+series). We found the generic peripheral libraries too painful to
+build on top of, and reimplemented the functionality we needed in a
+simpler (and less general) form.</p>
+<p>This library is transparently included in the <a class="reference external" href="http://leaflabs.com/docs/maple-ide/">Maple IDE</a>, but we develop it separately
+using good old Unix command line tools and release it for advanced
+users who might chafe at the &#8220;sketch&#8221; programming model of the
+IDE. Included are some examples, a Makefile, and the compatibility
+wrappers and code to imitate the Arduino programming library.</p>
+<p><strong>Check out the latest source</strong>:</p>
+<div class="highlight-sh"><div class="highlight"><pre>git clone git://github.com/leaflabs/libmaple.git
+</pre></div>
+</div>
+<p><strong>Table of contents:</strong></p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="unix-toolchain.html">Unix Toolchain Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="unix-toolchain.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unix-toolchain.html#test-compilation">Test compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unix-toolchain.html#upload-a-program">Upload a program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unix-toolchain.html#communicate-over-usb-serial-interface">Communicate over USB-serial interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unix-toolchain.html#starting-your-own-projects">Starting your own projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unix-toolchain.html#debug-with-openocd">Debug with OpenOCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unix-toolchain.html#do-it-all-with-code-blocks">Do it all with Code::Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unix-toolchain.html#go-forth-exuberantly">Go forth exuberantly!</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="arm-gcc.html">Guide to using GCC&#8217;s ARM target</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="arm-gcc.html#obtaining-arm-none-eabi-gcc">Obtaining <tt class="docutils literal"><span class="pre">arm-none-eabi-gcc</span></tt></a></li>
+<li class="toctree-l2"><a class="reference internal" href="arm-gcc.html#compiler-flags-used-by-libmaple">Compiler Flags Used by libmaple</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arm-gcc.html#switching-from-avr-gcc">Switching from AVR-GCC</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">IDE Anatomy</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Command-Line Tools &amp; APIs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="unix-toolchain.html">Unix Toolchain Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arm-gcc.html">Guide to using GCC&#8217;s ARM target</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="unix-toolchain.html" title="Unix Toolchain Quickstart"
+             >next</a></li>
+        <li class="right" >
+          <a href="external-interrupts.html" title="External Interrupts"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

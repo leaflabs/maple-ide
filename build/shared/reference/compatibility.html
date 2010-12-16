@@ -1,251 +1,403 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-"http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head><title>Maple Reference Documentation</title>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-<link rel="stylesheet" href="minimal.css" type="text/css">
-</head><body> 
-<!-- minimalist html; this is designed to be copy/pasted into a website -->
-<!-- STARTDOC -->
-<h1>Maple-Arduino Compatibility Notes</h1>
 
-<ul>
-  <li><a href="#overview">Overview</a>
-  <li><a href="#software">Software Language/Library Changes</a>
-  <li><a href="#shields">Shield and Device Compatibility</a>
-  <li><a href="#libraries">Library Porting Status</a>
-  <li><a href="#headers">Header Numbering and Incompatibilities</a>
-  <li><a href="#porting">Sketch and Library Porting HOWTO</a>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Maple-Arduino Compatibility &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="index.html" />
+    <link rel="next" title="External Interrupts" href="external-interrupts.html" />
+    <link rel="prev" title="Servo" href="libs/servo.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="external-interrupts.html" title="External Interrupts"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="libs/servo.html" title="Servo"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="maple-arduino-compatibility">
+<span id="compatibility"></span><h1>Maple-Arduino Compatibility<a class="headerlink" href="#maple-arduino-compatibility" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#overview" id="id1">Overview</a></li>
+<li><a class="reference internal" href="#header-numbering-and-incompatibilities" id="id2">Header Numbering and Incompatibilities</a></li>
+<li><a class="reference internal" href="#software-language-library-changes" id="id3">Software Language/Library Changes</a></li>
+<li><a class="reference internal" href="#shield-and-device-compatibility" id="id4">Shield and Device Compatibility</a></li>
+<li><a class="reference internal" href="#library-porting-status" id="id5">Library Porting Status</a></li>
+<li><a class="reference internal" href="#sketch-and-library-porting-howto" id="id6">Sketch and Library Porting HOWTO</a></li>
 </ul>
-
-<h2><a name="overview">Overview</a></h2> The biggest difference
-between the Maple and most Arduino boards is that the Maple uses a
-32-bit ARM Cortex-M3 architecture chip while the Arduinos have 8-bit
-Atmel AVR chips. The different instruction set means that machine code
-(executable binary programs) is incompatible between the two, and a
-different compiler (actually just a different version of gcc) is
-required. The compiler for the regular Arduino IDE is the popular
-"avr-gcc" package; the compiler for the Maple version of the IDE is
-CodeSourcery's edition of gcc for the ARM EABI target (aka
-"arm-non-eabi-gcc").
-
-<p>
-The bitwidth of the processor means that the Maple can process 32-bit
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id1">Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The biggest difference between the Maple and most Arduino boards is
+that the Maple uses a 32-bit ARM Cortex-M3 architecture chip while the
+Arduinos have 8-bit Atmel AVR chips. The different instruction set
+means that machine code (executable binary programs) is incompatible
+between the two, and a different compiler (actually just a different
+version of <a class="reference external" href="http://gcc.gnu.org/">gcc</a>) is required.</p>
+<p>The compiler for the regular Arduino IDE is the popular
+<strong class="command">avr-gcc</strong> package; the compiler for the Maple version of the
+IDE is CodeSourcery&#8217;s edition of gcc for the ARM EABI target
+(<strong class="command">arm-non-eabi-gcc</strong>).  A (preliminary) reference on
+<a class="reference internal" href="arm-gcc.html#arm-gcc"><em>using arm-none-eabi-gcc</em></a> is available.</p>
+<p>The bitwidth of the processor means that the Maple can process 32-bit
 operations (like adding two 32-bit integers) in a single instruction,
 while an Arduino processor would have to split up large operations
 into several smaller ones. In a lot of cases 8-bit operations are
 plenty (integers 0-255, single characters of text, etc.), but if
-you're dealing with higher resolution data, the speed up could be
+you&#8217;re dealing with higher resolution data, the speed up could be
 significant. A trade-off is that code could be larger as well; program
 instructions and memory locations can be up to 32-bits each, which in
 the worst case would quadruple program size. In reality, the removal
 of extra instructions and fancy packing together of simple
-instructions means that programs aren't much larger (or are even
-smaller).
-
-
-<h2><a name="headers">Header Numbering and Incompatibilities</a></h2>
-
-The numbering of headers is different; on the Maple each GPIO has a
-unique number: D0, D1, D2, all the way up to D37 (actually, there are
-a couple more...).  On the Arduino, the analog pins are numbered
-separately (A0-A5) from the digital pins (D0-D13).
-
-<p>
-The incompatible hardware differences are:
-<ul>
-
-  <li><b style="color:red;">i2c port:</b> on most Arduinos, the i2c
-  port is Analog Input 4 (SDA) and Analog Input 5 (SCL); on the Maple,
-  i2c port 1 is D5 (SCL) and D9 (SDA), and i2c port 2 is D29 (SCL) and
-  D30 (SDA). It should be possible to skywire, sacrificing signal
-  quality (increased capacitance).  Alternatively, i2c can be bit
-  banged reasonably well in software. This peripheral could
-  potentially be rerouted internally, but we haven't looked into it.
-
-  <li><b style="color:red;">PWM on D10:</b> all the other standard Arduino PWM
-  headers have PWM functionality on the Maple (D2,D3,D6,D9,D11), but not D10.
-  We did our best! It may be possible to reroute this peripheral internally
-  using low level configuration, but we haven't looked in to it.
-
-  <li><b style="color:red;">No External Voltage Reference:</b> The Arduino has
-  an Aref pin which allows the use of an external ADC voltage reference; the
-  Maple has an extra GPIO pin (14) with PWM capability in this spot, and does
-  not allow an external voltage reference to be configured. 
-
-  <li><b style="color:red;">EEPROM:</b> the Maple does not have any internal
-  EEPROM. This functionality can be emulated with regular persistent flash
-  memory, or with an external EEPROM chip. 
-
-  <li><b style="color:red;">ISP Programming:</b> the Maple does not use an
-  ISP/ICSP bus for debugging; it uses JTAG. 
-
-</ul>
-
-<h2><a name="software">Software Language/Library Changes</a></h2>
-
-<ul>
-  <li><b>32-bit int:</b> many standard functions either expect or return full
-  32-bit (4 byte) integer values instead of the regular 16-bit (2 byte)Arduino
-  values.
-
-  <li><b>pinMode types:</b> any GPIO (including analog pins) can be configured
-  into one of the following modes with a single call to pinMode: OUTPUT,
-  OUTPUT_OPEN_DRAIN, INPUT_FLOATING, INPUT_PULLUP, INPUT_PULLDOWN. Additionally
-  the PWM and Analog Input pins can be configured as INPUT_ANALOG and PWM 
-  respectively. See <a href="./gpio.html">GPIO docs</a> for more info.
-
-  <li><b>Serial1 syntax:</b> like the Arduino Mega, the Maple has multiple 
-  USART ports. By default <code>Serial</code> is not mapped to any of them,
-  use <code>Serial1</code> through <code>Serial3</code> instead.
-
-  <li><b><code>tone()</code> unimplemented:</b> On the TODO list!
-
-  <li><b><code>pulseIn()</code> unimplemented:</b> On the TODO list!
-
-  <li><b>16-bit PWM</b>
-
-  <li><b>12-bit ADC</b>
-
-</ul>
-
-<h2><a name="shields">Shield and Device Compatibility</a></h2>
-<table>
-<tr>
-  <th>Shield/Device
-  <th>Compatible?
-  <th>Notes
-<tr>
-  <td>Ethernet Shield
-  <td style="background-color:green;">Yes!
-  <td>Tested; no library yet
-<tr>
-  <td>Midi Shield
-  <td style="background-color:green;">Yes!
-  <td>Tested?
-<tr>
-  <td>XBee Shield
-  <td style="background-color:white;">Unknown
-  <td>
-<tr>
-  <td>Bluetooth Shield
-  <td style="background-color:white;">Unknown
-  <td>
-<tr>
-  <td>WiFi Shield
-  <td style="background-color:white;">Unknown
-  <td>
-<tr>
-  <td>Cellular Shield 
-  <td style="background-color:white;">Unknown
-  <td>
-</table>
-
-<h2><a name="libraries">Library Porting Status</a></h2>
-<table>
-<tr>
-  <th>Library
-  <th>Ported?
-  <th>Notes
-<tr>
-  <td>Wiring
-  <td style="background-color:orange;">Not yet
-  <td>In progress
-<tr>
-  <td>Ethernet
-  <td style="background-color:orange;">Not yet
-  <td>Planned
-<tr>
-  <td>EEPROM
-  <td style="background-color:red;">No
-  <td>The Maple doesn't have EEPROM; use flash instead. This library could be
-  emulated?
-<tr>
-  <td>Firmata
-  <td style="background-color:orange;">Not yet
-  <td>Planned
-<tr>
-  <td>Matrix
-  <td style="background-color:orange;">Not yet
-  <td>
-<tr>
-  <td>SoftwareSerial
-  <td style="background-color:orange;">Not yet
-  <td>Planned
-<tr>
-  <td>Sprite
-  <td style="background-color:orange;">Not yet
-  <td>
-<tr>
-  <td>LiquidCrystal
-  <td style="background-color:green;">Tested
-  <td>Will be included in v0.0.7 of IDE
-<tr>
-  <td>Stepper
-  <td style="background-color:orange;">Not yet
-  <td>Planned
-</table>
-
-<h2><a name="porting">Sketch and Library Porting HOWTO</a></h2>
-
-<ol>
-  <li> First check the hardware and header differences above and see if your
-  project or shield needs to be modified (eg, add 3.3v level converters or
-  reroute PWM to header D10). 
-
-  <li>Check for ported library functionality. We intend to port all of the
-  core and popular libraries (like Wire, Ethernet, and the LCD screen driver), 
-  but we may not be finished.
-
-  <li>Check for peripheral conflicts; changing the configuration of timers
-  and bus speeds for a feature on one header may impact all the features on
-  that hardware "port"; for example changing the timer prescaler to do long
-  PWM pulses could impact i2c communications on nearby headers.
-
-  <li>Rewrite any low-level code. This could potentially be very difficult, but
-  hopefully you've used the Arduino libraries to abstract away the registers
-  and other hardware-specific details. Your sketch probably doesn't have any
-  low-level code; a library which wraps a particular peripheral very well may.
-
-  <li>Redeclare variable sizes if necessary: generics like <code>int</code>
-  will probably work unless you depend on side-effects like rollover. 
-
-  <li>Check every pinMode: the Maple has more modes for GPIO pins. For example,
-  make sure to set analog pins to <code>INPUT_ANALOG</code> before reading and
-  PWM pins to <code>PWM</code> before writing.
-
-  <li>Modify PWM writes: pinMode must be set to <code>PWM</code>, the frequency
-  of the PWM pulse configured, and the duty cycle written with up to 16-bit
-  resolution. 
-
-  <li>Modify ADC reads: analogRead takes the full pin number (not 0-5) and
-  returns a full 12-bit reading. The ADC pin must be set to
-  <code>INPUT_ANALOG</code> using pinMode first.
-
-  <li>Possibly convert all Serial-over-USB communications to use HardwareUsb
-  instead of HardwareSerial. The Maple has a dedicated USB port which is not
-  connected to the USART TX/RX pins in any way.
-
-  <li>Check timing; Maple clock cycles are just 13.9 nanoseconds, though the
-  peripheral bus speeds (which limit GPIO output) are clocked slower. 
-</ol>
-
-<div class="box">
-<h3><i>About this Document</i></h3>
-A more recent version of this document may be available from the 
-<a href="http://leaflabs.com">LeafLabs website</a>. Our documentation is
-versioned on <a href="http://github.com">github</a>; you can track changes
-to the master branch at <a href="http://github.com/leaflabs/maple-ide/tree/master/build/shared/reference/">this link</a>.
-<p>
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
-<img alt="Creative Commons License" style="border-width:0" 
-    src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
-<br /><i>This documentation is released under a 
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
-Creative Commons Attribution-Share Alike 3.0</a> license.</i>
-<p>
-Translations are welcomed; give us a ping to make sure we aren't in the
-process of revising or editing first.
+instructions means that programs aren&#8217;t much larger (or are even
+smaller).</p>
 </div>
-<!-- ENDDOC -->
-</body></html>
+<div class="section" id="header-numbering-and-incompatibilities">
+<h2><a class="toc-backref" href="#id2">Header Numbering and Incompatibilities</a><a class="headerlink" href="#header-numbering-and-incompatibilities" title="Permalink to this headline">¶</a></h2>
+<p>The numbering of headers is different; on the Maple each GPIO has a
+unique number: D0, D1, D2, all the way up to D37 (actually, there are
+<a class="reference internal" href="jtag.html#jtag"><em>a few more</em></a>...). On the Arduino, the analog pins are
+numbered separately (A0-A5) from the digital pins (D0-D13).</p>
+<p>The incompatible hardware differences are:</p>
+<ul>
+<li><p class="first"><strong>I2C port</strong>: on most Arduinos, the I<sup>2</sup>C port is Analog Input 4
+(SDA) and Analog Input 5 (SCL); on the Maple, I<sup>2</sup>C port 1 is D5
+(SCL) and D9 (SDA), and I<sup>2</sup>C port 2 is D29 (SCL) and D30 (SDA).</p>
+<p>It should be possible to skywire, sacrificing signal quality (due to
+increased capacitance). Alternatively, I<sup>2</sup>C can be bit-banged
+reasonably well in software. This peripheral could potentially be
+rerouted internally, but we haven&#8217;t looked into it.</p>
+</li>
+<li><p class="first"><a class="reference internal" href="pwm.html#pwm"><em>PWM</em></a> <strong>on D10</strong>: all the other standard Arduino PWM
+headers have PWM functionality on the Maple (D2,D3,D6,D9,D11), but
+not D10. We did our best! It may be possible to reroute this
+peripheral internally using low level configuration, but we haven&#8217;t
+looked in to it.</p>
+</li>
+<li><p class="first"><strong>No External Voltage Reference</strong>: The Arduino has an Aref pin which
+allows the use of an external ADC voltage reference; the Maple has
+an extra GPIO pin (14) with PWM capability in this spot, and does
+not allow an external voltage reference to be configured.</p>
+</li>
+<li><p class="first"><strong>EEPROM</strong>: the Maple does not have any internal EEPROM. This
+functionality can be emulated with regular persistent flash memory,
+or with an external EEPROM chip.</p>
+</li>
+<li><p class="first"><strong>ISP Programming</strong>: the Maple does not use an ISP/ICSP bus for
+debugging; it uses <a class="reference internal" href="jtag.html#jtag"><em>JTAG</em></a>.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="software-language-library-changes">
+<h2><a class="toc-backref" href="#id3">Software Language/Library Changes</a><a class="headerlink" href="#software-language-library-changes" title="Permalink to this headline">¶</a></h2>
+<p>With <a class="reference internal" href="language.html#language-missing-features"><em>a few exceptions</em></a>, the entire
+Wiring/Arduino language is supported.  However, there are some subtle
+differences, most of which are improvements:</p>
+<ul class="simple">
+<li><strong>32-bit integers</strong>: many standard functions either expect or return
+full 32-bit (4 byte) integer values instead of the regular 16-bit (2
+byte) Arduino values.</li>
+<li><strong>64-bit doubles</strong>: The <a class="reference internal" href="lang/cpp/double.html#lang-double"><em>double</em></a> type is a full
+double-precision floating point type on the Maple; it is a
+single-precision floating point value on the Arduino.</li>
+<li><a class="reference internal" href="lang/api/pinmode.html#lang-pinmode"><em>pinMode()</em></a> <strong>types</strong>: any <a class="reference internal" href="gpio.html#gpio"><em>GPIO</em></a>
+(including analog pins) can be configured into one of the following
+modes with a single call to <tt class="docutils literal"><span class="pre">`pinMode()</span></tt>: <tt class="docutils literal"><span class="pre">OUTPUT</span></tt>,
+<tt class="docutils literal"><span class="pre">OUTPUT_OPEN_DRAIN</span></tt>, <tt class="docutils literal"><span class="pre">INPUT_FLOATING</span></tt>, <tt class="docutils literal"><span class="pre">INPUT_PULLUP</span></tt>,
+<tt class="docutils literal"><span class="pre">INPUT_PULLDOWN</span></tt>. Additionally, the PWM and Analog Input pins can
+be configured as <tt class="docutils literal"><span class="pre">INPUT_ANALOG</span></tt> and <tt class="docutils literal"><span class="pre">PWM</span></tt> respectively. See the
+<a class="reference internal" href="gpio.html#gpio"><em>GPIO documentation</em></a> for more information.</li>
+<li><a class="reference internal" href="lang/api/serial.html#lang-serial"><em>Serial port</em></a> <strong>syntax</strong>: like the <a class="reference external" href="http://arduino.cc/en/Main/ArduinoBoardMega">Arduino Mega</a>, the Maple has
+multiple <a class="reference internal" href="lang/api/serial.html#lang-serial"><em>USART ports</em></a>.  By default, <tt class="docutils literal"><span class="pre">Serial</span></tt>
+is not mapped to any of them, use <tt class="docutils literal"><span class="pre">Serial1</span></tt> through <tt class="docutils literal"><span class="pre">Serial3</span></tt>
+instead.</li>
+<li><strong>16-bit</strong> <a class="reference internal" href="pwm.html#pwm"><em>PWM</em></a>: Arduino boards support 8-bit PWM, which
+means that calls to <a class="reference internal" href="lang/api/analogwrite.html#lang-analogwrite"><em>analogWrite()</em></a> take
+values between 0 (always off) and 255 (always on).  The Maple
+supports 16-bit PWM, so the corresponding values should be between 0
+(always off) and 65535 (always on).</li>
+<li><strong>12-bit</strong> <a class="reference internal" href="adc.html#adc"><em>ADC</em></a>: Arduino boards support 10-bit ADC, which
+means that calls to <a class="reference internal" href="lang/api/analogread.html#lang-analogread"><em>analogRead()</em></a> will
+return values between 0 and 1023.  The Maple supports 12-bit ADC, so
+the same call will instead return values between 0 and 4095.</li>
+</ul>
+</div>
+<div class="section" id="shield-and-device-compatibility">
+<h2><a class="toc-backref" href="#id4">Shield and Device Compatibility</a><a class="headerlink" href="#shield-and-device-compatibility" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Shield/Device</th>
+<th class="head">Compatible?</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Ethernet shield</td>
+<td>Yes!</td>
+<td>Tested; no library yet</td>
+</tr>
+<tr><td>WiFi Shield</td>
+<td>Yes!</td>
+<td>Tested; preliminary library support</td>
+</tr>
+<tr><td>MIDI shield</td>
+<td>Yes!</td>
+<td>Tested; no library yet</td>
+</tr>
+<tr><td>XBee shield</td>
+<td>Unknown</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>Bluetooth shield</td>
+<td>Unknown</td>
+<td>Some Bluetooth &lt;-&gt; UART boards have been tested and are known
+to work.</td>
+</tr>
+<tr><td>Cellular shield</td>
+<td>Unknown</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="library-porting-status">
+<h2><a class="toc-backref" href="#id5">Library Porting Status</a><a class="headerlink" href="#library-porting-status" title="Permalink to this headline">¶</a></h2>
+<p>The state of currently ported Arduino libraries is the
+<a class="reference internal" href="libraries.html#libraries"><em>Maple Library Reference</em></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Library</th>
+<th class="head">Ported?</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Wire</td>
+<td>Preliminary</td>
+<td>In progress; see <a class="reference internal" href="libraries.html#libraries-wire"><em>library reference</em></a>.</td>
+</tr>
+<tr><td>LiquidCrystal</td>
+<td><strong>Yes</strong></td>
+<td><a class="reference internal" href="libraries.html#libraries-liquid-crystal"><em>Included since IDE 0.0.7</em></a></td>
+</tr>
+<tr><td>Ethernet</td>
+<td>Not yet</td>
+<td>Planned</td>
+</tr>
+<tr><td>EEPROM</td>
+<td>(Unsupported) third-party emulation</td>
+<td>The Maple doesn&#8217;t have EEPROM; it uses flash instead.  There is
+an <a class="reference external" href="http://akb77.com/g/mcu/maple-eeprom-emulation-library/">EEPROM emulation library</a> by
+<a class="reference external" href="http://akb77.com/g/">x893</a>, but we haven&#8217;t tested it.</td>
+</tr>
+<tr><td>Firmata</td>
+<td>Not yet</td>
+<td>Planned</td>
+</tr>
+<tr><td>Matrix</td>
+<td>Not yet</td>
+<td>Planned</td>
+</tr>
+<tr><td>Servo</td>
+<td><strong>Yes</strong></td>
+<td><a class="reference internal" href="libraries.html#libraries-servo"><em>Included since IDE 0.0.9</em></a></td>
+</tr>
+<tr><td>SoftwareSerial</td>
+<td>Not yet</td>
+<td>Planned</td>
+</tr>
+<tr><td>Sprite</td>
+<td>Not yet</td>
+<td>Planned</td>
+</tr>
+<tr><td>Stepper</td>
+<td>Not yet</td>
+<td>Planned</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="sketch-and-library-porting-howto">
+<h2><a class="toc-backref" href="#id6">Sketch and Library Porting HOWTO</a><a class="headerlink" href="#sketch-and-library-porting-howto" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the suggestions in this section, you may find many of
+the individual <a class="reference internal" href="language.html#language"><em>language reference</em></a> pages useful.  As
+appropriate, these have &#8220;Arduino Compatibility&#8221; sections; one good
+example is the <a class="reference internal" href="lang/api/analogwrite.html#lang-analogwrite-compatibility"><em>analogWrite()</em></a>
+function.</p>
+<ul class="simple">
+<li>Check the hardware and header differences above, and see if your
+project or shield needs to be modified (eg, add 3.3V level
+converters or reroute PWM to header D10).</li>
+<li>Check for ported library functionality. We intend to port all of the
+core and popular libraries (like Wire, Ethernet, and the LCD screen
+driver), but this task is not yet finished. (Patches are welcome!)</li>
+<li>Check for peripheral conflicts; changing the configuration of timers
+and bus speeds for a feature on one header may impact all the
+features on that hardware &#8220;port&#8221;.  For example, changing the timer
+prescaler to do long PWM pulses could impact I<sup>2</sup>C communications on
+nearby headers.</li>
+<li>Rewrite any low-level code. This could potentially be very
+difficult, but hopefully you&#8217;ve used the Arduino libraries to
+abstract away the registers and other hardware-specific
+details. Your sketch probably doesn&#8217;t have any low-level code; a
+library which wraps a particular peripheral very well may.  Some
+help is available in the <a class="reference internal" href="arm-gcc.html#arm-gcc"><em>GCC for Maple</em></a> reference.</li>
+<li>Redeclare variable sizes if necessary: generics like <tt class="docutils literal"><span class="pre">int</span></tt> will
+probably work unless you depend on side-effects like rollover.</li>
+<li>Check every <tt class="docutils literal"><span class="pre">pinMode()</span></tt>: the Maple has more modes for GPIO
+pins. For example, make sure to set analog pins to <tt class="docutils literal"><span class="pre">INPUT_ANALOG</span></tt>
+before reading and PWM pins to <tt class="docutils literal"><span class="pre">PWM</span></tt> before writing.  The full set
+of pin modes is documented in the <a class="reference internal" href="lang/api/pinmode.html#lang-pinmode"><em>pinMode()</em></a> reference.</li>
+<li>Modify PWM writes: <tt class="docutils literal"><span class="pre">pinMode()</span></tt> must be set to <tt class="docutils literal"><span class="pre">PWM</span></tt>, the
+frequency of the PWM pulse configured, and the duty cycle written
+with up to 16-bit resolution.</li>
+<li>Modify ADC reads: <a class="reference internal" href="lang/api/analogread.html#lang-analogread"><em>analogRead()</em></a> takes the full pin number
+(not 0-5) and returns a full 12-bit reading. The ADC pin must have
+its <tt class="docutils literal"><span class="pre">pinMode()</span></tt> set to <tt class="docutils literal"><span class="pre">INPUT_ANALOG</span></tt>.</li>
+<li>Possibly convert all Serial-over-USB communications to use
+<a class="reference internal" href="lang/api/serialusb.html#lang-serialusb"><em>SerialUSB</em></a> instead of a USART <a class="reference internal" href="lang/api/serial.html#lang-serial"><em>serial port</em></a>. The Maple has a dedicated USB port which is not
+connected to the USART TX/RX pins in any way.</li>
+<li>Check timing: Maple clock cycles are just 13.9 nanoseconds, though
+the peripheral bus speeds (which limit GPIO output) are clocked
+slower.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">IDE Anatomy</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Arduino Compatibility</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#header-numbering-and-incompatibilities">Header Numbering and Incompatibilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#software-language-library-changes">Software Language/Library Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#shield-and-device-compatibility">Shield and Device Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#library-porting-status">Library Porting Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sketch-and-library-porting-howto">Sketch and Library Porting HOWTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="external-interrupts.html" title="External Interrupts"
+             >next</a></li>
+        <li class="right" >
+          <a href="libs/servo.html" title="Servo"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="index.html">Index</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

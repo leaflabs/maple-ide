@@ -36,6 +36,7 @@ import com.apple.eawt.*;
  * As of 0140, this code need not be built on platforms other than OS X, 
  * because of the new platform structure which isolates through reflection.
  */
+@SuppressWarnings("deprecation") // we'll drop this sucker before these die
 public class ThinkDifferent implements ApplicationListener {
 
   // pseudo-singleton model; no point in making multiple instances
@@ -68,6 +69,7 @@ public class ThinkDifferent implements ApplicationListener {
   
   // implemented handler methods.  These are basically hooks into existing 
   // functionality from the main app, as if it came over from another platform.
+  @SuppressWarnings("deprecation")
   public void handleAbout(ApplicationEvent ae) {
     if (base != null) {
       ae.setHandled(true);
@@ -77,7 +79,7 @@ public class ThinkDifferent implements ApplicationListener {
     }
   }
   
-  
+  @SuppressWarnings("deprecation")
   public void handlePreferences(ApplicationEvent ae) {
     if (base != null) {
       base.handlePrefs();
@@ -88,10 +90,12 @@ public class ThinkDifferent implements ApplicationListener {
   }
 
 
+  @SuppressWarnings("deprecation")
   public void handleOpenApplication(ApplicationEvent ae) {
   }
 
 
+  @SuppressWarnings("deprecation")
   public void handleOpenFile(ApplicationEvent ae) {
 //    System.out.println("got open file event " + ae.getFilename());
     String filename = ae.getFilename();
@@ -100,11 +104,13 @@ public class ThinkDifferent implements ApplicationListener {
   }
 
 
+  @SuppressWarnings("deprecation")
   public void handlePrintFile(ApplicationEvent ae) {
     // TODO implement os x print handler here (open app, call handlePrint, quit)
   }
 
 
+  @SuppressWarnings("deprecation")
   public void handleQuit(ApplicationEvent ae) {
     if (base != null) {
       /*  
@@ -122,6 +128,7 @@ public class ThinkDifferent implements ApplicationListener {
   }
   
   
+  @SuppressWarnings("deprecation")
   public void handleReOpenApplication(ApplicationEvent arg0) {
   }
 }

@@ -1,0 +1,554 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HardwareTimer &mdash; Maple v0.0.9 Documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/breathe.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/round_logo_32x32.ico"/>
+    <link rel="top" title="Maple v0.0.9 Documentation" href="../../index.html" />
+    <link rel="up" title="Complete Language Index" href="../../language-index.html" />
+    <link rel="next" title="highByte()" href="highbyte.html" />
+    <link rel="prev" title="HardwareSPI" href="hardwarespi.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="highbyte.html" title="highByte()"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="hardwarespi.html" title="HardwareSPI"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" accesskey="U">Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="hardwaretimer">
+<span id="lang-hardwaretimer"></span><h1>HardwareTimer<a class="headerlink" href="#hardwaretimer" title="Permalink to this headline">¶</a></h1>
+<p>This class defines the public API for interfacing with the STM32&#8217;s
+built-in timer peripherals.  More information on these peripherals
+(including code examples) is available in the <a class="reference internal" href="../../timers.html#timers"><em>timers reference</em></a>.</p>
+<div class="section" id="library-documentation">
+<h2>Library Documentation<a class="headerlink" href="#library-documentation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="hardwaretimer-class-reference">
+<h3>HardwareTimer Class Reference<a class="headerlink" href="#hardwaretimer-class-reference" title="Permalink to this headline">¶</a></h3>
+<p>To interact with a particular timer, call one of the methods
+documented below on one of the predefined <tt class="docutils literal"><span class="pre">HardwareTimer</span></tt> instances.
+For example, to set the prescale factor on timer 1 to 5, call
+<tt class="docutils literal"><span class="pre">Timer1.setPrescaleFactor(5)</span></tt>.</p>
+<dl class="class">
+<dt id="HardwareTimer">
+<em class="property">class </em><tt class="descname">HardwareTimer</tt><a class="headerlink" href="#HardwareTimer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for interacting with a timer.  There are four predefined
+instances available on the Maple: <tt class="docutils literal"><span class="pre">Timer1</span></tt>, <tt class="docutils literal"><span class="pre">Timer2</span></tt>,
+<tt class="docutils literal"><span class="pre">Timer3</span></tt>, and <tt class="docutils literal"><span class="pre">Timer4</span></tt>.</p>
+</dd></dl>
+
+<span class="target" id="lang-hardwaretimer-attachinterrupt"></span><dl class="function">
+<dt id="HardwareTimer::attachInterrupt__i.voidFuncPtr">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">attachInterrupt</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#i" title="int">int</a> <em>channel</em>, <a class="reference internal" href="../cpp/built-in-types.html#voidFuncPtr" title="voidFuncPtr">voidFuncPtr</a> <em>handler</em><big>)</big><a class="headerlink" href="#HardwareTimer::attachInterrupt__i.voidFuncPtr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach an interrupt handler to the given <tt class="docutils literal"><span class="pre">channel</span></tt>.  This
+interrupt handler will be called when the timer&#8217;s counter reaches
+the given channel <a class="reference internal" href="#lang-hardwaretimer-setcompare"><em>compare</em></a>
+value.</p>
+<p><tt class="docutils literal"><span class="pre">handler</span></tt> should be a function which takes no arguments and has
+<a class="reference internal" href="../cpp/void.html#lang-void"><em>void</em></a> value; i.e. it should have signature</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="kt">void</span> <span class="n">handler</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>You can later detach the interrupt using <a class="reference internal" href="#lang-hardwaretimer-detachinterrupt"><em>detachInterrupt()</em></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The function (often called an <em>interrupt service
+routine</em>, or ISR) should attempt to return as quickly as
+possible.  <a class="reference internal" href="toggleled.html#lang-toggleled"><em>Blinking the LED</em></a>, some
+logic, <a class="reference internal" href="../../pwm.html#pwm"><em>PWM</em></a> updates, and <a class="reference internal" href="serial.html#lang-serial"><em>Serial</em></a> writes are fine; writing to
+<a class="reference internal" href="serialusb.html#lang-serialusb"><em>SerialUSB</em></a> or <a class="reference internal" href="waitforbuttonpress.html#lang-waitforbuttonpress"><em>waiting</em></a> for user input can take a long
+time and prevent other interrupts from firing on time.</p>
+<p class="last">Tip: if you have a <a class="reference internal" href="delay.html#lang-delay"><em>delay()</em></a> in your
+ISR, you&#8217;re probably doing it wrong.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::attachCompare1Interrupt__voidFuncPtr">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">attachCompare1Interrupt</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#voidFuncPtr" title="voidFuncPtr">voidFuncPtr</a> <em>handler</em><big>)</big><a class="headerlink" href="#HardwareTimer::attachCompare1Interrupt__voidFuncPtr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-attachinterrupt"><em>attachInterrupt</em></a><tt class="docutils literal"><span class="pre">(1,</span> <span class="pre">handler)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::attachCompare2Interrupt__voidFuncPtr">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">attachCompare2Interrupt</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#voidFuncPtr" title="voidFuncPtr">voidFuncPtr</a> <em>handler</em><big>)</big><a class="headerlink" href="#HardwareTimer::attachCompare2Interrupt__voidFuncPtr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-attachinterrupt"><em>attachInterrupt</em></a><tt class="docutils literal"><span class="pre">(2,</span> <span class="pre">handler)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::attachCompare3Interrupt__voidFuncPtr">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">attachCompare3Interrupt</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#voidFuncPtr" title="voidFuncPtr">voidFuncPtr</a> <em>handler</em><big>)</big><a class="headerlink" href="#HardwareTimer::attachCompare3Interrupt__voidFuncPtr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-attachinterrupt"><em>attachInterrupt</em></a><tt class="docutils literal"><span class="pre">(3,</span> <span class="pre">handler)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::attachCompare4Interrupt__voidFuncPtr">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">attachCompare4Interrupt</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#voidFuncPtr" title="voidFuncPtr">voidFuncPtr</a> <em>handler</em><big>)</big><a class="headerlink" href="#HardwareTimer::attachCompare4Interrupt__voidFuncPtr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-attachinterrupt"><em>attachInterrupt</em></a><tt class="docutils literal"><span class="pre">(4,</span> <span class="pre">handler)</span></tt>.</p>
+</dd></dl>
+
+<span class="target" id="lang-hardwaretimer-setchannelmode"></span><dl class="function">
+<dt id="HardwareTimer::setChannelMode__i.TimerMode">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">setChannelMode</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#i" title="int">int</a> <em>channel</em>, TimerMode <em>mode</em><big>)</big><a class="headerlink" href="#HardwareTimer::setChannelMode__i.TimerMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the given channel of this timer to the given <a class="reference internal" href="#lang-hardwaretimer-modes"><em>mode</em></a>.  The parameter <tt class="docutils literal"><span class="pre">channel</span></tt> is one of
+1, 2, 3, and 4, and corresponds to the compare channel you would
+like to set.  Refer to the full <a class="reference internal" href="../../gpio.html#pin-mapping-mega-table"><em>pin mapping table</em></a> to match up timer channels and pin
+numbers.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::setChannel1Mode__TimerMode">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">setChannel1Mode</tt><big>(</big>TimerMode <em>mode</em><big>)</big><a class="headerlink" href="#HardwareTimer::setChannel1Mode__TimerMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-setchannelmode"><em>setChannelMode</em></a><tt class="docutils literal"><span class="pre">(1,</span> <span class="pre">mode)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::setChannel2Mode__TimerMode">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">setChannel2Mode</tt><big>(</big>TimerMode <em>mode</em><big>)</big><a class="headerlink" href="#HardwareTimer::setChannel2Mode__TimerMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-setchannelmode"><em>setChannelMode</em></a><tt class="docutils literal"><span class="pre">(2,</span> <span class="pre">mode)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::setChannel3Mode__TimerMode">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">setChannel3Mode</tt><big>(</big>TimerMode <em>mode</em><big>)</big><a class="headerlink" href="#HardwareTimer::setChannel3Mode__TimerMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-setchannelmode"><em>setChannelMode</em></a><tt class="docutils literal"><span class="pre">(3,</span> <span class="pre">mode)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::setChannel4Mode__TimerMode">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">setChannel4Mode</tt><big>(</big>TimerMode <em>mode</em><big>)</big><a class="headerlink" href="#HardwareTimer::setChannel4Mode__TimerMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-setchannelmode"><em>setChannelMode</em></a><tt class="docutils literal"><span class="pre">(4,</span> <span class="pre">mode)</span></tt>.</p>
+</dd></dl>
+
+<span class="target" id="lang-hardwaretimer-getcompare"></span><dl class="function">
+<dt id="HardwareTimer::getCompare__i">
+<a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">getCompare</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#i" title="int">int</a> <em>channel</em><big>)</big><a class="headerlink" href="#HardwareTimer::getCompare__i" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the compare value for the given <tt class="docutils literal"><span class="pre">channel</span></tt>, from 1 to 4.  See
+<a class="reference internal" href="#lang-hardwaretimer-setcompare"><em>setCompare()</em></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::getCompare1">
+<a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">getCompare1</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::getCompare1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-getcompare"><em>getCompare</em></a><tt class="docutils literal"><span class="pre">(1,</span> <span class="pre">mode)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::getCompare2">
+<a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">getCompare2</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::getCompare2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-getcompare"><em>getCompare</em></a><tt class="docutils literal"><span class="pre">(2,</span> <span class="pre">mode)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::getCompare3">
+<a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">getCompare3</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::getCompare3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-getcompare"><em>getCompare</em></a><tt class="docutils literal"><span class="pre">(3,</span> <span class="pre">mode)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::getCompare4">
+<a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">getCompare4</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::getCompare4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-getcompare"><em>getCompare</em></a><tt class="docutils literal"><span class="pre">(4,</span> <span class="pre">mode)</span></tt>.</p>
+</dd></dl>
+
+<span class="target" id="lang-hardwaretimer-setcompare"></span><dl class="function">
+<dt id="HardwareTimer::setCompare__i.uint16">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">setCompare</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#i" title="int">int</a> <em>channel</em>, <a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <em>compare</em><big>)</big><a class="headerlink" href="#HardwareTimer::setCompare__i.uint16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the compare value for the given <tt class="docutils literal"><span class="pre">channel</span></tt> to <tt class="docutils literal"><span class="pre">compare</span></tt>.
+If <tt class="docutils literal"><span class="pre">compare</span></tt> is greater than this timer&#8217;s overflow value, it will
+be truncated to the overflow value.  The default compare value is
+65,535 (the largest unsigned 16-bit integer value).</p>
+<p>When the counter reaches this value the interrupt for this channel
+will fire if the given <tt class="docutils literal"><span class="pre">channel</span></tt> <a class="reference internal" href="#lang-hardwaretimer-setchannelmode"><em>mode</em></a> is <tt class="docutils literal"><span class="pre">TIMER_OUTPUTCOMPARE</span></tt> and
+an interrupt is <a class="reference internal" href="#lang-hardwaretimer-attachinterrupt"><em>attached</em></a>.</p>
+<p>By default, this only changes the relative offsets between events
+on a single timer (&#8220;phase&#8221;); they don&#8217;t control the frequency with
+which they occur. However, a common trick is to increment the
+compare value manually in the interrupt handler so that the event
+will fire again after the increment period. There can be a
+different increment value for each channel, so this trick allows
+events to be programmed at 4 different rates on a single
+timer. Note that function call overheads mean that the smallest
+increment rate is at least a few microseconds.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::setCompare1__uint16">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">setCompare1</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <em>compare</em><big>)</big><a class="headerlink" href="#HardwareTimer::setCompare1__uint16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-setcompare"><em>setCompare</em></a><tt class="docutils literal"><span class="pre">(1,</span> <span class="pre">compare)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::setCompare2__uint16">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">setCompare2</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <em>compare</em><big>)</big><a class="headerlink" href="#HardwareTimer::setCompare2__uint16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-setcompare"><em>setCompare</em></a><tt class="docutils literal"><span class="pre">(2,</span> <span class="pre">compare)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::setCompare3__uint16">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">setCompare3</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <em>compare</em><big>)</big><a class="headerlink" href="#HardwareTimer::setCompare3__uint16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-setcompare"><em>setCompare</em></a><tt class="docutils literal"><span class="pre">(3,</span> <span class="pre">compare)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::setCompare4__uint16">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">setCompare4</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <em>compare</em><big>)</big><a class="headerlink" href="#HardwareTimer::setCompare4__uint16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-setcompare"><em>setCompare</em></a><tt class="docutils literal"><span class="pre">(4,</span> <span class="pre">compare)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::getCount">
+<a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">getCount</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::getCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the current timer count.  Due to function call overhead, the
+return value will be increasingly accurate with smaller prescale
+values.  Also see <a class="reference internal" href="#lang-hardwaretimer-setcount"><em>setCount()</em></a>.</p>
+</dd></dl>
+
+<span class="target" id="lang-hardwaretimer-setcount"></span><dl class="function">
+<dt id="HardwareTimer::setCount__uint16">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">setCount</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <em>val</em><big>)</big><a class="headerlink" href="#HardwareTimer::setCount__uint16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the timer&#8217;s current count to <tt class="docutils literal"><span class="pre">val</span></tt>.</p>
+<p>Note that there is some function call overhead associated with
+calling this method, so using it is not a robust way to get
+multiple timers to share a count value.</p>
+<p>If <tt class="docutils literal"><span class="pre">val</span></tt> exceeds the timer&#8217;s <a class="reference internal" href="#lang-hardwaretimer-getoverflow"><em>overflow value</em></a>, it is truncated to the overflow
+value.</p>
+</dd></dl>
+
+<span class="target" id="lang-hardwaretimer-detachinterrupt"></span><dl class="function">
+<dt id="HardwareTimer::detachInterrupt__i">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">detachInterrupt</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#i" title="int">int</a> <em>channel</em><big>)</big><a class="headerlink" href="#HardwareTimer::detachInterrupt__i" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the interrupt handler attached to the given <tt class="docutils literal"><span class="pre">channel</span></tt>, if
+any.  The handler will no longer be called by this timer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::detachCompare1Interrupt">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">detachCompare1Interrupt</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::detachCompare1Interrupt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-detachinterrupt"><em>detachInterrupt</em></a><tt class="docutils literal"><span class="pre">(1)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::detachCompare2Interrupt">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">detachCompare2Interrupt</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::detachCompare2Interrupt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-detachinterrupt"><em>detachInterrupt</em></a><tt class="docutils literal"><span class="pre">(2)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::detachCompare3Interrupt">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">detachCompare3Interrupt</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::detachCompare3Interrupt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-detachinterrupt"><em>detachInterrupt</em></a><tt class="docutils literal"><span class="pre">(3)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::detachCompare4Interrupt">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">detachCompare4Interrupt</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::detachCompare4Interrupt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#lang-hardwaretimer-detachinterrupt"><em>detachInterrupt</em></a><tt class="docutils literal"><span class="pre">(4)</span></tt>.</p>
+</dd></dl>
+
+<span class="target" id="lang-hardwaretimer-generateupdate"></span><dl class="function">
+<dt id="HardwareTimer::generateUpdate">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">generateUpdate</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::generateUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Re-initializes the counter (to 0 in upcounting mode, which is the
+default), and generates an update of the prescale and overflow
+registers.</p>
+</dd></dl>
+
+<span class="target" id="lang-hardwaretimer-getoverflow"></span><dl class="function">
+<dt id="HardwareTimer::getOverflow">
+<a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">getOverflow</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::getOverflow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the timer&#8217;s overflow value.  See <a class="reference internal" href="#lang-hardwaretimer-setoverflow"><em>setOverflow()</em></a>.</p>
+</dd></dl>
+
+<span class="target" id="lang-hardwaretimer-setoverflow"></span><dl class="function">
+<dt id="HardwareTimer::setOverflow__uint16">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">setOverflow</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <em>val</em><big>)</big><a class="headerlink" href="#HardwareTimer::setOverflow__uint16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the timer overflow (or &#8220;reload&#8221;) value to <tt class="docutils literal"><span class="pre">val</span></tt>.</p>
+<p>When the timer&#8217;s counter reaches this, value it resets to
+zero. Its default value is 65535 (the largest unsigned 16-bit
+integer); setting the overflow to anything lower will cause
+interrupts to be called more frequently (see <a class="reference internal" href="#lang-hardwaretimer-setperiod"><em>setPeriod()</em></a> function for a shortcut).</p>
+<p>After the next <a class="reference internal" href="#lang-hardwaretimer-generateupdate"><em>timer update</em></a>, this number will be the
+maximum value for the timer&#8217;s channel compare values.</p>
+</dd></dl>
+
+<span class="target" id="lang-hardwaretimer-pause"></span><dl class="function">
+<dt id="HardwareTimer::pause">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">pause</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::pause" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the timer&#8217;s counter, without affecting its configuration.</p>
+<p>The timer will no longer count or fire interrupts after this
+function is called, until it is resumed.  This function is useful
+during timer setup periods, in order to prevent interrupts from
+firing before the timer is fully configured.</p>
+<p>Note that there is some function call overhead associated with this
+method, so using it in concert with <em class="xref std std-ref">resume()</em> is not a robust way to align multiple
+timers to the same count value.</p>
+</dd></dl>
+
+<span class="target" id="lang-hardwaretimer-setperiod"></span><dl class="function">
+<dt id="HardwareTimer::setPeriod__uint32">
+<a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">setPeriod</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#uint32" title="uint32">uint32</a> <em>microseconds</em><big>)</big><a class="headerlink" href="#HardwareTimer::setPeriod__uint32" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the <a class="reference internal" href="#lang-hardwaretimer-getprescalefactor"><em>prescaler</em></a> and <a class="reference internal" href="#lang-hardwaretimer-getoverflow"><em>overflow</em></a> values to generate a timer reload
+with a period as close to the given number of <tt class="docutils literal"><span class="pre">microseconds</span></tt> as
+possible.</p>
+<p>The return value is the new overflow value, which may be used to
+set channel compare values.  However, if a clock that fires an
+interrupt every given number of microseconds is all that is
+desired, and the relative &#8220;phases&#8221; are unimportant, channel compare
+values may all be set to 1.</p>
+</dd></dl>
+
+<span class="target" id="lang-hardwaretimer-getprescalefactor"></span><dl class="function">
+<dt id="HardwareTimer::getPrescaleFactor">
+<a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">getPrescaleFactor</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::getPrescaleFactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the timer&#8217;s prescale factor.  See
+<a class="reference internal" href="#lang-hardwaretimer-setprescalefactor"><em>setPrescaleFactor()</em></a>.</p>
+</dd></dl>
+
+<span class="target" id="lang-hardwaretimer-setprescalefactor"></span><dl class="function">
+<dt id="HardwareTimer::setPrescaleFactor__uint16">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">setPrescaleFactor</tt><big>(</big><a class="reference internal" href="../cpp/built-in-types.html#uint16" title="uint16">uint16</a> <em>factor</em><big>)</big><a class="headerlink" href="#HardwareTimer::setPrescaleFactor__uint16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the timer&#8217;s prescale factor to <tt class="docutils literal"><span class="pre">factor</span></tt>.</p>
+<p>The prescaler acts as a clock divider to slow down the rate at
+which the counter increments.</p>
+<p>For example, the system clock rate is 72MHz, so the counter will
+reach 65535 in (13.89 nanoseconds) × (65535 counts) = (910.22
+microseconds), or about a thousand times a second. If the
+prescaler equals 1098, then the clock rate is effectively 72MHz /
+1098 = 65.56KHz, and the counter will reach 65536 in (15.25
+microseconds) × (65536 counts) = (0.999 seconds), or about once
+per second.</p>
+<p>The <a class="reference internal" href="#lang-hardwaretimer-setperiod"><em>setPeriod()</em></a> method may
+also be used as a convenient alternative.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::resume">
+<a class="reference internal" href="../cpp/void.html#void" title="void">void</a> <tt class="descclassname">HardwareTimer::</tt><tt class="descname">resume</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::resume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resume a paused timer, without affecting its configuration.</p>
+<p>The timer will resume counting and firing interrupts as
+appropriate.</p>
+<p>Note that there is some function call overhead associated with
+using this method, so using it in concert with <a class="reference internal" href="#lang-hardwaretimer-pause"><em>pause()</em></a> is not a robust way to align multiple
+timers to the same count value.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HardwareTimer::getTimerNum">
+timer_dev_num <tt class="descclassname">HardwareTimer::</tt><tt class="descname">getTimerNum</tt><big>(</big><big>)</big><a class="headerlink" href="#HardwareTimer::getTimerNum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <a class="reference internal" href="#lang-hardwaretimer-timer-dev-num"><em>timer device number</em></a> associated with the timer.  For
+example, <tt class="docutils literal"><span class="pre">Timer1.getTimerNum()</span></tt> would return <tt class="docutils literal"><span class="pre">TIMER1</span></tt>.</p>
+<p>In most cases, you should not need to use this function.  If you do
+use it, be careful; the constant <tt class="docutils literal"><span class="pre">TIMER1</span></tt> is <em>not equal</em> to the
+number 1; similarly, <tt class="docutils literal"><span class="pre">TIMER2</span></tt> is <em>not</em> the number 2, etc.  Be
+sure to refer to the timer device number by name.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="timer-modes">
+<span id="lang-hardwaretimer-modes"></span><h3>Timer Modes<a class="headerlink" href="#timer-modes" title="Permalink to this headline">¶</a></h3>
+<dt id=""><span id="project0timers_8h_1aed9a35f11d8cfb1d9946754d01e46ee5"></span><strong>TimerMode enum</strong></dt>
+<dd><p class="first">
+<p>Used to configure the behavior of a timer. </p>
+        </p>
+<p>
+        </p>
+<p><em>Values:</em></p>
+<ul class="breatheenumvalues last">
+<li><tt class="first docutils literal"><span class="pre">TIMER_DISABLED</span></tt> - 
+<p>In this mode, the timer stops counting, interrupts are not called, and no state changes are output. </p>
+          
+          </li>
+<li><tt class="first docutils literal"><span class="pre">TIMER_PWM</span></tt> - 
+<p>This is the default mode for pins after initialization. </p>
+          
+          </li>
+<li><tt class="first docutils literal"><span class="pre">TIMER_OUTPUTCOMPARE</span></tt> - 
+<p>In this mode, the timer counts from 0 to its reload value repeatedly; every time the counter value reaches one of the channel compare values, the corresponding interrupt is fired. </p>
+          
+          </li>
+</ul>
+</dd>
+</div>
+<div class="section" id="timer-device-numbers">
+<span id="lang-hardwaretimer-timer-dev-num"></span><h3>Timer Device Numbers<a class="headerlink" href="#timer-device-numbers" title="Permalink to this headline">¶</a></h3>
+<p>These provide a lower-level interface for interacting with timers.
+They are mostly useful in context with the <a class="reference internal" href="#lang-hardwaretimer-gettimer"><em>getTimer()</em></a> function.  <strong>Be careful</strong> when using
+these not to confuse e.g. <tt class="docutils literal"><span class="pre">TIMER1</span></tt> with the number 1; they are
+different.</p>
+<dt id=""><span id="project0timers_8h_1af0a3ae57a8068de7f72d85b8c519fe42"></span><strong>timer_dev_num enum</strong></dt>
+<dd><p class="first">
+<p>Timer device numbers. </p>
+        </p>
+<p>
+<p>See STM32 reference manual, chapters 13-15. </p>
+        </p>
+<p><em>Values:</em></p>
+<ul class="breatheenumvalues last">
+<li><tt class="first docutils literal"><span class="pre">TIMER1</span></tt> - 
+          
+          </li>
+<li><tt class="first docutils literal"><span class="pre">TIMER2</span></tt> - 
+          
+          </li>
+<li><tt class="first docutils literal"><span class="pre">TIMER3</span></tt> - 
+          
+          </li>
+<li><tt class="first docutils literal"><span class="pre">TIMER4</span></tt> - 
+          
+          </li>
+<li><tt class="first docutils literal"><span class="pre">TIMER_INVALID</span></tt> - 
+          
+          </li>
+</ul>
+</dd>
+</div>
+<div class="section" id="other-functions">
+<span id="lang-hardwaretimer-gettimer"></span><span id="lang-hardwaretimer-convenience"></span><h3>Other Functions<a class="headerlink" href="#other-functions" title="Permalink to this headline">¶</a></h3>
+<dt id=""><span id="project0_hardware_timer_8h_1af21b8f16508e1bb62298269722748311"></span>HardwareTimer  *  <strong>getTimer</strong>(<a class="reference internal" href="#project0timers_8h_1af0a3ae57a8068de7f72d85b8c519fe42"><em>timer_dev_num</em></a> timerNum)</dt>
+<dd><p class="first">
+<p>Get one of the pre-instantiated HardwareTimer instances, given a timer device number. </p>
+        </p>
+<p class="last">
+<p>Be careful not to pass an actual number to this function. For example, getTimer(1) will not return Timer1. Use a real timer_dev_num, e.g. TIMER1, TIMER2, etc.</p>
+<p><p><em>Parameters</em></p>
+<ul class="breatheparameterlist">
+<li><tt class="first docutils literal"><span class="pre">timerNum</span></tt> - 
+<p>the timer device number, e.g. TIMER1.</p>
+</li>
+</ul>
+
+
+
+<dl class="docutils">
+<dt><em>Return</em></dt>
+<dd>Pointer to the HardwareTimer instance corresponding to the given timer device number. If timerNum is TIMER_INVALID, returns a null pointer.</dd>
+<dt><em>See</em></dt>
+<dd><a class="reference internal" href="#project0timers_8h_1af0a3ae57a8068de7f72d85b8c519fe42"><em>timer_dev_num</em></a> </dd>
+</dl>
+</p>
+        </p>
+</dd>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/round_logo_60x60.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maple-ide-install.html">IDE Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ide.html">IDE Anatomy</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Maple Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libraries.html">Maple Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compatibility.html">Arduino Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external-interrupts.html">External Interrupts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libmaple.html">Command-Line Tools &amp; APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bootloader.html">Bootloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../errata.html">Known Problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../i2c.html">I<sup>2</sup>C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pwm.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gpio.html">GPIO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usb.html">USB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jtag.html">JTAG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adc.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spi.html">SPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usart.html">USART</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timers.html">Timers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../specs.html">Technical Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language-index.html">Complete Language Index</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="highbyte.html" title="highByte()"
+             >next</a></li>
+        <li class="right" >
+          <a href="hardwarespi.html" title="HardwareSPI"
+             >previous</a> |</li>
+    <li><a href="http://leaflabs.com">LeafLabs</a> |</li>
+    <li><a href="index.html">Docs Home</a> |</li>
+    
+        <li><a href="../../index.html">Index</a> &raquo;</li>
+
+          <li><a href="../../language-index.html" >Complete Language Index</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, LeafLabs, LLC.
+      Last updated on Dec 15, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

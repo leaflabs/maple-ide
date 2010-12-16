@@ -1,6 +1,6 @@
 ##############################################################
 
-maple.name=LeafLabs Maple rev3 to FLASH
+maple.name=LeafLabs Maple Rev 3/5 to FLASH
 
 maple.upload.file_type=bin
 maple.upload.maximum_size=108000
@@ -21,7 +21,7 @@ maple.build.linker=maple/flash.ld
 maple.build.using=armcompiler
 
 ##############################################################
-mapleRAM.name=LeafLabs Maple rev3 to RAM
+mapleRAM.name=LeafLabs Maple Rev 3/5 to RAM
 
 mapleRAM.upload.file_type=bin
 mapleRAM.upload.maximum_size=17000
@@ -43,7 +43,7 @@ mapleRAM.build.linker=maple/ram.ld
 mapleRAM.build.using=armcompiler
 
 ##############################################################
-# Commented out for 0.0.7
+# Commented out for 0.0.9
 # maple_native.name=LeafLabs Maple Native (prototype) to FLASH
 
 # maple_native.upload.file_type=bin
