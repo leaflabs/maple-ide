@@ -1,12 +1,13 @@
+This directory contains the stable libraries that are shipped with the
+Maple IDE.
 
-Many libraries still need to be ported from Arduino... grab the original source 
-from the Arduino SVN repo and get hacking!
+DO NOT DEVELOP LIBRARIES HERE!  DO IT IN A LIBMAPLE BRANCH, THEN COPY
+THE FINAL VERSION AT IDE RELEASE TIME.
 
-- The LiquidCrystal library has already been ported and lives in this directory
+In the past, we did our library development in the IDE repo.  However,
+that blocks people who don't use the IDE from convenient access to the
+extra libraries.
 
-- The Wire library has been partially ported, the current implementation only 
-  supports master mode using a bit-banged (software) protocol. Future 
-  enhancements will use the hardware i2c peripheral on the stm32 as well as the 
-  DMA for performance. Support for slave, smBUS, and multimaster modes are also 
-  slated for inclusion in the enhanced Wire port. 
- 
+To resolve this issue, all library development now takes place on
+libmaple branches.  Final versions are added to this repository as IDE
+releases happen.

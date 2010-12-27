@@ -1,4 +1,4 @@
-0.0.9 maple-ide
+custom-build maple-ide
 
 COMPUTER
 
