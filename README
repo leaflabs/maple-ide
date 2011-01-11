@@ -1,9 +1,9 @@
-                                   _         _     _      
-             _ __ ___   __ _ _ __ | | ___   (_) __| | ___ 
+                                   _         _     _
+             _ __ ___   __ _ _ __ | | ___   (_) __| | ___
             | '_ ` _ \ / _` | '_ \| |/ _ \  | |/ _` |/ _ \
             | | | | | | (_| | |_) | |  __/  | | (_| |  __/
             |_| |_| |_|\__,_| .__/|_|\___|  |_|\__,_|\___|
-                            |_|                              
+                            |_|
                                                 by leaflabs!
 
 
@@ -11,26 +11,29 @@ maple-ide is a graphical programming environment for the Maple development
 board developed by LeafLabs. It is a modified version of the popular open
 source Arduino environment targeted towards the ARM Cortex-M3 microcontroller
 in the Maple; the regular arduino toolchain is only targeted towards the Atmel
-series of AVR microcontrollers. 
+series of AVR microcontrollers.
 
 This is the source code repository for the maple-ide; if you just want to
 program your Maple board you probably want to download a binary release package
-for your particular platform. Binaries are linked from
-http://leaflabs.com/docs/maple-ide/install/; the latest version of this
-repository can be found at http://github.com/leaflabs/maple-ide/
+for your particular platform. Binaries are linked from:
+
+    http://leaflabs.com/docs/maple-ide/install/
 
 This IDE includes a full ARM compiler toolchain ("arm-none-eabi-gcc") and a low
 level library for the STM32 Cortex-M3 platform called libmaple. The toolchain
 binaries are fetched from the leaflabs server as a repackaged (and sometimes
 recompiled) .tar.gz of CodeSourcery's modifications to the GCC toolchain.
 libmaple is developed separately and can be used straight from the command
-line; it is available at: http://github.com/leaflabs/libmaple
+line; it is available at
+
+      http://github.com/leaflabs/libmaple
 
 If you are a "power hacker" just looking to modify the Maple IDE compilation
 process or get at libmaple directly we strongly recommend that you check out
 the alternative workflow described at
-http://leaflabs.com/docs/libmaple/unix-toolchain/
- 
+
+    http://leaflabs.com/docs/libmaple/unix-toolchain/
+
 Arduino Compatibility Disclaimer
 ------------------------------------------------------------------------------
 We make no claims that we "preserve" any design or strategy behind Arduino,
@@ -52,19 +55,78 @@ The toolchain archives for each platform are quite large and don't change
 often so they are mirrored separately from this repository. The appropriate
 .tar.gz file will be downloaded as part of the make.sh/dist.sh process.
 
+In order to successfully build the IDE, you'll need to get a fresh
+clone of libmaple.  For this, you'll need to download Git (you've
+probably already done this), and get a fresh clone of libmaple with
+
+    $ git clone git://github.com/leaflabs/libmaple.git
+
+The libmaple documentation is automatically generated, and you need to
+be able to build it to get a full-featured IDE.  The documentation
+dependencies are:
+
+ 1) Sphinx: you need version 1.0.6 or higher; earlier versions
+    contained bugs that broke our docs' build.
+
+        http://sphinx.pocoo.org/
+
+ 2) Doxygen: any relatively recent version should work.  Mac users:
+    Make sure the doxygen executable is in your PATH; it lives in
+    Doxygen.app/Contents/Resources.
+
+        http://www.stack.nl/~dimitri/doxygen/
+
+ 3) Breathe: A Doxygen-to-Sphinx bridge by Michael Jones.  LeafLabs
+    maintains a fork of Breathe here:
+
+        $ git clone git://github.com/leaflabs/breathe.git
+
+    We sometimes modify the breathe internals to suit our own needs.
+    While we do submit pull requests to try to get our changes merged
+    upstream, we make no guarantees that our documentation will build
+    using a stock version of breathe.
+
 Linux build requirements:
- - a reasonable development environment (tar, perl, gzip, etc)
- - A java 1.5+ environment with javac on the path 
+ - A reasonable development environment (tar, perl, gzip, etc)
+ - A java 1.5+ environment with javac on the path
+ - We've had luck building this on Ubuntu with sun-java6-jdk (in the
+   partner repo), and running it with openjdk-6-jre and openjdk-6-jdk.
 
 Mac OSX build requirements:
- - Xcode? Might work without it...
+ - XCode
+ - Apple's JDK and JRE
 
 Windows build requirements:
- - a cygwin build environment (see the Arduino build docs)
- - A java compiler on your PATH
+ - A Cygwin build environment (see the Arduino build docs)
+ - A JDK and JRE on the PATH
 
 Build Instructions
 ------------------------------------------------------------------------------
+
+You first need to set the environment variables LIB_MAPLE_HOME to the
+path containing the libmaple repo, and BREATHE_HOME to the path
+containing the breathe repo.  [FIXME: using env. vars. is hackish].
+This will enable you to build the documentation.  Check that this
+worked with:
+
+    $ cd $LIB_MAPLE_HOME/docs
+    $ doxygen
+    $ make html
+
+Sphinx should build the docs with no trouble, ending in "The HTML
+pages are in build/html".  Please ignore any warnings.
+
+If that worked, you're now ready to place the IDE's various libmaple
+dependencies into their respective places.  There's a hackish script
+in the libmaple repo which will get the details right for you.  From
+$LIB_MAPLE_HOME, run
+
+    $ ./support/scripts/copy-to-ide <--path to IDE directory-->
+
+Where <--path to IDE directory--> gets replaced with the path
+containing the IDE repository.  This will copy the libmaple source
+tree over, then rebuild the documentation and copy it over.  You are
+now ready to compile the IDE itself.
 
 From the build/ directory, select the appropriate subdirectory based
 on your target platform.  Run make.sh from within that directory.
@@ -81,8 +143,18 @@ Windows (Cygwin):
     $ cd build/windows
     $ ./make.sh
 
+On Windows, you may have problems with line endings (one potential
+error message is "'\r': command not found").  To fix these, run
+
+    $ dos2unix.exe make.sh dist.sh run.sh
+
 After compilation, you can run the appropriate build/<platform>/run.sh
 script to run the IDE.
+
+If you would like to package the compiled IDE for distribution, run
+the appropriate build/<platform>/dist.sh script.  This will create an
+appropriate file for distribution (.dmg on OS X, .zip on Windows, .tgz
+on Linux).
 
 Notes on RXTX
 ------------------------------------------------------------------------------
@@ -93,24 +165,3 @@ port support (this reduces the jar file size?):
 
     $ ./configure  --disable-PRINTER
     $ make
-
-Changes from stock Arduino codebase (partial?)
-------------------------------------------------------------------------------
- * removed all Eclipse project cruft
- * hardware/leaflabs directory, including bootloader/ and core/
- * app/src/processing/app/Base.java: add getArmBasePath
- * app/src/processing/app/Sketch.java: imports, compiler/uploader selection
- * app/src/processing/app/Serial.java: added support for setRTS()
- * app/src/processing/app/debug/Sizer.java: don't try to size make builds
- * app/src/processing/app/debug/DFUUploader.java: new dfu-util uploader
- * app/src/processing/app/debug/Compiler.java: expose a couple methods
- * app/src/processing/app/debug/ArmCompiler.java: new, extends Compiler
- * build/macosx/dist/Arduino.app/Contents/Resources/processing.icns,
-   build/shared/lib: UI skin and preferences
- * build/*/dist/*: dist files broken out into external zip downloads
- * build/*/*sh: make files are heavily modified
- * build/shared/examples/Maple: Maple-specific examples and porting
- * added a "program delay" to the preferences, delay between reset and dfu-util
-   app/src/processing/app/Preferences.java
- * build/shared/reference: completely replaced for Maple
-

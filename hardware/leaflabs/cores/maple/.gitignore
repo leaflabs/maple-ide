@@ -1,0 +1,12 @@
+# This is the directory which contains the flattened libmaple source
+# tree.  Ignore these source files.
+
+*.h
+*.c
+*.cpp
+*.ld
+*.a
+*.cxx
+*.S
+*.inc
+LICENSE

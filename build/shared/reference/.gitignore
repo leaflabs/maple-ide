@@ -1,0 +1,10 @@
+# The contents of this directory are auto-generated
+
+*.html
+*.png
+*.css
+*.js
+_static/*
+_images/*
+_sources/*
+objects.inv
