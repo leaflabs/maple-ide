@@ -1,9 +1,8 @@
 #!/bin/sh
 
-REVISION=`../shared/gen-version-string`
+revision=`../shared/gen-version-string`
 
-RELEASE=$REVISION
-echo Creating Arduino distribution for revision $REVISION...
+echo Creating Arduino distribution for revision $revision...
 
 ARCH=`uname -m`
 
@@ -37,7 +36,7 @@ mv arduino/hardware/tools/dfu-util arduino/hardware/tools/arm/bin
 cp work/tools/45-maple.rules arduino/tools
 
 # write the release version number into the output directory
-echo $REVISION > arduino/lib/build-version.txt
+echo $revision > arduino/lib/build-version.txt
 
 echo Copying examples...
 cp -r ../shared/examples arduino/
@@ -73,21 +72,19 @@ find arduino -name "Thumbs.db" -exec rm -f {} ';'
 
 # zip it all up for release
 echo Creating tarball and finishing...
-P5=maple-ide-$RELEASE
-mv arduino $P5
+version=maple-ide-$revision
+mv arduino $version
 echo Using 64-bit librxtxSerial.so
-cp dist/lib/librxtxSerial.so.x86_64 $P5/lib/librxtxSerial.so
-cp dist/lib/RXTXcomm.jar.x86_64 $P5/lib/RXTXcomm.jar
+cp dist/lib/librxtxSerial.so.x86_64 $version/lib/librxtxSerial.so
+cp dist/lib/RXTXcomm.jar.x86_64 $version/lib/RXTXcomm.jar
 
-tar cfz $P5-linux64.tgz $P5
-# nah, keep the new directory around
-#rm -rf $P5
+tar cfz $version-linux64.tgz $version
 
 echo Done with 64bit.
 
 echo Using 32-bit librxtxSerial.so
-cp dist/lib/librxtxSerial.so.i386 $P5/lib/librxtxSerial.so
-cp dist/lib/RXTXcomm.jar.i386 $P5/lib/RXTXcomm.jar
-tar cfz $P5-linux32.tgz $P5
+cp dist/lib/librxtxSerial.so.i386 $version/lib/librxtxSerial.so
+cp dist/lib/RXTXcomm.jar.i386 $version/lib/RXTXcomm.jar
+tar cfz $version-linux32.tgz $version
 echo Done with 32bit.
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This script determines the IDE's version, and stores that in
 # an output file passed as first argument (or stdout).
