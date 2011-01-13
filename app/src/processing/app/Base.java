@@ -43,20 +43,42 @@ import processing.core.*;
 public class Base {
   public static final int REVISION = 18;
   public static String ARDUINO_VERSION_NAME = "0018";
-  public static final String MAPLE_VERSION_NAME = "0.0.9";
+  public static final String MAPLE_VERSION_NAME; // see static initializer block
   static HashMap<Integer, String> platformNames = new HashMap<Integer, String>();
+  static HashMap<String, Integer> platformIndices = new HashMap<String, Integer>();
+
   static {
+    // MAPLE_VERSION_NAME
+    String versionString = "generic-custom-build"; {
+      String err = ("Error reading build-version.txt; using " +
+                    "\"generic-custom-build\" as version.");
+      try {
+        File versionFile = getContentFile("lib" + File.separator +
+                                          "build-version.txt");
+        String[] strings = PApplet.loadStrings(versionFile);
+        if (strings != null && strings.length > 0) {
+          versionString = strings[0].trim();
+        } else {
+          System.out.println(err);
+        }
+      } catch (Exception e) {
+        System.out.println(err);
+      }
+    }
+    MAPLE_VERSION_NAME = versionString;
+
+    // Platform names
     platformNames.put(PConstants.WINDOWS, "windows");
     platformNames.put(PConstants.MACOSX, "macosx");
     platformNames.put(PConstants.LINUX, "linux");
-  }
 
-  static HashMap<String, Integer> platformIndices = new HashMap<String, Integer>();
-  static {
+    // Platform indices
     platformIndices.put("windows", PConstants.WINDOWS);
     platformIndices.put("macosx", PConstants.MACOSX);
     platformIndices.put("linux", PConstants.LINUX);
+
   }
+
   static Platform platform;
 
   static private boolean commandLine;
@@ -91,91 +113,19 @@ public class Base {
   // Location for untitled items
   static File untitledFolder;
 
-  // p5 icon for the window
-//  static Image icon;
-
-//  int editorCount;
-//  Editor[] editors;
   java.util.List<Editor> editors =
     Collections.synchronizedList(new ArrayList<Editor>());
-//  ArrayList editors = Collections.synchronizedList(new ArrayList<Editor>());
   Editor activeEditor;
 
-//  int nextEditorX;
-//  int nextEditorY;
-
-//  import com.sun.jna.Library;
-//  import com.sun.jna.Native;
-
-//  public interface CLibrary extends Library {
-//    CLibrary INSTANCE = (CLibrary)Native.loadLibrary("c", CLibrary.class);
-//      int setenv(String name, String value, int overwrite);
-//    String getenv(String name);
-//    int unsetenv(String name);
-//    int putenv(String string);
-//  }
-
-
   static public void main(String args[]) {
-//    /Users/fry/coconut/sketchbook/libraries/gsvideo/library
-//    CLibrary clib = CLibrary.INSTANCE;
-//    clib.setenv("DYLD_LIBRARY_PATH", "/Users/fry/coconut/sketchbook/libraries/gsvideo/library", 1);
-//    System.out.println("env is now " + clib.getenv("DYLD_LIBRARY_PATH"));
-
-    try {
-      // File versionFile = getContentFile("lib/version.txt");
-      // if (versionFile.exists()) {
-      //   VERSION_NAME = PApplet.loadStrings(versionFile)[0];
-      // }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-//    if (System.getProperty("mrj.version") != null) {
-//      //String jv = System.getProperty("java.version");
-//      String ov = System.getProperty("os.version");
-//      if (ov.startsWith("10.5")) {
-//        System.setProperty("apple.laf.useScreenMenuBar", "true");
-//      }
-//    }
-
-    /*
-    commandLine = false;
-    if (args.length >= 2) {
-      if (args[0].startsWith("--")) {
-        commandLine = true;
-      }
-    }
-
-    if (PApplet.javaVersion < 1.5f) {
-      //System.err.println("no way man");
-      Base.showError("Need to install Java 1.5",
-                     "This version of Processing requires    \n" +
-                     "Java 1.5 or later to run properly.\n" +
-                     "Please visit java.com to upgrade.", null);
-    }
-    */
 
     initPlatform();
-
-//    // Set the look and feel before opening the window
-//    try {
-//      platform.setLookAndFeel();
-//    } catch (Exception e) {
-//      System.err.println("Non-fatal error while setting the Look & Feel.");
-//      System.err.println("The error message follows, however Processing should run fine.");
-//      System.err.println(e.getMessage());
-//      //e.printStackTrace();
-//    }
 
     // Use native popups so they don't look so crappy on osx
     JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 
     // Don't put anything above this line that might make GUI,
     // because the platform has to be inited properly first.
-
-    // Make sure a full JDK is installed
-    //initRequirements();
 
     // run static initialization that grabs all the prefs
     Preferences.init(null);
@@ -190,7 +140,6 @@ public class Base {
       System.err.println("Non-fatal error while setting the Look & Feel.");
       System.err.println("The error message follows, however Arduino should run fine.");
       System.err.println(e.getMessage());
-      //e.printStackTrace();
     }
 
     // Create a location for untitled sketches
@@ -228,19 +177,6 @@ public class Base {
                      "platform-specific code for your machine.", e);
     }
   }
-
-
-  static protected void initRequirements() {
-    try {
-      Class.forName("com.sun.jdi.VirtualMachine");
-    } catch (ClassNotFoundException cnfe) {
-      Base.showError("Please install JDK 1.5 or later",
-                     "Maple requires a full JDK (not just a JRE)\n" +
-                     "to run. Please install JDK 1.5 or later.\n" +
-                     "More information can be found in the reference.", cnfe);
-    }
-  }
-
 
   public Base(String[] args) {
     platform.init(this);
@@ -338,14 +274,6 @@ public class Base {
       if ((screen.width != screenW) || (screen.height != screenH)) {
         windowPositionValid = false;
       }
-      /*
-      int windowX = Preferences.getInteger("last.window.x");
-      int windowY = Preferences.getInteger("last.window.y");
-      if ((windowX < 0) || (windowY < 0) ||
-          (windowX > screenW) || (windowY > screenH)) {
-        windowPositionValid = false;
-      }
-      */
     } else {
       windowPositionValid = false;
     }
@@ -418,29 +346,8 @@ public class Base {
     Preferences.set("last.sketch" + index + ".path", path);
   }
 
-
-  /*
-  public void storeSketch(Editor editor) {
-    int index = -1;
-    for (int i = 0; i < editorCount; i++) {
-      if (editors[i] == editor) {
-        index = i;
-        break;
-      }
-    }
-    if (index == -1) {
-      System.err.println("Problem storing sketch " + editor.sketch.name);
-    } else {
-      String path = editor.sketch.getMainFilePath();
-      Preferences.set("last.sketch" + index + ".path", path);
-    }
-  }
-  */
-
-
   // .................................................................
-
-
+  
   // Because of variations in native windowing systems, no guarantees about
   // changes to the focused and active Windows can be made. Developers must
   // never assume that this Window is the focused or active Window until this
@@ -451,7 +358,6 @@ public class Base {
     // set the current window to be the console that's getting output
     EditorConsole.setEditor(activeEditor);
   }
-
 
   protected int[] nextEditorLocation() {
     Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -601,11 +507,9 @@ public class Base {
         activeEditor.handleOpenInternal(path);
         activeEditor.untitled = true;
       }
-//      return true;
 
     } catch (IOException e) {
       activeEditor.statusError(e);
-//      return false;
     }
   }
 
@@ -637,9 +541,6 @@ public class Base {
     FileDialog fd = new FileDialog(activeEditor,
                                    "Open an Arduino sketch...",
                                    FileDialog.LOAD);
-    // This was annoying people, so disabled it in 0125.
-    //fd.setDirectory(Preferences.get("sketchbook.path"));
-    //fd.setDirectory(getSketchbookPath());
 
     // Only show .pde files as eligible bachelors
     fd.setFilenameFilter(new FilenameFilter() {
@@ -1833,11 +1734,11 @@ public class Base {
   // ...................................................................
 
 
-  /**
-   * Retrieve a path to something in the Processing folder. Eventually this
-   * may refer to the Contents subfolder of Processing.app, if we bundle things
-   * up as a single .app file with no additional folders.
-   */
+//  /**
+//   * Retrieve a path to something in the Processing folder. Eventually this
+//   * may refer to the Contents subfolder of Processing.app, if we bundle things
+//   * up as a single .app file with no additional folders.
+//   */
 //  static public String getContentsPath(String filename) {
 //    String basePath = System.getProperty("user.dir");
 //    /*
@@ -1850,9 +1751,9 @@ public class Base {
 //  }
 
 
-  /**
-   * Get a path for something in the Processing lib folder.
-   */
+//  /**
+//   * Get a path for something in the Processing lib folder.
+//   */
   /*
   static public String getLibContentsPath(String filename) {
     String libPath = getContentsPath("lib/" + filename);

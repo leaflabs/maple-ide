@@ -1,44 +1,25 @@
 #!/bin/sh
 
+REVISION=`../shared/gen-version-string`
 
-REVISION=`head -1 ../../todo.txt | awk '{print $1}'`
+RELEASE=$REVISION
+echo Creating Arduino distribution for revision $REVISION...
 
-if [ $1 ]
-then
-  RELEASE=$1
-  echo Creating Arduino release $RELEASE...
-  INFO_SOUGHT="<string>$RELEASE,"
-  INFO_FOUND=`cat ./dist/MapleIDE.app/Contents/Info.plist | grep $INFO_SOUGHT`
-  if [ -z "$INFO_FOUND" ]
-  then 
-    echo Fix the version number in Info.plist
-    exit
-  fi
-else 
-  RELEASE=$REVISION
-  echo Creating Arduino distribution for revision $REVISION...
-fi
-
-#VERSIONED=`cat ../../app/src/processing/app/Base.java | grep $REVISION`
-#if [ -z "$VERSIONED" ]
-#then
-#  echo Fix the revision number in Base.java or todo.txt
-#  exit
-#fi
+echo Removing old work directory, etc.
 
 # remove any unfinished builds or old builds
 rm -rf arduino
-rm -rf Arduino*
 rm -rf arduino-*
+rm -rf Arduino*
 rm -rf work
 
+echo Rerunning make.sh...
 ./make.sh
 
-if [ $1 ]
-then
-  # write the release version number into the output directory
-  echo $1 > work/MapleIDE.app/Contents/Resources/Java/lib/version.txt
-fi
+echo Finished with make.sh.  Packaging release.
+
+# write the release version number into the output directory
+echo $REVISION > work/MapleIDE.app/Contents/Resources/Java/lib/build-version.txt
 
 echo Cleaning file boogers...
 
@@ -48,11 +29,6 @@ find work -name "*~" -exec rm -f {} ';'
 #find processing -name ".DS_Store" -exec rm -f {} ';'
 find work -name "._*" -exec rm -f {} ';'
 find work -name "Thumbs.db" -exec rm -f {} ';'
-
-# clean out the cvs entries
-find work -name "CVS" -exec rm -rf {} ';' 2> /dev/null
-find work -name ".cvsignore" -exec rm -rf {} ';'
-find work -name ".svn" -exec rm -rf {} 2> /dev/null ';'
 
 
 # the following was adopted from the makefile by Remko Troncon:

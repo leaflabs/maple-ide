@@ -1,30 +1,22 @@
 #!/bin/sh
 
-REVISION=`head -1 ../../todo.txt | awk '{print $1}'`
+REVISION=`../shared/gen-version-string`
 
-if [ $1 ]
-then
-  RELEASE=$1
-  echo Creating Arduino release $RELEASE...
-else 
-  RELEASE=$REVISION
-  echo Creating Arduino distribution for revision $REVISION...
-fi
+RELEASE=$REVISION
+echo Creating Arduino distribution for revision $REVISION...
 
-# check to see if the version number in the app is correct
-# so that mikkel doesn't kick my ass
-VERSIONED=`cat ../../app/src/processing/app/Base.java | grep $REVISION`
-if [ -z "$VERSIONED" ]
-then
-  echo Fix the revision number in Base.java
-  #exit
-fi
-
-./make.sh
+echo Removing old work directory, etc.
 
 # remove any old boogers
 rm -rf arduino
 rm -rf arduino-*
+rm -rf Arduino*
+rm -rf work
+
+echo Rerunning make.sh...
+./make.sh
+
+echo Finished with make.sh.  Packaging release.
 
 mkdir arduino
 cp -r ../shared/lib arduino/
@@ -37,12 +29,8 @@ cp -r ../../hardware arduino/
 cp -r ../../libraries arduino/
 mkdir arduino/hardware/tools/
 
-
-if [ $1 ]
-then
-  # write the release version number into the output directory
-  echo $1 > arduino/lib/version.txt
-fi
+# write the release version number into the output directory
+echo $REVISION > arduino/lib/build-version.txt
 
 cp ../../app/lib/antlr.jar arduino/lib/
 cp ../../app/lib/ecj.jar arduino/lib/
@@ -99,28 +87,14 @@ find arduino -name "*.dll" -exec chmod +x {} ';'
 find arduino -name "*.exe" -exec chmod +x {} ';'
 find arduino -name "*.html" -exec chmod +x {} ';'
 
-# clean out the cvs entries
-find arduino -name "CVS" -exec rm -rf {} ';' 2> /dev/null
-find arduino -name ".cvsignore" -exec rm -rf {} ';'
-find arduino -name ".svn" -exec rm -rf {} ';' 2> /dev/null
-
 # zip it all up for release
 echo Packaging standard release...
 echo
-P5=maple-ide-$RELEASE
-mv arduino $P5
-zip -rq $P5-windowsxp32.zip $P5
+release_string=maple-ide-$REVISION
+mv arduino $release_string
+zip -rq $release_string-windowsxp32.zip $release_string
 # nah, keep the new directory around
 #rm -rf $P5
-
-# zip up another for experts
-#echo Expert release is disabled until further notice.
-#echo Packaging expert release...
-#echo
-#cp -a $P5 $P5-expert
-# remove enormous java runtime
-#rm -rf $P5-expert/java
-#zip -rq $P5-expert.zip $P5-expert
 
 echo Done.
 

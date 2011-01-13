@@ -1,0 +1,7 @@
+DO NOT MANUALLY EDIT ANY FILES IN THIS DIRECTORY.
+
+DO NOT WRITE REFERENCE DOCUMENTATION IN THIS DIRECTORY.  ESPECIALLY DO
+NOT ADD ANY SUCH DOCUMENTS TO GIT.
+
+This directory is intended to hold the generated HTML documentation.
+See libmaple/docs/README for more information.

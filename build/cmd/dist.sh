@@ -5,16 +5,14 @@ ARCH=`uname`
 if [ $ARCH == "Darwin" ]
 then
     BUILD=../macosx
-    REVISION=`head -1 ../../todo.txt | cut -c 1-4`
 elif [ $ARCH == "Cygwin" ]
 then
     BUILD=../windows
-    REVISION=`head -c 4 ../../todo.txt`
 else 
     BUILD=../linux
-    REVISION=`head -c 4 ../../todo.txt`
 fi
 
+REVISION=`../gen-version-string`
 echo Creating command-line distribution for revision $REVISION...
 
 # remove any old boogers

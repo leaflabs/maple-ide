@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# This script determines the IDE's version, and stores that in
+# an output file passed as first argument (or stdout).
+#
+# It proceeds by reading the top-level file version.txt.  If this file
+# contains the string "custom-build", it generates output based on
+# today's date and the current HEAD's SHA1.  Otherwise, the contents
+# of version.txt are used unaltered.
+#
+# The IDE reads the content file "lib/build-version.txt" at startup,
+# and reacts in some appropriate manner, so the build scripts are
+# responsible for putting this script's output there.
+#
+# Not wonderful, but better than hardcoded strings.
+
+version=`cat ../../version.txt`
+
+if [ $version == "custom-build" ]
+then
+    version=snapshot-`date "+%Y-%m-%d"`-[git-`git show-ref HEAD | cut -c 1-10`]
+fi
+
+if [ $# -gt 0 ]
+then
+    echo $version > $1
+else
+    echo $version
+fi

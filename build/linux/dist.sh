@@ -1,29 +1,24 @@
 #!/bin/sh
 
-#REVISION=`head -c 4 ../../todo.txt`
-REVISION=`head -1 ../../todo.txt | awk '{print $1}'`
+REVISION=`../shared/gen-version-string`
 
-if [ $1 ]
-then
-  RELEASE=$1
-  echo Creating Arduino release $RELEASE...
-else 
-  RELEASE=$REVISION
-  echo Creating Arduino distribution for revision $REVISION...
-fi
+RELEASE=$REVISION
+echo Creating Arduino distribution for revision $REVISION...
 
 ARCH=`uname -m`
-#if [ $ARCH != "i686" ]
-#then
-#  echo At present, the Linux distribution can only be built on i686 \(32-bit\).
-#  exit
-#fi
 
-./make.sh
+echo Removing old work directory, etc.
 
 # remove any old boogers
 rm -rf arduino
 rm -rf arduino-*
+rm -rf Arduino*
+rm -rf work
+
+echo Rerunning make.sh...
+./make.sh
+
+echo Finished with make.sh.  Packaging release.
 
 mkdir arduino
 cp -r ../shared/lib arduino/
@@ -41,11 +36,8 @@ cp -r dist/tools arduino/hardware
 mv arduino/hardware/tools/dfu-util arduino/hardware/tools/arm/bin
 cp work/tools/45-maple.rules arduino/tools
 
-if [ $1 ]
-then
-  # write the release version number into the output directory
-  echo $1 > arduino/lib/version.txt
-fi
+# write the release version number into the output directory
+echo $REVISION > arduino/lib/build-version.txt
 
 echo Copying examples...
 cp -r ../shared/examples arduino/
@@ -78,11 +70,6 @@ find arduino -name "*~" -exec rm -f {} ';'
 find arduino -name ".DS_Store" -exec rm -f {} ';'
 find arduino -name "._*" -exec rm -f {} ';'
 find arduino -name "Thumbs.db" -exec rm -f {} ';'
-
-# clean out the cvs entries
-find arduino -name "CVS" -exec rm -rf {} ';' 2> /dev/null
-find arduino -name ".cvsignore" -exec rm -rf {} ';'
-find arduino -name ".svn" -exec rm -rf {} 2> /dev/null ';'
 
 # zip it all up for release
 echo Creating tarball and finishing...
