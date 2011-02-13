@@ -66,9 +66,16 @@ be able to build it to get a full-featured IDE.  The documentation
 dependencies are:
 
  1) Sphinx: you need version 1.0.6 or higher; earlier versions
-    contained bugs that broke our docs' build.
+    contained bugs that broke our docs' build. As of Feb. 2011,
+    apt-get gives you a pre 1.0 version and therefore
+    INSUFFICIENT. Grab the new version from:
 
         http://sphinx.pocoo.org/
+
+    or if you prefer python's easy_install tool (apt-get install
+    python-setuptools) you can just do
+
+        $ sudo easy_install -U Sphinx
 
  2) Doxygen: any relatively recent version should work.  Mac users:
     Make sure the doxygen executable is in your PATH; it lives in
@@ -89,8 +96,21 @@ dependencies are:
 Linux build requirements:
  - A reasonable development environment (tar, perl, gzip, etc)
  - A java 1.5+ environment with javac on the path
- - We've had luck building this on Ubuntu with sun-java6-jdk (in the
-   partner repo), and running it with openjdk-6-jre and openjdk-6-jdk.
+ - You will need a java jdk as well as a jre (runtime). Unfortunately,
+   the Ubuntu standard openjdk-6-jre/jdk does NOT include the
+   necessary JDI package which the IDE needs to build. Thus, you will
+   need to get the sun-java6-jdk to build everything even if you
+   already have openjdk installed. The sun version is NOT FREE
+   SOFTWARE, so youll need to tap into nonfree/multiverse
+   repositories. On ubuntu 10.10 you can do:
+   
+   $ sudo add-apt-repository ppa:sun-java-community-team/sun-java6
+   $ sudo apt-get update
+   $ sudo apt-get install sun-java6-jdk openjdk-6-jre openjdk-6-jre
+
+   That call to add-apt-repository should only add the sun-java6
+   packages, so you dont have to worry about muddying your system with
+   any more non free packages!
 
 Mac OSX build requirements:
  - XCode
