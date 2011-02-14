@@ -1,75 +1,76 @@
 /*
   Calibration
- 
- Demonstrates one techinque for calibrating sensor input.  The
- sensor readings during the first five seconds of the sketch
- execution define the minimum and maximum of expected values
- attached to the sensor pin.
- 
- The sensor minumum and maximum initial values may seem backwards.
- Initially, you set the minimum high and listen for anything 
- lower, saving it as the new minumum. Likewise, you set the
- maximum low and listen for anything higher as the new maximum.
- 
- The circuit:
- * Analog sensor (potentiometer will do) attached to analog input 0
- * LED attached from digital pin 9 to ground
- 
- created 29 Oct 2008
- By David A Mellis
- Modified 17 Jun 2009
- By Tom Igoe
- 
- http://arduino.cc/en/Tutorial/Calibration
 
- Ported to Maple 27 May, 2010 by Bryan Newbold
- 
- */
+  Demonstrates one techinque for calibrating sensor input.  The sensor
+  readings during the first five seconds of the sketch execution
+  define the minimum and maximum of expected values attached to the
+  sensor pin.
 
-// These constants won't change:
-const int sensorPin = 15;     // pin that the sensor is attached to
-const int ledPin = 13;        // pin that the LED is attached to
+  The sensor minumum and maximum initial values may seem backwards.
+  Initially, you set the minimum high and listen for anything lower,
+  saving it as the new minumum. Likewise, you set the maximum low and
+  listen for anything higher as the new maximum.
 
-// variables:
-int sensorValue = 0;         // the sensor value
-int sensorMin = 1023;  // minimum sensor value
-int sensorMax = 0;     // maximum sensor value
+  The circuit:
+  * Analog sensor (potentiometer will do) attached to analog input 15
 
+  created 29 Oct 2008
+  By David A Mellis
+  Modified 17 Jun 2009
+  By Tom Igoe
+
+  http://arduino.cc/en/Tutorial/Calibration
+
+  Ported to Maple 27 May, 2010 by Bryan Newbold
+
+*/
+
+// Constant (won't change):
+const int sensorPin = 15;    // pin that the sensor is attached to
+
+// Variables:
+int sensorMin = 1023;   // minimum sensor value
+int sensorMax = 0;      // maximum sensor value
+int sensorValue = 0;    // the sensor value
 
 void setup() {
-  // turn on LED to signal the start of the calibration period:
-  pinMode(13, OUTPUT);
-  digitalWrite(13, HIGH);
+  // Declare the sensorPin as INPUT_ANALOG:
+  pinMode(sensorPin, INPUT_ANALOG);
 
-  // calibrate during the first five seconds 
+  // Turn on the built-in LED to signal the start of the calibration
+  // period:
+  pinMode(BOARD_LED_PIN, OUTPUT);
+  digitalWrite(BOARD_LED_PIN, HIGH);
+
+  // Calibrate during the first five seconds:
   while (millis() < 5000) {
     sensorValue = analogRead(sensorPin);
 
-    // record the maximum sensor value
+    // Record the maximum sensor value:
     if (sensorValue > sensorMax) {
       sensorMax = sensorValue;
     }
 
-    // record the minimum sensor value
+    // Record the minimum sensor value:
     if (sensorValue < sensorMin) {
       sensorMin = sensorValue;
     }
   }
 
-  // signal the end of the calibration period
-  digitalWrite(13, LOW);
+  // Signal the end of the calibration period:
+  digitalWrite(BOARD_LED_PIN, LOW);
 }
 
 void loop() {
-  // read the sensor:
+  // Read the sensor:
   sensorValue = analogRead(sensorPin);
 
-  // apply the calibration to the sensor reading
-  sensorValue = map(sensorValue, sensorMin, sensorMax, 0, 255);
+  // Apply the calibration to the sensor reading:
+  sensorValue = map(sensorValue, sensorMin, sensorMax, 0, 65535);
 
-  // in case the sensor value is outside the range seen during calibration
-  sensorValue = constrain(sensorValue, 0, 255);
+  // In case the sensor value is outside the range seen during calibration:
+  sensorValue = constrain(sensorValue, 0, 65535);
 
-  // fade the LED using the calibrated value:
-  analogWrite(ledPin, sensorValue);
+  // Fade the LED using the calibrated value:
+  pwmWrite(BOARD_LED_PIN, sensorValue);
 }

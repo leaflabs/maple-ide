@@ -1,74 +1,72 @@
 /*
   Conditionals - while statement
- 
- This example demonstrates the use of  while() statements.
- 
- While the pushbutton is pressed, the sketch runs the calibration routine.
- The  sensor readings during the while loop define the minimum and maximum 
- of expected values from the photo resistor.
- 
- This is a variation on the calibrate example.
- 
+
+ This example demonstrates the use of while() statements.
+
+ While the built-in button is pressed, the sketch runs the calibration
+ routine.  The sensor readings during the while loop define the
+ minimum and maximum of expected values from the photo resistor.
+
+ This is a variation on the Analog > Calibration example.
+
  The circuit:
- * photo resistor connected from +5V to analog in pin 0
- * 10K resistor connected from ground to analog in pin 0
+ * Photo resistor connected from +3.3V to pin 15
+ * 10K resistor connected from ground to pin 15
  * LED connected from digital pin 9 to ground through 220 ohm resistor
  * pushbutton attached from pin 2 to +5V
  * 10K resistor attached from pin 2 to ground
- 
+
  created 17 Jan 2009
  modified 25 Jun 2009
  by Tom Igoe
- 
- http://arduino.cc/en/Tutorial/WhileLoop
- 
- */
+ modified for Maple 13 February 2011
+ by LeafLabs
 
+ http://arduino.cc/en/Tutorial/WhileLoop
+ */
 
 // These constants won't change:
 const int sensorPin = 2;     // pin that the sensor is attached to
 const int ledPin = 9;        // pin that the LED is attached to
-const int indicatorLedPin = 13;  // pin that the built-in LED is attached to
-const int buttonPin = 2;      // pin that the button is attached to
-
 
 // These variables will change:
-int sensorMin = 1023;  // minimum sensor value
+int sensorMin = 4095;  // minimum sensor value
 int sensorMax = 0;     // maximum sensor value
-int sensorValue = 0;         // the sensor value
-
+int sensorValue = 0;   // the sensor value
 
 void setup() {
   // set the LED pins as outputs and the switch pin as input:
-  pinMode(indicatorLedPin, OUTPUT);
-  pinMode (ledPin, OUTPUT);
-  pinMode (buttonPin, INPUT);
+  pinMode(ledPin, OUTPUT);          // LED on pin 9
+  pinMode(BOARD_LED_PIN, OUTPUT);   // Built-in LED
+  pinMode(BOARD_BUTTON_PIN, INPUT); // Built-in button
 }
 
 void loop() {
   // while the button is pressed, take calibration readings:
-  while (digitalRead(buttonPin) == HIGH) {
-    calibrate(); 
+  while (digitalRead(BOARD_BUTTON_PIN) == HIGH) {
+  // You could also use this:
+  //while (isButtonPressed()) {
+    calibrate();
   }
   // signal the end of the calibration period
-  digitalWrite(indicatorLedPin, LOW);  
+  digitalWrite(BOARD_LED_PIN, LOW);
 
   // read the sensor:
   sensorValue = analogRead(sensorPin);
 
   // apply the calibration to the sensor reading
-  sensorValue = map(sensorValue, sensorMin, sensorMax, 0, 255);
+  sensorValue = map(sensorValue, sensorMin, sensorMax, 0, 65535);
 
   // in case the sensor value is outside the range seen during calibration
-  sensorValue = constrain(sensorValue, 0, 255);
+  sensorValue = constrain(sensorValue, 0, 65535);
 
   // fade the LED using the calibrated value:
-  analogWrite(ledPin, sensorValue);
+  pwmWrite(ledPin, sensorValue);
 }
 
 void calibrate() {
-  // turn on the indicator LED to indicate that calibration is happening:
-  digitalWrite(indicatorLedPin, HIGH);
+  // turn on the built-in LED to indicate that calibration is happening:
+  digitalWrite(BOARD_LED_PIN, HIGH);
   // read the sensor:
   sensorValue = analogRead(sensorPin);
 

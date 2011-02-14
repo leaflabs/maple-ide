@@ -1,74 +1,72 @@
 /*
   ASCII table
- 
- Prints out byte values in all possible formats:  
- * as raw binary values
- * as ASCII-encoded decimal, hex, octal, and binary values
- 
- For more on ASCII, see http://www.asciitable.com and http://en.wikipedia.org/wiki/ASCII
- 
- The circuit:  No external hardware needed.
- 
- created 2006
- by Nicholas Zambetti 
- modified 18 Jan 2009
- by Tom Igoe
- 
- <http://www.zambetti.com> 
 
- Ported to the Maple 27 May 2010 by Bryan Newbold
- */
+  Prints out byte values in all possible formats:
+  * as raw binary values
+  * as ASCII-encoded decimal, hex, octal, and binary values
 
-void setup() 
-{ 
-  // prints title with ending line break 
-  SerialUSB.println("ASCII Table ~ Character Map"); 
-} 
+  For more on ASCII, see:
+  http://www.asciitable.com
+  http://en.wikipedia.org/wiki/ASCII
 
-// first visible ASCIIcharacter '!' is number 33:
-int thisByte = 33; 
-// you can also write ASCII characters in single quotes.
+  No external hardware needed.
+
+  created 2006
+  by Nicholas Zambetti
+  modified 18 Jan 2009
+  by Tom Igoe
+
+  <http://www.zambetti.com>
+
+  Ported to the Maple 27 May 2010 by Bryan Newbold
+*/
+
+void setup() {
+  // Prints title with ending line break
+  SerialUSB.println("ASCII Table ~ Character Map");
+}
+
+// First visible ASCIIcharacter '!' is number 33:
+int thisByte = 33;
+// You can also write ASCII characters in single quotes.
 // for example. '!' is the same as 33, so you could also use this:
-//int thisByte = '!';  
+//int thisByte = '!';
 
-void loop() 
-{ 
-  // prints value unaltered, i.e. the raw binary version of the 
-  // byte. The serial monitor interprets all bytes as 
-  // ASCII, so 33, the first number,  will show up as '!' 
-  SerialUSB.print(thisByte, BYTE);    
+void loop() {
+  // Prints value unaltered, i.e. the raw binary version of the
+  // byte. The serial monitor interprets all bytes as
+  // ASCII, so 33, the first number,  will show up as '!'
+  SerialUSB.print(thisByte, BYTE);
 
-  SerialUSB.print(", dec: "); 
-  // prints value as string as an ASCII-encoded decimal (base 10).
-  // Decimal is the  default format for Serial.print() and Serial.println(),
-  // so no modifier is needed:
-  SerialUSB.print(thisByte);      
+  SerialUSB.print(", dec: ");
+  // Prints value as string as an ASCII-encoded decimal (base 10).
+  // Decimal is the default format for SerialUSB.print() and
+  // SerialUSB.println(), so no modifier is needed:
+  SerialUSB.print(thisByte);
   // But you can declare the modifier for decimal if you want to.
-  //this also works if you uncomment it:
+  // This also works if you uncomment it:
+  // SerialUSB.print(thisByte, DEC);
 
-  // SerialUSB.print(thisByte, DEC);  
+  SerialUSB.print(", hex: ");
+  // Prints value as string in hexadecimal (base 16):
+  SerialUSB.print(thisByte, HEX);
 
+  SerialUSB.print(", oct: ");
+  // Prints value as string in octal (base 8);
+  SerialUSB.print(thisByte, OCT);
 
-  SerialUSB.print(", hex: "); 
-  // prints value as string in hexadecimal (base 16):
-  SerialUSB.print(thisByte, HEX);     
+  SerialUSB.print(", bin: ");
+  // Prints value as string in binary (base 2); also prints ending
+  // line break:
+  SerialUSB.println(thisByte, BIN);
 
-  SerialUSB.print(", oct: "); 
-  // prints value as string in octal (base 8);
-  SerialUSB.print(thisByte, OCT);     
-
-  SerialUSB.print(", bin: "); 
-  // prints value as string in binary (base 2) 
-  // also prints ending line break:
-  SerialUSB.println(thisByte, BIN);   
-
-  // if printed last visible character '~' or 126, stop: 
-  if(thisByte == 126) {     // you could also use if (thisByte == '~') {
+  // If printed last visible character '~' or 126, stop:
+  if(thisByte == 126) {     // You could also use if (thisByte == '~') {
     // This loop loops forever and does nothing
-    while(true) { 
-      continue; 
-    } 
-  } 
-  // go on to the next character
-  thisByte++;  
-} 
+    while(true) {
+      continue;
+    }
+  }
+  // Go on to the next character
+  thisByte++;
+}

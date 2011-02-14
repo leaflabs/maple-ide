@@ -51,6 +51,7 @@ import processing.core.PApplet;
  * It works under my windows XP + PentiumIV + Processing 0091.
  */
 public class DiscourseFormat {
+  // FIXME adapt for forum.leaflabs.com; this uses YaBB tags and is b0rked as is
 
   Editor editor;
   // JTextArea of the actual Editor
@@ -110,7 +111,7 @@ public class DiscourseFormat {
       });
 
     editor.statusNotice("Code formatted for " +
-                        (html ? "HTML" : "the Arduino forum ") +
+                        (html ? "HTML" : "the forum ") +
                         " has been copied to the clipboard.");
   }
 

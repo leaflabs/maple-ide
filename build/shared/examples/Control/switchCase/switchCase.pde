@@ -1,21 +1,21 @@
 /*
   Switch statement
- 
+
  Demonstrates the use of a switch statement.  The switch
  statement allows you to choose from among a set of discrete values
  of a variable.  It's like a series of if statements.
- 
+
  To see this sketch in action, but the board and sensor in a well-lit
  room, open the serial monitor, and and move your hand gradually
  down over the sensor.
- 
+
  The circuit:
  * photoresistor from analog in 0 to +5V
  * 10K resistor from analog in 0 to ground
- 
+
  created 1 Jul 2009
- by Tom Igoe 
- 
+ by Tom Igoe
+
  http://www.arduino.cc/en/Tutorial/SwitchCase
 
  Ported to the Maple 27 May 2010 by Bryan Newbold
@@ -35,7 +35,7 @@ void loop() {
   // map the sensor range to a range of four options:
   int range = map(sensorReading, sensorMin, sensorMax, 0, 3);
 
-  // do something different depending on the 
+  // do something different depending on the
   // range value:
   switch (range) {
   case 0:    // your hand is on the sensor
@@ -50,7 +50,7 @@ void loop() {
   case 3:    // your hand is nowhere near the sensor
     SerialUSB.println("bright");
     break;
-  } 
+  }
 
 }
 

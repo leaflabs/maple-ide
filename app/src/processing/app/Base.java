@@ -138,7 +138,7 @@ public class Base {
       platform.setLookAndFeel();
     } catch (Exception e) {
       System.err.println("Non-fatal error while setting the Look & Feel.");
-      System.err.println("The error message follows, however Arduino should run fine.");
+      System.err.println("The error message follows, however Maple IDE should run fine.");
       System.err.println(e.getMessage());
     }
 
@@ -197,10 +197,9 @@ public class Base {
       if (!skechbookFolder.exists()) {
         Base.showWarning("Sketchbook folder disappeared",
                          "The sketchbook folder no longer exists.\n" +
-                         "Arduino will switch to the default sketchbook\n" +
+                         "Maple IDE will switch to the default sketchbook\n" +
                          "location, and create a new sketchbook folder if\n" +
-                         "necessary. Arduino will then stop talking about\n" +
-                         "himself in the third person.", null);
+                         "necessary.", null);
         sketchbookPath = null;
       }
     }
@@ -539,7 +538,7 @@ public class Base {
   public void handleOpenPrompt() {
     // get the frontmost window frame for placing file dialog
     FileDialog fd = new FileDialog(activeEditor,
-                                   "Open an Arduino sketch...",
+                                   "Open a Maple sketch...",
                                    FileDialog.LOAD);
 
     // Only show .pde files as eligible bachelors
@@ -976,7 +975,7 @@ public class Base {
           } else {
             showWarning("Sketch Does Not Exist",
                         "The selected sketch no longer exists.\n" +
-                        "You may need to restart Arduino to update\n" +
+                        "You may need to restart Maple IDE to update\n" +
                         "the sketchbook menu.", null);
           }
         }
@@ -1300,7 +1299,7 @@ public class Base {
         settingsFolder = platform.getSettingsFolder();
       } catch (Exception e) {
         showError("Problem getting data folder",
-                  "Error getting the Arduino data folder.", e);
+                  "Error getting the Maple IDE data folder.", e);
       }
     }
 
@@ -1308,7 +1307,7 @@ public class Base {
     if (!settingsFolder.exists()) {
       if (!settingsFolder.mkdirs()) {
         showError("Settings issues",
-                  "Arduino cannot run because it could not\n" +
+                  "Maple IDE cannot run because it could not\n" +
                   "create a folder to store your settings.", null);
       }
     }
@@ -1476,7 +1475,7 @@ public class Base {
 
     if (!result) {
       showError("You forgot your sketchbook",
-                "Arduino cannot run because it could not\n" +
+                "Maple IDE cannot run because it could not\n" +
                 "create a folder to store your sketchbook.", null);
     }
 

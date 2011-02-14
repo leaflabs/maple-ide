@@ -1,30 +1,29 @@
 /*
   Analog input, serial output
- 
- Reads an analog input pin, prints the results to the serial monitor.
- 
- The circuit:
 
- * potentiometer connected to analog pin 0.
-   Center pin of the potentiometer goes to the analog pin.
-   side pins of the potentiometer go to +5V and ground
- 
- created over and over again
- by Tom Igoe and everyone who's ever used Arduino
+  Reads an analog input pin, prints the results to the serial monitor.
 
- Ported to Maple 27 May, 2010 by Bryan Newbold
- 
- */
+  The circuit:
 
- void setup() {
- }
- 
- void loop() {
+  * Potentiometer connected to analog pin 15.
+  * Center pin of the potentiometer goes to the analog pin.
+  * Side pins of the potentiometer go to +3.3V and ground
+
+  created over and over again
+  by Tom Igoe and everyone who's ever used Arduino
+
+  Ported to Maple 27 May, 2010 by Bryan Newbold
+*/
+
+void setup() {
+  // Declare pin 15 as INPUT_ANALOG:
+  pinMode(15, INPUT_ANALOG);
+}
+
+void loop() {
   // read the analog input into a variable:
-   int analogValue = analogRead(0);
-   // print the result:
-   SerialUSB.println(analogValue);
-   // wait 10 milliseconds for the analog-to-digital converter
-   // to settle after the last reading:
-   delay(10);
- }
+  int analogValue = analogRead(15);
+
+  // print the result:
+  SerialUSB.println(analogValue);
+}

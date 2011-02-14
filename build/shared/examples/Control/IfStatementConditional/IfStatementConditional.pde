@@ -1,53 +1,50 @@
 /*
   Conditionals - If statement
- 
- This example demonstrates the use of if() statements.
- It reads the state of a potentiometer (an analog input) and turns on an LED
- only if the LED goes above a certain threshold level. It prints the analog value
- regardless of the level.
- 
+
+ This example demonstrates the use of if() statements.  It reads the
+ state of a potentiometer (an analog input) and turns on an LED only
+ if the LED goes above a certain threshold level. It prints the analog
+ value regardless of the level.
+
  The circuit:
- * potentiometer connected to analog pin 0.
- Center pin of the potentiometer goes to the analog pin.
- side pins of the potentiometer go to +5V and ground
- * LED connected from digital pin 13 to ground
- 
- * Note: On most Arduino boards, there is already an LED on the board
- connected to pin 13, so you don't need any extra components for this example.
- 
+ * Potentiometer connected to pin 15.
+   Center pin of the potentiometer goes to the Maple pin.
+   Side pins of the potentiometer go to +3.3V and ground
+
  created 17 Jan 2009
  by Tom Igoe
- 
-  http://arduino.cc/en/Tutorial/
 
-  Ported to the Maple 27 May 2010 by Bryan Newbold
- 
+ Ported to the Maple 27 May 2010 by Bryan Newbold
  */
- 
+
 // These constants won't change:
-const int analogPin = 15;     // pin that the sensor is attached to
-const int ledPin = 13;       // pin that the LED is attached to
-const int threshold = 400;   // an arbitrary threshold level that's in the range of the analog input
+
+const int analogPin = 15;     // Pin that the sensor is attached to
+
+const int threshold = 400;    // A random threshold level that's in
+                              // the range of the analog input
 
 void setup() {
-  // initialize the LED pin as an output:
-  pinMode(ledPin, OUTPUT);
+  // Initialize the built-in LED pin as an output:
+  pinMode(BOARD_LED_PIN, OUTPUT);
+
+  // Initialize the potentiometer pin as an analog input:
+  pinMode(analogPin, INPUT_ANALOG);
 }
 
 void loop() {
-  // read the value of the potentiometer:
+  // Read the value of the potentiometer:
   int analogValue = analogRead(analogPin);
 
-  // if the analog value is high enough, turn on the LED:
+  // If the analog value is high enough, turn on the LED:
   if (analogValue > threshold) {
     digitalWrite(ledPin, HIGH);
-  } 
+  }
   else {
-    digitalWrite(ledPin,LOW); 
+    digitalWrite(ledPin,LOW);
   }
 
-  // print the analog value:
+  // Print the analog value:
   SerialUSB.println(analogValue, DEC);
-
 }
 

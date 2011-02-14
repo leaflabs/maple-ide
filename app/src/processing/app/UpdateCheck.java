@@ -62,6 +62,10 @@ public class UpdateCheck implements Runnable {
 
 
   public void run() {
+    // TODO make an update checker for Maple IDE.  For now, just
+    // return, so users don't see any messages about Arduino
+    if (true) return;
+
     //System.out.println("checking for updates...");
 
     // generate a random id in case none exists yet

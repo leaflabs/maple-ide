@@ -143,7 +143,7 @@ public class Preferences {
       load(Base.getLibStream("preferences.txt"));
     } catch (Exception e) {
       Base.showError(null, "Could not read default settings.\n" +
-                           "You'll need to reinstall Arduino.", e);
+                           "You'll need to reinstall Maple IDE.", e);
     }
 
     // check for platform-specific properties in the defaults
@@ -195,7 +195,7 @@ public class Preferences {
                          "Error reading the preferences file. " +
                          "Please delete (or move)\n" +
                          preferencesFile.getAbsolutePath() +
-                         " and restart Arduino.", ex);
+                         " and restart Maple IDE.", ex);
         }
       }
     }    
@@ -282,7 +282,7 @@ public class Preferences {
     box.add(label);
     delayLenField = new JTextField(4);
     box.add(delayLenField);
-    label = new JLabel("  (requires restart of Arduino)");
+    label = new JLabel("  (requires restart of Maple IDE)");
     box.add(label);
     pain.add(box);
     d = box.getPreferredSize();
@@ -328,7 +328,7 @@ public class Preferences {
 
     if (Base.isWindows()) {
       autoAssociateBox =
-        new JCheckBox("Automatically associate .pde files with Arduino");
+        new JCheckBox("Automatically associate .pde files with Maple IDE");
       pain.add(autoAssociateBox);
       d = autoAssociateBox.getPreferredSize();
       autoAssociateBox.setBounds(left, top, d.width + 10, d.height);
@@ -368,7 +368,7 @@ public class Preferences {
     right = Math.max(right, left + d.width);
     top += d.height;
 
-    label = new JLabel("(edit only when Arduino is not running)");
+    label = new JLabel("(edit only when Maple IDE is not running)");
     pain.add(label);
     d = label.getPreferredSize();
     label.setForeground(Color.gray);
@@ -478,11 +478,6 @@ public class Preferences {
     setBoolean("export.delete_target_folder",
                deletePreviousBox.isSelected());
 
-//    setBoolean("sketchbook.closing_last_window_quits",
-//               closingLastQuitsBox.isSelected());
-    //setBoolean("sketchbook.prompt", sketchPromptBox.isSelected());
-    //setBoolean("sketchbook.auto_clean", sketchCleanBox.isSelected());
-
     // if the sketchbook path has changed, rebuild the menus
     String oldPath = get("sketchbook.path");
     String newPath = sketchbookLocationField.getText();
@@ -493,18 +488,6 @@ public class Preferences {
 
     setBoolean("editor.external", externalEditorBox.isSelected());
     setBoolean("update.check", checkUpdatesBox.isSelected());
-
-    /*
-      // was gonna use this to check memory settings,
-      // but it quickly gets much too messy
-    if (getBoolean("run.options.memory")) {
-      Process process = Runtime.getRuntime().exec(new String[] {
-          "java", "-Xms" + memoryMin + "m", "-Xmx" + memoryMax + "m"
-        });
-      processInput = new SystemOutSiphon(process.getInputStream());
-      processError = new MessageSiphon(process.getErrorStream(), this);
-    }
-    */
 
     String newSizeText = fontSizeField.getText();
     try {
@@ -542,14 +525,6 @@ public class Preferences {
     // set all settings entry boxes to their actual status
     deletePreviousBox.
       setSelected(getBoolean("export.delete_target_folder"));
-
-    //closingLastQuitsBox.
-    //  setSelected(getBoolean("sketchbook.closing_last_window_quits"));
-    //sketchPromptBox.
-    //  setSelected(getBoolean("sketchbook.prompt"));
-    //sketchCleanBox.
-    //  setSelected(getBoolean("sketchbook.auto_clean"));
-
     sketchbookLocationField.
       setText(get("sketchbook.path"));
     externalEditorBox.
@@ -579,7 +554,7 @@ public class Preferences {
       if ((line.length() == 0) ||
           (line.charAt(0) == '#')) continue;
 
-      // this won't properly handle = signs being in the text
+      // FIXME this won't properly handle = signs being in the text
       int equals = line.indexOf('=');
       if (equals != -1) {
         String key = line.substring(0, equals).trim();
@@ -594,7 +569,6 @@ public class Preferences {
 
 
   static protected void save() {
-//    try {
     // on startup, don't worry about it
     // this is trying to update the prefs for who is open
     // before Preferences.init() has been called.
@@ -611,10 +585,6 @@ public class Preferences {
 
     writer.flush();
     writer.close();
-
-//    } catch (Exception ex) {
-//      Base.showWarning(null, "Error while saving the settings file", ex);
-//    }
   }
 
 
@@ -623,20 +593,9 @@ public class Preferences {
 
   // all the information from preferences.txt
 
-  //static public String get(String attribute) {
-  //return get(attribute, null);
-  //}
-  
-  static public String get(String attribute /*, String defaultValue */) {
-    return (String) table.get(attribute);
-    /*
-    //String value = (properties != null) ?
-    //properties.getProperty(attribute) : applet.getParameter(attribute);
-    String value = properties.getProperty(attribute);
 
-    return (value == null) ?
-      defaultValue : value;
-    */
+  static public String get(String attribute) {
+    return (String) table.get(attribute);
   }
 
 
@@ -651,21 +610,8 @@ public class Preferences {
 
 
   static public boolean getBoolean(String attribute) {
-    String value = get(attribute); //, null);
+    String value = get(attribute);
     return (new Boolean(value)).booleanValue();
-
-    /*
-      supposedly not needed, because anything besides 'true'
-      (ignoring case) will just be false.. so if malformed -> false
-    if (value == null) return defaultValue;
-
-    try {
-      return (new Boolean(value)).booleanValue();
-    } catch (NumberFormatException e) {
-      System.err.println("expecting an integer: " + attribute + " = " + value);
-    }
-    return defaultValue;
-    */
   }
 
 
@@ -674,24 +620,8 @@ public class Preferences {
   }
 
 
-  static public int getInteger(String attribute /*, int defaultValue*/) {
+  static public int getInteger(String attribute) {
     return Integer.parseInt(get(attribute));
-
-    /*
-    String value = get(attribute, null);
-    if (value == null) return defaultValue;
-
-    try {
-      return Integer.parseInt(value);
-    } catch (NumberFormatException e) {
-      // ignored will just fall through to returning the default
-      System.err.println("expecting an integer: " + attribute + " = " + value);
-    }
-    return defaultValue;
-    //if (value == null) return defaultValue;
-    //return (value == null) ? defaultValue :
-    //Integer.parseInt(value);
-    */
   }
 
 
@@ -721,7 +651,6 @@ public class Preferences {
     boolean replace = false;
     String value = get(attr);
     if (value == null) {
-      //System.out.println("reset 1");
       value = getDefault(attr);
       replace = true;
     }
@@ -729,9 +658,7 @@ public class Preferences {
     String[] pieces = PApplet.split(value, ',');
     if (pieces.length != 3) {
       value = getDefault(attr);
-      //System.out.println("reset 2 for " + attr);
       pieces = PApplet.split(value, ',');
-      //PApplet.println(pieces);
       replace = true;
     }
 
@@ -755,8 +682,8 @@ public class Preferences {
   }
 
 
-  static public SyntaxStyle getStyle(String what /*, String dflt*/) {
-    String str = get("editor." + what + ".style"); //, dflt);
+  static public SyntaxStyle getStyle(String what) {
+    String str = get("editor." + what + ".style");
 
     StringTokenizer st = new StringTokenizer(str, ",");
 
@@ -770,7 +697,6 @@ public class Preferences {
     s = st.nextToken();
     boolean bold = (s.indexOf("bold") != -1);
     boolean italic = (s.indexOf("italic") != -1);
-    //System.out.println(what + " = " + str + " " + bold + " " + italic);
 
     return new SyntaxStyle(color, italic, bold);
   }
