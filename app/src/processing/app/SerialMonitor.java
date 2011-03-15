@@ -38,15 +38,15 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
 
   public SerialMonitor(String port) {
     super(port);
-  
+
     this.port = port;
-  
+
     addWindowListener(new WindowAdapter() {
         public void windowClosing(WindowEvent e) {
           closeSerialPort();
         }
-      });  
-      
+      });
+
     // obvious, no?
     KeyStroke wc = Editor.WINDOW_CLOSE_KEYSTROKE;
     getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(wc, "close");
@@ -55,17 +55,17 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
         closeSerialPort();
         setVisible(false);
       }});
-  
+
     getContentPane().setLayout(new BorderLayout());
-    
+
     Font font = Theme.getFont("console.font");
 
     textArea = new JTextArea(16, 40);
-    textArea.setEditable(false);    
+    textArea.setEditable(false);
     textArea.setFont(font);
-    
+
     getContentPane().add(new JScrollPane(textArea), BorderLayout.CENTER);
-    
+
     JPanel pane = new JPanel(new BorderLayout(4, 0));
     pane.setBorder(new EmptyBorder(4, 4, 4, 4));
 
@@ -82,24 +82,24 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
         send(textField.getText());
         textField.setText("");
       }});
-    
+
     pane.add(textField, BorderLayout.CENTER);
     pane.add(sendButton, BorderLayout.EAST);
-    
+
     getContentPane().add(pane, BorderLayout.NORTH);
-    
+
     pane = new JPanel(new BorderLayout(4, 0));
     pane.setBorder(new EmptyBorder(4, 4, 4, 4));
-    
+
     statusLabel = new JLabel();
-    
+
     pane.add(statusLabel, BorderLayout.CENTER);
-  
+
     String[] serialRateStrings = {
       "300","1200","2400","4800","9600","14400",
       "19200","28800","38400","57600","115200"
     };
-    
+
     serialRates = new JComboBox();
     for (int i = 0; i < serialRateStrings.length; i++)
       serialRates.addItem(serialRateStrings[i] + " baud");
@@ -115,22 +115,22 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
         closeSerialPort();
         openSerialPort();
       }});
-    
+
     pane.add(serialRates, BorderLayout.EAST);
-    
+
     getContentPane().add(pane, BorderLayout.SOUTH);
 
     pack();
   }
-  
+
   private void send(String s) {
     if (serial != null)
       serial.write(s);
   }
-  
+
   public void openSerialPort() {
     if (serial != null) return;
-  
+
     try {
       statusLabel.setText("opening...");
       serial = new Serial(port, serialRate);
@@ -140,7 +140,7 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
       statusLabel.setText(e.getMessage());
     }
   }
-  
+
   public void closeSerialPort() {
     if (serial != null) {
       statusLabel.setText("closing...");
@@ -150,7 +150,7 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
       statusLabel.setText("");
     }
   }
-  
+
   public void message(final String s) {
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {

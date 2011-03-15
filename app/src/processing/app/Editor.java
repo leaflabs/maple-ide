@@ -99,7 +99,7 @@ public class Editor extends JFrame implements RunnerListener {
 
   static SerialMenuListener serialMenuListener;
   static SerialMonitor serialMonitor;
-  
+
   EditorHeader header;
   EditorStatus status;
   EditorConsole console;
@@ -116,7 +116,7 @@ public class Editor extends JFrame implements RunnerListener {
 
   boolean newEditor = true;
   JEditorPane editorPane;
-  
+
   JEditTextArea textarea;
   EditorListener listener;
 
@@ -183,7 +183,7 @@ public class Editor extends JFrame implements RunnerListener {
 
     if (serialMonitor == null)
       serialMonitor = new SerialMonitor(Preferences.get("serial.port"));
-    
+
     buildMenuBar();
 
     // For rev 0120, placing things inside a JPanel
@@ -579,7 +579,7 @@ public class Editor extends JFrame implements RunnerListener {
     JMenuItem item;
 
     addInternalTools(menu);
-    
+
     item = newJMenuItemShift("Serial Monitor", 'M');
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -587,31 +587,31 @@ public class Editor extends JFrame implements RunnerListener {
         }
       });
     menu.add(item);
-    
+
     addTools(menu, Base.getToolsFolder());
     File sketchbookTools = new File(Base.getSketchbookFolder(), "tools");
     addTools(menu, sketchbookTools);
 
     menu.addSeparator();
-    
+
     numTools = menu.getItemCount();
-    
+
     // XXX: DAM: these should probably be implemented using the Tools plugin
     // API, if possible (i.e. if it supports custom actions, etc.)
-    
+
     if (boardsMenu == null) {
       boardsMenu = new JMenu("Board");
       base.rebuildBoardsMenu(boardsMenu);
     }
     menu.add(boardsMenu);
-    
+
     if (serialMenuListener == null)
       serialMenuListener  = new SerialMenuListener();
     if (serialMenu == null)
       serialMenu = new JMenu("Serial Port");
     populateSerialMenu();
     menu.add(serialMenu);
-        
+
     menu.addMenuListener(new MenuListener() {
       public void menuCanceled(MenuEvent e) {}
       public void menuDeselected(MenuEvent e) {}
@@ -780,13 +780,13 @@ public class Editor extends JFrame implements RunnerListener {
       serialMonitor = new SerialMonitor(Preferences.get("serial.port"));
     }
   }
-  
-  
+
+
   protected void populateSerialMenu() {
     // getting list of ports
 
     JMenuItem rbMenuItem;
-	
+
     serialMenu.removeAll();
     boolean empty = true;
 
@@ -815,7 +815,7 @@ public class Editor extends JFrame implements RunnerListener {
       System.out.println("error retrieving port list");
       exception.printStackTrace();
     }
-	
+
     if (serialMenu.getItemCount() == 0) {
       serialMenu.setEnabled(false);
     }
@@ -1863,7 +1863,6 @@ public class Editor extends JFrame implements RunnerListener {
 
     } else if (immediately) {
       handleSave2();
-
     } else {
       SwingUtilities.invokeLater(new Runnable() {
           public void run() {
@@ -1960,9 +1959,9 @@ public class Editor extends JFrame implements RunnerListener {
           try {
             serialMonitor.closeSerialPort();
             serialMonitor.setVisible(false);
-            
+
             uploading = true;
-          
+
             boolean success = sketch.exportApplet(verbose);
             if (success) {
               statusNotice("Done uploading.");

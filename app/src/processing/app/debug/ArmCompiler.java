@@ -50,6 +50,8 @@ public class ArmCompiler extends Compiler {
   private Map<String, String> boardPrefs;
   private File corePath;
 
+  private static final boolean DEBUG = false;
+
   /**
    * Compile for ARM with make
    *
@@ -121,6 +123,13 @@ public class ArmCompiler extends Compiler {
     sizeBinary(binFile);
 
     return true;
+  }
+
+  @Override
+  protected void execAsynchronously(List<String> commandList)
+    throws RunnerException {
+    if (DEBUG) System.out.println("execAsynchronously: " + commandList);
+    super.execAsynchronously(commandList);
   }
 
   /**

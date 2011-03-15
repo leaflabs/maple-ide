@@ -99,7 +99,7 @@ public class Base {
   static private File hardwareFolder;
 
   static HashSet<File> libraries;
-  
+
   // maps imported packages to their library folder
   static HashMap<String, File> importToLibraryTable;
 
@@ -107,7 +107,7 @@ public class Base {
   // (both those in the p5/libs folder and those with lib subfolders
   // found in the sketchbook)
   static public String librariesClassPath;
-  
+
   static public HashMap<String, Target> targetsTable;
 
   // Location for untitled items
@@ -212,7 +212,7 @@ public class Base {
         defaultFolder.mkdirs();
       }
     }
-    
+
     targetsTable = new HashMap<String, Target>();
     loadHardware(getHardwareFolder());
     loadHardware(getSketchbookHardwareFolder());
@@ -346,7 +346,7 @@ public class Base {
   }
 
   // .................................................................
-  
+
   // Because of variations in native windowing systems, no guarantees about
   // changes to the focused and active Windows can be made. Developers must
   // never assume that this Window is the focused or active Window until this
@@ -891,15 +891,15 @@ public class Base {
       e.printStackTrace();
     }
   }
-  
-  
+
+
   public void rebuildBoardsMenu(JMenu menu) {
     //System.out.println("rebuilding boards menu");
-    menu.removeAll();      
+    menu.removeAll();
     ButtonGroup group = new ButtonGroup();
     for (Target target : targetsTable.values()) {
       for (String board : target.getBoards().keySet()) {
-        AbstractAction action = 
+        AbstractAction action =
           new AbstractAction(target.getBoards().get(board).get("name")) {
             public void actionPerformed(ActionEvent actionevent) {
               //System.out.println("Switching to " + target + ":" + board);
@@ -919,14 +919,14 @@ public class Base {
       }
     }
   }
-  
-  
+
+
   public void rebuildBurnBootloaderMenu(JMenu menu) {
     //System.out.println("rebuilding burn bootloader menu");
-    menu.removeAll();      
+    menu.removeAll();
     for (Target target : targetsTable.values()) {
       for (String programmer : target.getProgrammers().keySet()) {
-        AbstractAction action = 
+        AbstractAction action =
           new AbstractAction(
             "w/ " + target.getProgrammers().get(programmer).get("name")) {
             public void actionPerformed(ActionEvent actionevent) {
@@ -1119,11 +1119,11 @@ public class Base {
     }
     return ifound;
   }
-  
-  
+
+
   protected void loadHardware(File folder) {
     if (!folder.isDirectory()) return;
-    
+
     String list[] = folder.list(new FilenameFilter() {
       public boolean accept(File dir, String name) {
         // skip .DS_Store files, .svn folders, etc
@@ -1138,7 +1138,7 @@ public class Base {
     // alphabetize list, since it's not always alpha order
     // replaced hella slow bubble sort with this feller for 0093
     Arrays.sort(list, String.CASE_INSENSITIVE_ORDER);
-    
+
     for (String target : list) {
       File subfolder = new File(folder, target);
       targetsTable.put(target, new Target(target, subfolder));
@@ -1398,44 +1398,38 @@ public class Base {
     // before the other folders / paths get cached).
     return getContentFile("hardware");
   }
-  
-  
+
+
   static public String getHardwarePath() {
     return getHardwareFolder().getAbsolutePath();
   }
-  
-  
+
+
   static public String getAvrBasePath() {
     if(Base.isLinux()) {
       return ""; // avr tools are installed system-wide and in the path
     } else {
       return getHardwarePath() + File.separator + "tools" +
              File.separator + "avr" + File.separator + "bin" + File.separator;
-    }  
+    }
   }
-  
-  static public String getArmBasePath() {
-// Actually, tools are bundled on linux...
-//     if(Base.isLinux()) {
-//       return ""; // tools are installed system-wide and in the path
-//     } else {
-//       return getHardwarePath() + File.separator + "tools" +
-//              File.separator + "arm" + File.separator + "bin" + File.separator;
-//     }  
 
+
+  static public String getArmBasePath() {
     return getHardwarePath() + File.separator + "tools" +
       File.separator + "arm" + File.separator + "bin" + File.separator;
   }
 
+
   static public Target getTarget() {
     return Base.targetsTable.get(Preferences.get("target"));
   }
-  
-  
+
+
   static public Map<String, String> getBoardPreferences() {
     return getTarget().getBoards().get(Preferences.get("board"));
   }
-  
+
 
   static public File getSketchbookFolder() {
     return new File(Preferences.get("sketchbook.path"));
@@ -1450,8 +1444,8 @@ public class Base {
   static public String getSketchbookLibrariesPath() {
     return getSketchbookLibrariesFolder().getAbsolutePath();
   }
-  
-  
+
+
   static public File getSketchbookHardwareFolder() {
     return new File(getSketchbookFolder(), "hardware");
   }
@@ -1553,7 +1547,7 @@ public class Base {
 
 
   /**
-   * Prompt for a fodler and return it as a File object (or null).
+   * Prompt for a folder and return it as a File object (or null).
    * Implementation for choosing directories that handles both the
    * Mac OS X hack to allow the native AWT file dialog, or uses
    * the JFileChooser on other platforms. Mac AWT trick obtained from

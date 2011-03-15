@@ -81,7 +81,7 @@ public class Compiler implements MessageConsumer {
     }
     String core = boardPreferences.get("build.core");
     String corePath;
-    
+
     if (core.indexOf(':') == -1) {
       Target t = Base.getTarget();
       File coreFolder = new File(new File(t.getFolder(), "cores"), core);
@@ -97,19 +97,19 @@ public class Compiler implements MessageConsumer {
 
     List includePaths = new ArrayList();
     includePaths.add(corePath);
-    
+
     String runtimeLibraryName = buildPath + File.separator + "core.a";
 
     // 1. compile the core, outputting .o files to <buildPath> and then
     // collecting them into the core.a library file.
-    
-    List<File> coreObjectFiles = 
+
+    List<File> coreObjectFiles =
       compileFiles(avrBasePath, buildPath, includePaths,
                    findFilesInPath(corePath, "S", true),
                    findFilesInPath(corePath, "c", true),
                    findFilesInPath(corePath, "cpp", true),
                    boardPreferences);
-                   
+
     List baseCommandAR = new ArrayList(Arrays.asList(new String[] {
       avrBasePath + "avr-ar",
       "rcs",
@@ -188,7 +188,7 @@ public class Compiler implements MessageConsumer {
       "-O",
       "-R",
     }));
-    
+
     List commandObjcopy;
 
     // 5. extract EEPROM data (from EEMEM directive) to .eep file.
@@ -203,7 +203,7 @@ public class Compiler implements MessageConsumer {
     commandObjcopy.add(buildPath + File.separator + primaryClassName + ".elf");
     commandObjcopy.add(buildPath + File.separator + primaryClassName + ".eep");
     execAsynchronously(commandObjcopy);
-    
+
     // 6. build the .hex file
     commandObjcopy = new ArrayList(baseCommandObjcopy);
     commandObjcopy.add(2, "ihex");
@@ -211,20 +211,20 @@ public class Compiler implements MessageConsumer {
     commandObjcopy.add(buildPath + File.separator + primaryClassName + ".elf");
     commandObjcopy.add(buildPath + File.separator + primaryClassName + ".hex");
     execAsynchronously(commandObjcopy);
-    
+
     return true;
   }
 
 
   private List<File> compileFiles(String avrBasePath,
                                   String buildPath, List<File> includePaths,
-                                  List<File> sSources, 
+                                  List<File> sSources,
                                   List<File> cSources, List<File> cppSources,
                                   Map<String, String> boardPreferences)
     throws RunnerException {
 
     List<File> objectPaths = new ArrayList<File>();
-    
+
     for (File file : sSources) {
       String objectPath = buildPath + File.separator + file.getName() + ".o";
       objectPaths.add(new File(objectPath));
@@ -233,7 +233,7 @@ public class Compiler implements MessageConsumer {
                                              objectPath,
                                              boardPreferences));
     }
- 		
+
     for (File file : cSources) {
         String objectPath = buildPath + File.separator + file.getName() + ".o";
         objectPaths.add(new File(objectPath));
@@ -251,7 +251,7 @@ public class Compiler implements MessageConsumer {
                                                  objectPath,
                                                  boardPreferences));
     }
-    
+
     return objectPaths;
   }
 
@@ -262,11 +262,12 @@ public class Compiler implements MessageConsumer {
   /**
    * Either succeeds or throws a RunnerException fit for public consumption.
    */
-  protected void execAsynchronously(List commandList) throws RunnerException {
+  protected void execAsynchronously(List<String> commandList)
+    throws RunnerException {
     String[] command = new String[commandList.size()];
     commandList.toArray(command);
     int result = 0;
-    
+
     if (verbose || Preferences.getBoolean("build.verbose")) {
       for(int j = 0; j < command.length; j++) {
         System.out.print(command[j] + " ");
@@ -278,7 +279,7 @@ public class Compiler implements MessageConsumer {
     secondErrorFound = false;
 
     Process process;
-    
+
     try {
       process = Runtime.getRuntime().exec(command);
     } catch (IOException e) {
@@ -405,9 +406,9 @@ public class Compiler implements MessageConsumer {
         System.err.print(s1);
         return;
       }
-      
+
       //System.out.println("pde / line number: " + lineNumber);
-      
+
       if (fileIndex == 0) {  // main class, figure out which tab
         for (int i = 1; i < sketch.getCodeCount(); i++) {
           if (sketch.getCode(i).isExtension("pde")) {
@@ -495,7 +496,7 @@ public class Compiler implements MessageConsumer {
     return baseCommandCompiler;
   }
 
-  
+
   static private List getCommandCompilerC(String avrBasePath, List includePaths,
     String sourceName, String objectName, Map<String, String> boardPreferences) {
 
@@ -511,7 +512,7 @@ public class Compiler implements MessageConsumer {
       "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
       "-DARDUINO=" + Base.REVISION,
     }));
-		
+
     for (int i = 0; i < includePaths.size(); i++) {
       baseCommandCompiler.add("-I" + (String) includePaths.get(i));
     }
@@ -521,12 +522,12 @@ public class Compiler implements MessageConsumer {
 
     return baseCommandCompiler;
   }
-	
-	
+
+
   static private List getCommandCompilerCPP(String avrBasePath,
     List includePaths, String sourceName, String objectName,
     Map<String, String> boardPreferences) {
-    
+
     List baseCommandCompilerCPP = new ArrayList(Arrays.asList(new String[] {
       avrBasePath + "avr-g++",
       "-c", // compile, don't link
@@ -572,35 +573,35 @@ public class Compiler implements MessageConsumer {
         return name.endsWith(".h");
       }
     };
-    
+
     return (new File(path)).list(onlyHFiles);
   }
-  
+
   static public ArrayList<File> findFilesInPath(String path, String extension,
                                                 boolean recurse) {
     return findFilesInFolder(new File(path), extension, recurse);
   }
-  
+
   static public ArrayList<File> findFilesInFolder(File folder, String extension,
                                                   boolean recurse) {
     ArrayList<File> files = new ArrayList<File>();
-    
+
     if (folder.listFiles() == null) return files;
-    
+
     for (File file : folder.listFiles()) {
       if (file.getName().equals(".") || file.getName().equals("..")) continue;
-      
+
       if (file.getName().endsWith("." + extension))
         files.add(file);
-        
+
       if (recurse && file.isDirectory()) {
         files.addAll(findFilesInFolder(file, extension, true));
       }
     }
-    
+
     return files;
   }
-  
+
   /**
    * Given a folder, return a list of absolute paths to all jar or zip files
    * inside that folder, separated by pathSeparatorChar.

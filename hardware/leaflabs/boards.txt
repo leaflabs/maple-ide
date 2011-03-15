@@ -1,6 +1,6 @@
 ##############################################################
 
-maple.name=LeafLabs Maple Rev 3/5 to FLASH
+maple.name=LeafLabs Maple Rev 3/5 to Flash
 
 maple.upload.file_type=bin
 maple.upload.maximum_size=108000
@@ -43,24 +43,91 @@ mapleRAM.build.linker=maple/ram.ld
 mapleRAM.build.using=armcompiler
 
 ##############################################################
-# Commented out for 0.0.9
-# maple_native.name=LeafLabs Maple Native (prototype) to FLASH
+maple_mini.name=LeafLabs Maple Mini Rev 2 to Flash
 
-# maple_native.upload.file_type=bin
-# maple_native.upload.maximum_size=500000
-# maple_native.upload.ram.maximum_size=61000
-# maple_native.upload.flash.maximum_size=500000
-# maple_native.upload.usbID=1EAF:0003
-# maple_native.upload.altID=1
-# maple_native.upload.uploader=dfu-util
-# maple_native.upload.auto_reset=true
+maple_mini.upload.file_type=bin
+maple_mini.upload.maximum_size=108000
+maple_mini.upload.ram.maximum_size=17000
+maple_mini.upload.flash.maximum_size=108000
+# FIXME
+maple_mini.upload.usbID=1EAF:0003
+maple_mini.upload.altID=1
+maple_mini.upload.uploader=dfu-util
+maple_mini.upload.auto_reset=true
 
-# maple_native.build.board=maple_native
-# maple_native.build.mcu=STM32F103ZE
-# maple_native.build.family=cortex-m3
-# maple_native.build.f_cpu=72000000L
-# maple_native.build.core=maple
-# maple_native.build.vect=VECT_TAB_FLASH
-# maple_native.build.linker=maple_native/flash.ld
-# maple_native.build.using=armcompiler
+maple_mini.build.board=maple_mini
+maple_mini.build.mcu=STM32F103CB
+maple_mini.build.family=cortex-m3
+maple_mini.build.f_cpu=72000000L
+maple_mini.build.core=maple
+maple_mini.build.submdl=stm32f103
+maple_mini.build.vect=VECT_TAB_FLASH
+maple_mini.build.linker=maple_mini/flash.ld
+maple_mini.build.using=armcompiler
 
+##############################################################
+maple_miniRAM.name=LeafLabs Maple Mini Rev 2 to RAM
+
+maple_miniRAM.upload.file_type=bin
+maple_miniRAM.upload.maximum_size=108000
+maple_miniRAM.upload.ram.maximum_size=17000
+maple_miniRAM.upload.flash.maximum_size=108000
+# FIXME
+maple_miniRAM.upload.usbID=1EAF:0003
+maple_miniRAM.upload.altID=0
+maple_miniRAM.upload.uploader=dfu-util
+maple_miniRAM.upload.auto_reset=true
+
+maple_miniRAM.build.board=maple_mini
+maple_miniRAM.build.mcu=STM32F103CB
+maple_miniRAM.build.family=cortex-m3
+maple_miniRAM.build.f_cpu=72000000L
+maple_miniRAM.build.core=maple
+maple_miniRAM.build.submdl=stm32f103
+maple_miniRAM.build.vect=VECT_TAB_RAM
+maple_miniRAM.build.linker=maple_mini/ram.ld
+maple_miniRAM.build.using=armcompiler
+
+##############################################################
+maple_native.name=LeafLabs Maple Native (prototype) to Flash
+
+maple_native.upload.file_type=bin
+maple_native.upload.maximum_size=500000
+maple_native.upload.ram.maximum_size=61000
+maple_native.upload.flash.maximum_size=500000
+# FIXME
+maple_native.upload.usbID=1EAF:0003
+maple_native.upload.altID=1
+maple_native.upload.uploader=dfu-util
+maple_native.upload.auto_reset=true
+
+maple_native.build.board=maple_native
+maple_native.build.mcu=STM32F103ZE
+maple_native.build.family=cortex-m3
+maple_native.build.f_cpu=72000000L
+maple_native.build.core=maple
+maple_native.build.vect=VECT_TAB_FLASH
+maple_native.build.linker=maple_native/flash.ld
+maple_native.build.using=armcompiler
+
+##############################################################
+maple_nativeRAM.name=LeafLabs Maple Native (prototype) to RAM
+
+maple_nativeRAM.upload.file_type=bin
+maple_nativeRAM.upload.maximum_size=500000
+maple_nativeRAM.upload.ram.maximum_size=61000
+maple_nativeRAM.upload.flash.maximum_size=500000
+# FIXME
+maple_nativeRAM.upload.usbID=1EAF:0003
+maple_nativeRAM.upload.altID=0
+maple_nativeRAM.upload.uploader=dfu-util
+maple_nativeRAM.upload.auto_reset=true
+
+maple_nativeRAM.build.board=maple_native
+maple_nativeRAM.build.mcu=STM32F103ZE
+maple_nativeRAM.build.family=cortex-m3
+maple_nativeRAM.build.f_cpu=72000000L
+maple_nativeRAM.build.core=maple
+maple_nativeRAM.build.vect=VECT_TAB_RAM
+maple_nativeRAM.build.linker=maple_native/ram.ld
+maple_nativeRAM.build.using=armcompiler

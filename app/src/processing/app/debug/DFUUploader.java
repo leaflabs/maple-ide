@@ -19,7 +19,7 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software Foundation,
   Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-  
+
 */
 
 package processing.app.debug;
@@ -93,11 +93,11 @@ public class DFUUploader extends Uploader  {
       if (Preferences.get("upload.auto_reset") != null) {
         if (Preferences.get("upload.auto_reset").toLowerCase().equals("true")) {
           System.out.println("Resetting to bootloader via DTR pulse");
-          emitResetPulse();          
+          emitResetPulse();
         }
       } else {
         System.out.println("Resetting to bootloader via DTR pulse");
-        emitResetPulse();          
+        emitResetPulse();
       }
 
       String dfuList = new String();
@@ -136,18 +136,18 @@ public class DFUUploader extends Uploader  {
     System.err.println("Only .bin files are supported at this time");
     return false;
   }
-      
-  /* we need to ensure both RTS and DTR are low to start, 
+
+  /* we need to ensure both RTS and DTR are low to start,
      then pulse DTR on its own. This is the reset signal
      maple responds to
   */
   private void emitResetPulse() throws RunnerException {
     /* wait a while for the device to reboot */
     int programDelay = Integer.parseInt(Preferences.get("programDelay").trim());
-      
+
     try {
       Serial serialPort = new Serial();
-    
+
       // try to toggle DTR/RTS (old scheme)
       serialPort.setRTS(false);
       serialPort.setDTR(false);
@@ -178,27 +178,27 @@ public class DFUUploader extends Uploader  {
     }
   }
 
-  protected String executeCheckCommand(Collection commandDownloader) 
+  protected String executeCheckCommand(Collection commandDownloader)
     throws RunnerException
   {
     firstErrorFound = false;  // haven't found any errors yet
     secondErrorFound = false;
     notFoundError = false;
     int result=0; // pre-initialized to quiet a bogus warning from jikes
-    
+
     String userdir = System.getProperty("user.dir") + File.separator;
     String returnStr = new String();
 
     try {
       String[] commandArray = new String[commandDownloader.size()];
       commandDownloader.toArray(commandArray);
-      
+
       String armBasePath;
-      
-      armBasePath = new String(Base.getHardwarePath() + "/tools/arm/bin/"); 
-      
+
+      armBasePath = new String(Base.getHardwarePath() + "/tools/arm/bin/");
+
       commandArray[0] = armBasePath + commandArray[0];
-     
+
       if (verbose || Preferences.getBoolean("upload.verbose")) {
         for(int i = 0; i < commandArray.length; i++) {
           System.out.print(commandArray[i] + " ");
@@ -207,9 +207,9 @@ public class DFUUploader extends Uploader  {
       }
 
       Process process = Runtime.getRuntime().exec(commandArray);
-      BufferedReader stdInput = new BufferedReader(new 
+      BufferedReader stdInput = new BufferedReader(new
             InputStreamReader(process.getInputStream()));
-      BufferedReader stdError = new BufferedReader(new 
+      BufferedReader stdError = new BufferedReader(new
             InputStreamReader(process.getErrorStream()));
 
       // wait for the process to finish.  if interrupted
@@ -222,7 +222,7 @@ public class DFUUploader extends Uploader  {
           busy = false;
         } catch (InterruptedException intExc) {
         }
-      } 
+      }
 
       String s;
       while ((s = stdInput.readLine()) != null) {
@@ -233,7 +233,7 @@ public class DFUUploader extends Uploader  {
 
       if(exception!=null) {
         exception.hideStackTrace();
-        throw exception;   
+        throw exception;
       }
       if(result!=0) return "Error!";
     } catch (Exception e) {
@@ -249,31 +249,31 @@ public class DFUUploader extends Uploader  {
       exception = new RunnerException(SUPER_BADNESS);
     }
 
-    return returnStr; // ? true : false;      
+    return returnStr; // ? true : false;
 
   }
 
   // Need to overload this from Uploader to use the system-wide dfu-util
-  protected boolean executeUploadCommand(Collection commandDownloader) 
+  protected boolean executeUploadCommand(Collection commandDownloader)
     throws RunnerException
   {
     firstErrorFound = false;  // haven't found any errors yet
     secondErrorFound = false;
     notFoundError = false;
     int result=0; // pre-initialized to quiet a bogus warning from jikes
-    
+
     String userdir = System.getProperty("user.dir") + File.separator;
 
     try {
       String[] commandArray = new String[commandDownloader.size()];
       commandDownloader.toArray(commandArray);
-      
+
       String armBasePath;
-      
-      armBasePath = new String(Base.getHardwarePath() + "/tools/arm/bin/"); 
-      
+
+      armBasePath = new String(Base.getHardwarePath() + "/tools/arm/bin/");
+
       commandArray[0] = armBasePath + commandArray[0];
-      
+
       if (verbose || Preferences.getBoolean("upload.verbose")) {
         for(int i = 0; i < commandArray.length; i++) {
           System.out.print(commandArray[i] + " ");
@@ -295,10 +295,10 @@ public class DFUUploader extends Uploader  {
           compiling = false;
         } catch (InterruptedException intExc) {
         }
-      } 
+      }
       if(exception!=null) {
         exception.hideStackTrace();
-        throw exception;   
+        throw exception;
       }
       if(result!=0)
         return false;
@@ -318,7 +318,7 @@ public class DFUUploader extends Uploader  {
       //throw new PdeException(SUPER_BADNESS);
     }
 
-    return (result == 0); // ? true : false;      
+    return (result == 0); // ? true : false;
 
   }
 
