@@ -304,6 +304,9 @@ public class ArmCompiler extends Compiler {
         "-mthumb",
         "-DBOARD_" + boardPrefs.get("build.board"),
         "-DMCU_" + boardPrefs.get("build.mcu"),
+        "-D" + boardPrefs.get("build.density"),
+        "-DERROR_LED_PORT=" + boardPrefs.get("build.error_led_port"),
+        "-DERROR_LED_PIN=" + boardPrefs.get("build.error_led_pin"),
         "-DMAPLE_IDE",
         "-x", "assembler-with-cpp",
         "-o", objFile.getAbsolutePath(),
@@ -341,6 +344,9 @@ public class ArmCompiler extends Compiler {
         "-DBOARD_" + boardPrefs.get("build.board"),
         "-DMCU_" + boardPrefs.get("build.mcu"),
         "-D" + boardPrefs.get("build.vect"),
+        "-D" + boardPrefs.get("build.density"),
+        "-DERROR_LED_PORT=" + boardPrefs.get("build.error_led_port"),
+        "-DERROR_LED_PIN=" + boardPrefs.get("build.error_led_pin"),
         "-DMAPLE_IDE",
         "-DARDUINO=" + Base.REVISION));
 
@@ -383,6 +389,9 @@ public class ArmCompiler extends Compiler {
         "-Wl,--gc-sections",
         "-DBOARD_" + boardPrefs.get("build.board"),
         "-DMCU_" + boardPrefs.get("build.mcu"),
+        "-D" + boardPrefs.get("build.density"),
+        "-DERROR_LED_PORT=" + boardPrefs.get("build.error_led_port"),
+        "-DERROR_LED_PIN=" + boardPrefs.get("build.error_led_pin"),
         "-DMAPLE_IDE"));
 
     for (File i: includePaths) {

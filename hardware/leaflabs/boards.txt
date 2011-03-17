@@ -1,6 +1,6 @@
 ##############################################################
 
-maple.name=LeafLabs Maple Rev 3/5 to Flash
+maple.name=LeafLabs Maple Rev 3+ to Flash
 
 maple.upload.file_type=bin
 maple.upload.maximum_size=108000
@@ -19,9 +19,12 @@ maple.build.core=maple
 maple.build.vect=VECT_TAB_FLASH
 maple.build.linker=maple/flash.ld
 maple.build.using=armcompiler
+maple.build.density=STM32_MEDIUM_DENSITY
+maple.build.error_led_port=GPIOA
+maple.build.error_led_pin=5
 
 ##############################################################
-mapleRAM.name=LeafLabs Maple Rev 3/5 to RAM
+mapleRAM.name=LeafLabs Maple Rev 3+ to RAM
 
 mapleRAM.upload.file_type=bin
 mapleRAM.upload.maximum_size=17000
@@ -41,6 +44,9 @@ mapleRAM.build.submdl=stm32f103
 mapleRAM.build.vect=VECT_TAB_RAM
 mapleRAM.build.linker=maple/ram.ld
 mapleRAM.build.using=armcompiler
+mapleRAM.build.density=STM32_MEDIUM_DENSITY
+mapleRAM.build.error_led_port=GPIOA
+mapleRAM.build.error_led_pin=5
 
 ##############################################################
 maple_mini.name=LeafLabs Maple Mini Rev 2 to Flash
@@ -64,15 +70,18 @@ maple_mini.build.submdl=stm32f103
 maple_mini.build.vect=VECT_TAB_FLASH
 maple_mini.build.linker=maple_mini/flash.ld
 maple_mini.build.using=armcompiler
+maple_mini.build.density=STM32_MEDIUM_DENSITY
+maple_mini.build.error_led_port=GPIOB
+maple_mini.build.error_led_pin=1
+
 
 ##############################################################
 maple_miniRAM.name=LeafLabs Maple Mini Rev 2 to RAM
 
 maple_miniRAM.upload.file_type=bin
-maple_miniRAM.upload.maximum_size=108000
+maple_miniRAM.upload.maximum_size=17000
 maple_miniRAM.upload.ram.maximum_size=17000
 maple_miniRAM.upload.flash.maximum_size=108000
-# FIXME
 maple_miniRAM.upload.usbID=1EAF:0003
 maple_miniRAM.upload.altID=0
 maple_miniRAM.upload.uploader=dfu-util
@@ -87,6 +96,57 @@ maple_miniRAM.build.submdl=stm32f103
 maple_miniRAM.build.vect=VECT_TAB_RAM
 maple_miniRAM.build.linker=maple_mini/ram.ld
 maple_miniRAM.build.using=armcompiler
+maple_miniRAM.build.density=STM32_MEDIUM_DENSITY
+maple_miniRAM.build.error_led_port=GPIOB
+maple_miniRAM.build.error_led_pin=1
+
+##############################################################
+maple_RET6.name=LeafLabs Maple RET6 Edition to Flash
+
+maple_RET6.upload.file_type=bin
+maple_RET6.upload.maximum_size=492000
+maple_RET6.upload.ram.maximum_size=61000
+maple_RET6.upload.flash.maximum_size=492000
+maple_RET6.upload.usbID=1EAF:0003
+maple_RET6.upload.altID=1
+maple_RET6.upload.uploader=dfu-util
+maple_RET6.upload.auto_reset=true
+
+maple_RET6.build.board=maple_RET6
+maple_RET6.build.mcu=STM32F103RE
+maple_RET6.build.family=cortex-m3
+maple_RET6.build.f_cpu=72000000L
+maple_RET6.build.core=maple
+maple_RET6.build.vect=VECT_TAB_FLASH
+maple_RET6.build.linker=maple_RET6/flash.ld
+maple_RET6.build.using=armcompiler
+maple_RET6.build.density=STM32_HIGH_DENSITY
+maple_RET6.build.error_led_port=GPIOA
+maple_RET6.build.error_led_pin=5
+
+##############################################################
+maple_RET6RAM.name=LeafLabs Maple RET6 Edition to RAM
+
+maple_RET6RAM.upload.file_type=bin
+maple_RET6RAM.upload.maximum_size=61000
+maple_RET6RAM.upload.ram.maximum_size=61000
+maple_RET6RAM.upload.flash.maximum_size=492000
+maple_RET6RAM.upload.usbID=1EAF:0003
+maple_RET6RAM.upload.altID=1
+maple_RET6RAM.upload.uploader=dfu-util
+maple_RET6RAM.upload.auto_reset=true
+
+maple_RET6RAM.build.board=maple_RET6
+maple_RET6RAM.build.mcu=STM32F103RE
+maple_RET6RAM.build.family=cortex-m3
+maple_RET6RAM.build.f_cpu=72000000L
+maple_RET6RAM.build.core=maple
+maple_RET6RAM.build.vect=VECT_TAB_RAM
+maple_RET6RAM.build.linker=maple_RET6/ram.ld
+maple_RET6RAM.build.using=armcompiler
+maple_RET6RAM.build.density=STM32_HIGH_DENSITY
+maple_RET6RAM.build.error_led_port=GPIOA
+maple_RET6RAM.build.error_led_pin=5
 
 ##############################################################
 maple_native.name=LeafLabs Maple Native (prototype) to Flash
@@ -109,6 +169,9 @@ maple_native.build.core=maple
 maple_native.build.vect=VECT_TAB_FLASH
 maple_native.build.linker=maple_native/flash.ld
 maple_native.build.using=armcompiler
+maple_native.build.density=STM32_HIGH_DENSITY
+maple_native.build.error_led_port=GPIOC
+maple_native.build.error_led_pin=15
 
 ##############################################################
 maple_nativeRAM.name=LeafLabs Maple Native (prototype) to RAM
@@ -131,3 +194,6 @@ maple_nativeRAM.build.core=maple
 maple_nativeRAM.build.vect=VECT_TAB_RAM
 maple_nativeRAM.build.linker=maple_native/ram.ld
 maple_nativeRAM.build.using=armcompiler
+maple_nativeRAM.build.density=STM32_HIGH_DENSITY
+maple_nativeRAM.build.error_led_port=GPIOC
+maple_nativeRAM.build.error_led_pin=15

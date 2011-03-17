@@ -32,6 +32,9 @@ INPUT_ANALOG	LITERAL1
 PWM	LITERAL1
 PWM_OPEN_DRAIN	LITERAL1
 
+BOARD_LED_PIN	LITERAL1
+BOARD_BUTTON_PIN	LITERAL1
+
 BIT0 LITERAL1
 BIT1 LITERAL1
 BIT2 LITERAL1
@@ -116,6 +119,17 @@ word	KEYWORD1	Word
 pow	KEYWORD1	Pow
 goto	KEYWORD1	Goto
 
+uint8	KEYWORD1
+uint16	KEYWORD1
+uint32	KEYWORD1
+uint64	KEYWORD1
+int8	KEYWORD1
+int16	KEYWORD1
+int32	KEYWORD1
+int64	KEYWORD1
+
+HardwareSerial KEYWORD1
+
 # operators aren't highlighted, but may have documentation
 
 +=		IncrementCompound
@@ -195,6 +209,13 @@ bit	KEYWORD2	Bit
 highByte	KEYWORD2	HighByte
 lowByte	KEYWORD2	LowByte
 
+# TODO add in noTone(), pulseIn(), tone() when they're done
+# noTone	KEYWORD2	NoTone
+# pulseIn	KEYWORD2	PulseIn
+# tone	KEYWORD2	Tone
+
+toggleLED	KEYWORD2
+togglePin	KEYWORD2
 analogReference	KEYWORD2	AnalogReference
 analogRead	KEYWORD2	AnalogRead
 analogWrite	KEYWORD2	AnalogWrite
@@ -208,11 +229,8 @@ interrupts	KEYWORD2
 millis	KEYWORD2	Millis
 micros	KEYWORD2	Micros
 noInterrupts	KEYWORD2	NoInterrupts
-noTone	KEYWORD2	NoTone
 pinMode	KEYWORD2	PinMode
-pulseIn	KEYWORD2	PulseIn
 shiftOut	KEYWORD2	ShiftOut
-tone	KEYWORD2	Tone
 
 Serial	KEYWORD3	Serial
 Serial1	KEYWORD3	Serial
