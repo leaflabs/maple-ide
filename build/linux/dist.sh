@@ -45,7 +45,6 @@ cp -r ../shared/examples arduino/
 #unzip -q -d arduino/ ../shared/reference.zip
 echo Copying reference...
 cp -r ../shared/reference arduino/
-cp ../../readme-arduino.txt arduino/reference/
 
 # add java (jre) files
 #tar --extract --file=jre.tgz --ungzip --directory=arduino
@@ -74,13 +73,14 @@ find arduino -name "Thumbs.db" -exec rm -f {} ';'
 echo Creating tarball and finishing...
 version=maple-ide-$revision
 mv arduino $version
-echo Using 64-bit librxtxSerial.so
-cp dist/lib/librxtxSerial.so.x86_64 $version/lib/librxtxSerial.so
-cp dist/lib/RXTXcomm.jar.x86_64 $version/lib/RXTXcomm.jar
+# FIXME re-insert this once we've actually got a 64 bit version
+# echo Using 64-bit librxtxSerial.so
+# cp dist/lib/librxtxSerial.so.x86_64 $version/lib/librxtxSerial.so
+# cp dist/lib/RXTXcomm.jar.x86_64 $version/lib/RXTXcomm.jar
 
-tar cfz $version-linux64.tgz $version
+# tar cfz $version-linux64.tgz $version
 
-echo Done with 64bit.
+# echo Done with 64bit.
 
 echo Using 32-bit librxtxSerial.so
 cp dist/lib/librxtxSerial.so.i386 $version/lib/librxtxSerial.so

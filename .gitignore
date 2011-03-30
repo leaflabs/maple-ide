@@ -4,7 +4,8 @@ jre.tgz
 jre.zip                 
 reference.zip           
 template.dmg.gz         
-tools-universal.zip     
+tools-universal.zip
+libmaple-version.txt
 ./build/windows/avr_tools.zip
 ./build/linux/jre.tgz
 ./build/windows/jre.zip
