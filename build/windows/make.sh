@@ -62,7 +62,7 @@ if test -d work
 then
   BUILD_PREPROC=false
 else
-  echo Setting up directories to build P5...
+  echo Setting up directories to build Maple IDE...
   BUILD_PREPROC=true
 
   mkdir work
@@ -102,12 +102,10 @@ else
   echo Copy dfu-util...
   cp dist/dfu-util.exe work/hardware/tools/arm/bin
 
-
   echo Copying enormous JRE...
   cp -r dist/java work/java
-  #unzip -q -d work/ jre.zip
 
-  # build the processing.exe bundle
+  # build the maple-ide.exe bundle
   # there are a few hacks in the source to launch4j-3.0.1
   # to build them, use the following:
   # cd head_src/gui_head && make -f Makefile.win

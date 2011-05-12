@@ -1,100 +1,79 @@
-#!/bin/sh
+#!/bin/bash
 
 REVISION=`../shared/gen-version-string`
+BUILD_DIR=work
 
-RELEASE=$REVISION
-echo Creating Arduino distribution for revision $REVISION...
+echo Creating Maple IDE distribution for revision $REVISION
 
-echo Removing old work directory, etc.
-
-# remove any old boogers
-rm -rf arduino
-rm -rf arduino-*
-rm -rf Arduino*
-rm -rf work
+echo Removing old build directory $BUILD_DIR
+rm -rf $BUILD_DIR
 
 echo Rerunning make.sh...
 ./make.sh
 
 echo Finished with make.sh.  Packaging release.
 
-mkdir arduino
-cp -r ../shared/lib arduino/
-cp -r ../shared/tools arduino/
+cp -r ../shared/lib $BUILD_DIR
+cp -r ../shared/tools $BUILD_DIR
 
-cp dist/*.dll arduino/
-cp -r dist/drivers arduino/
+cp dist/*.dll $BUILD_DIR
+cp -r dist/drivers $BUILD_DIR
 
-cp -r ../../hardware arduino/
-cp -r ../../libraries arduino/
-mkdir arduino/hardware/tools/
+cp -r ../../hardware $BUILD_DIR
+cp -r ../../libraries $BUILD_DIR
 
 # write the release version number into the output directory
-echo $REVISION > arduino/lib/build-version.txt
+echo $REVISION > $BUILD_DIR/lib/build-version.txt
 
-cp ../../app/lib/antlr.jar arduino/lib/
-cp ../../app/lib/ecj.jar arduino/lib/
-cp ../../app/lib/jna.jar arduino/lib/
-cp ../../app/lib/oro.jar arduino/lib/
-cp ../../app/lib/RXTXcomm.jar arduino/lib/
+cp ../../app/lib/antlr.jar $BUILD_DIR/lib/
+cp ../../app/lib/ecj.jar $BUILD_DIR/lib/
+cp ../../app/lib/jna.jar $BUILD_DIR/lib/
+cp ../../app/lib/oro.jar $BUILD_DIR/lib/
+cp ../../app/lib/RXTXcomm.jar $BUILD_DIR/lib/
 
-cp ../../README-dist arduino/README.txt
+cp ../../README-dist $BUILD_DIR/README.txt
 
 echo Copying examples...
-cp -r ../shared/examples arduino/
+cp -r ../shared/examples $BUILD_DIR/
 
 #echo Extracting reference...
 #unzip -q -d arduino/ ../shared/reference.zip
 echo Copying reference...
-cp -r ../shared/reference arduino/
-cp ../../readme-arduino.txt arduino/reference/
+cp -r ../shared/reference $BUILD_DIR/
 
 echo Copying binaries...
-#cp -r dist/tools/avr arduino/hardware/tools/avr
-cp -r dist/tools/arm arduino/hardware/tools/arm
-#unzip -q -d arduino/hardware/tools/arm arm.zip
-cp dist/dfu-util.exe arduino/hardware/tools/arm/bin
-cp dist/dfu-util.exe arduino/ # TODO: both places?
+cp -r dist/tools/arm $BUILD_DIR/hardware/tools/arm
+cp dist/dfu-util.exe $BUILD_DIR/hardware/tools/arm/bin
+cp dist/dfu-util.exe $BUILD_DIR/ # FIXME: both places?
 
 # add java (jre) files
-#unzip -q -d arduino jre.zip
-cp -r dist/java arduino/java
+cp -r dist/java $BUILD_DIR/java
 
 # get platform-specific goodies from the dist dir
-cp launcher/maple-ide.exe arduino/maple-ide.exe
-
-# grab pde.jar and export from the working dir
-cp work/lib/pde.jar arduino/lib/
-cp work/lib/core.jar arduino/lib/
+cp launcher/maple-ide.exe $BUILD_DIR/maple-ide.exe
 
 echo Converting and renaming and cleaning...
-# convert revisions.txt to windows LFs
+# convert to Windows line endings
 # the 2> is because the app is a little chatty
-unix2dos arduino/readme.txt 2> /dev/null
-unix2dos arduino/lib/preferences.txt 2> /dev/null
-unix2dos arduino/lib/keywords.txt 2> /dev/null
-
-# remove boogers
-find arduino -name "*.bak" -exec rm -f {} ';'
-find arduino -name "*~" -exec rm -f {} ';'
-find arduino -name ".DS_Store" -exec rm -f {} ';'
-find arduino -name "._*" -exec rm -f {} ';'
-find arduino -name "Thumbs.db" -exec rm -f {} ';'
+unix2dos $BUILD_DIR/readme.txt 2> /dev/null
+unix2dos $BUILD_DIR/lib/preferences.txt 2> /dev/null
+unix2dos $BUILD_DIR/lib/keywords.txt 2> /dev/null
 
 # chmod +x the crew
-find arduino -name "*.html" -exec chmod +x {} ';'
-find arduino -name "*.dll" -exec chmod +x {} ';'
-find arduino -name "*.exe" -exec chmod +x {} ';'
-find arduino -name "*.html" -exec chmod +x {} ';'
+# cygwin requires this because of unknown weirdness
+# it was not formerly this anal retentive
+# with the html, it's necessary on windows for launching reference 
+# from shell/command prompt, which is done internally to view reference
+find $BUILD_DIR -name "*.html" -exec chmod +x {} ';'
+find $BUILD_DIR -name "*.dll" -exec chmod +x {} ';'
+find $BUILD_DIR -name "*.exe" -exec chmod +x {} ';'
+find $BUILD_DIR -name "*.html" -exec chmod +x {} ';'
 
 # zip it all up for release
-echo Packaging standard release...
-echo
-release_string=maple-ide-$REVISION
-mv arduino $release_string
-zip -rq $release_string-windowsxp32.zip $release_string
-# nah, keep the new directory around
-#rm -rf $P5
+
+echo release is ready to zip.  windows line endings means you need to do this by hand.  sorry.
+
+# mv $BUILD_DIR $RELEASE_STRING
+# zip -rq $RELEASE_STRING.zip $RELEASE_STRING
 
 echo Done.
-
