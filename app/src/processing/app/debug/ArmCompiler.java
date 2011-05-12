@@ -128,7 +128,7 @@ public class ArmCompiler extends Compiler {
   @Override
   protected void execAsynchronously(List<String> commandList)
     throws RunnerException {
-    if (DEBUG) System.out.println("execAsynchronously: " + commandList);
+    if (DEBUG) System.out.println("*** execAsynchronously: " + commandList);
     super.execAsynchronously(commandList);
   }
 
@@ -390,6 +390,7 @@ public class ArmCompiler extends Compiler {
         "-DBOARD_" + boardPrefs.get("build.board"),
         "-DMCU_" + boardPrefs.get("build.mcu"),
         "-D" + boardPrefs.get("build.density"),
+        "-D" + boardPrefs.get("build.vect"),
         "-DERROR_LED_PORT=" + boardPrefs.get("build.error_led_port"),
         "-DERROR_LED_PIN=" + boardPrefs.get("build.error_led_pin"),
         "-DMAPLE_IDE"));
