@@ -1,40 +1,19 @@
 /*
-  Blink
- 
- Turns on an LED on for one second, then off for one second, repeatedly.
- 
- The circuit:
- * LED connected from digital pin 13 to ground.
- 
- * Note: On most Arduino boards, there is already an LED on the board
- connected to pin 13, so you don't need any extra components for this example.
- 
- 
- Created 1 June 2005
- By David Cuartielles
- 
- http://arduino.cc/en/Tutorial/Blink
- 
- based on an orginal by H. Barragan for the Wiring i/o board
- 
- */
+ Blink
 
-int ledPin =  13;    // LED connected to digital pin 13
+ Turns on the built-in LED on for one second, then off for one second,
+ repeatedly.
 
-// The setup() method runs once, when the sketch starts
+ Ported to Maple from the Arduino example 27 May 2011
+ By Marti Bolivar
+*/
 
-void setup()   {                
-  // initialize the digital pin as an output:
-  pinMode(ledPin, OUTPUT);     
+void setup() {
+    // Set up the built-in LED pin as an output:
+    pinMode(BOARD_LED_PIN, OUTPUT);
 }
 
-// the loop() method runs over and over again,
-// as long as the Arduino has power
-
-void loop()                     
-{
-  digitalWrite(ledPin, HIGH);   // set the LED on
-  delay(1000);                  // wait for a second
-  digitalWrite(ledPin, LOW);    // set the LED off
-  delay(1000);                  // wait for a second
+void loop() {
+    toggleLED();          // Turn the LED from off to on, or on to off
+    delay(1000);          // Wait for 1 second (1000 milliseconds)
 }
