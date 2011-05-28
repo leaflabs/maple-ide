@@ -1,37 +1,41 @@
 /*
   Graph
 
- A simple example of communication from the Maple to the computer: the
- value of analog input 15 is sent out the serial port.  We call this
- "serial" communication because the connection appears to both the
- Maple and the computer as a serial port, even though it may actually
- use a USB cable. Bytes are sent one after another (serially) from the
- Maple to the computer.
+  A simple example of communication from the Maple to the computer:
+  the value of analog input 15 is sent out the serial port.  We call
+  this "serial" communication because the connection appears to both
+  the Maple and the computer as a serial port, even though it may
+  actually use a USB cable. Bytes are sent one after another
+  ("serially") from the Maple to the computer.
 
- You can use the Maple IDE Serial Monitor to view the sent data, or it can
- be read by Processing, PD, Max/MSP, or any other program capable of reading
- data from a serial port.  The Processing code below graphs the data received
- so you can see the value of the analog input changing over time.
+  You can use the Maple IDE Serial Monitor to view the sent data, or
+  it can be read by Processing, PD, Max/MSP, or any other program
+  capable of reading data from a serial port.  The Processing code
+  below graphs the data received so you can see the value of the
+  analog input changing over time.
 
- The circuit:
- Any analog input sensor (like a potentiometer) attached to pin 15.
+  The circuit:
+  Any analog input sensor (like a potentiometer) attached to pin 15.
 
- created 2006
- by David A. Mellis
- modified 14 Apr 2009
- by Tom Igoe and Scott Fitzgerald
+  created 2006
+  by David A. Mellis
+  modified 14 Apr 2009
+  by Tom Igoe and Scott Fitzgerald
 
- http://www.arduino.cc/en/Tutorial/Graph
- */
+  http://www.arduino.cc/en/Tutorial/Graph
+*/
+
+// Pin to use for analog input
+const int analogInPin = 15;
 
 void setup() {
   // Declare pin 15 as an analog input:
-  pinMode(15, INPUT_ANALOG);
+  pinMode(analogInPin, INPUT_ANALOG);
 }
 
 void loop() {
   // send the value of analog input 15:
-  SerialUSB.println(analogRead(15));
+  SerialUSB.println(analogRead(analogInPin));
 }
 
 /* Processing code for this example
