@@ -19,31 +19,31 @@
 
   http://www.arduino.cc/en/Tutorial/PhysicalPixel
 
-  Ported to the Maple 27 May 2010 by Bryan Newbold
-
+  Ported to the Maple 27 May 2010
+  By Bryan Newbold
 */
 
 int incomingByte;      // a variable to read incoming serial data into
 
 void setup() {
-  // initialize the built-in LED pin as an output:
-  pinMode(BOARD_LED_PIN, OUTPUT);
+    // Initialize the built-in LED pin as an output:
+    pinMode(BOARD_LED_PIN, OUTPUT);
 }
 
 void loop() {
-  // see if there's incoming serial data:
-  if (SerialUSB.available() > 0) {
-    // read the oldest byte in the serial buffer:
-    incomingByte = SerialUSB.read();
-    // if it's a capital H (ASCII 72), turn on the LED:
-    if (incomingByte == 'H') {
-      digitalWrite(ledPin, HIGH);
+    // See if there's incoming serial data:
+    if (SerialUSB.available() > 0) {
+        // Read the oldest byte in the serial buffer:
+        incomingByte = SerialUSB.read();
+        // If it's a capital H (ASCII 72), turn on the LED:
+        if (incomingByte == 'H') {
+            digitalWrite(BOARD_LED_PIN, HIGH);
+        }
+        // If it's an L (ASCII 76) turn off the LED:
+        if (incomingByte == 'L') {
+            digitalWrite(BOARD_LED_PIN, LOW);
+        }
     }
-    // if it's an L (ASCII 76) turn off the LED:
-    if (incomingByte == 'L') {
-      digitalWrite(ledPin, LOW);
-    }
-  }
 }
 
 /* Processing code for this example
