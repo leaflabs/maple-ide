@@ -1,30 +1,28 @@
 /*
   Serial Call and Response in ASCII
- Language: Wiring/Arduino
 
- This program sends an ASCII A (byte of value 65) on startup
- and repeats that until it gets some data in.
- Then it waits for a byte in the serial port, and
- sends three ASCII-encoded, comma-separated sensor values,
- truncated by a linefeed and carriage return,
- whenever it gets a byte in.
+  This program sends an ASCII A (byte of value 65) on startup and
+  repeats that until it gets some data in.  Then it waits for a byte
+  in the serial port, and sends three ASCII-encoded, comma-separated
+  sensor values, truncated by a linefeed and carriage return, whenever
+  it gets a byte in.
 
- Thanks to Greg Shakar and Scott Fitzgerald for the improvements
+  Thanks to Greg Shakar and Scott Fitzgerald for the improvements
 
   The circuit:
- * potentiometers attached to analog inputs 0 and 1
- * pushbutton attached to digital I/O 2
+  * potentiometers attached to analog inputs 0 and 1
+  * pushbutton attached to digital I/O 2
 
+  http://www.arduino.cc/en/Tutorial/SerialCallResponseASCII
 
- http://www.arduino.cc/en/Tutorial/SerialCallResponseASCII
+  Created 26 Sept. 2005
+  by Tom Igoe
+  Modified 14 April 2009
+  by Tom Igoe and Scott Fitzgerald
 
- Created 26 Sept. 2005
- by Tom Igoe
- Modified 14 April 2009
- by Tom Igoe and Scott Fitzgerald
-
- Ported to the Maple 27 May 2010 by Bryan Newbold
- */
+  Ported to the Maple 27 May 2010
+  by Bryan Newbold
+*/
 
 int firstSensor = 0;    // first analog sensor
 int secondSensor = 0;   // second analog sensor
@@ -32,39 +30,40 @@ int thirdSensor = 0;    // digital sensor
 int inByte = 0;         // incoming serial byte
 
 void setup() {
-  pinMode(2, INPUT);   // digital sensor is on digital pin 2
-  establishContact();  // send a byte to establish contact until receiver responds
+    pinMode(0, INPUT_ANALOG); // First (analog) sensor is on pin 0
+    pinMode(1, INPUT_ANALOG); // Second (analog) sensor is on pin 1
+    pinMode(2, INPUT);   // digital sensor is on digital pin 2
+    establishContact();  // send a byte to establish contact until receiver responds
 }
 
 void loop() {
-  // if we get a valid byte, read analog ins:
-  if (SerialUSB.available() > 0) {
-    // get incoming byte:
-    inByte = SerialUSB.read();
-    // read first analog input, divide by 4 to make the range 0-255:
-    firstSensor = analogRead(0)/4;
-    // delay 10ms to let the ADC recover:
-    delay(10);
-    // read second analog input, divide by 4 to make the range 0-255:
-    secondSensor = analogRead(1)/4;
-    // read  switch, map it to 0 or 255L
-    thirdSensor = map(digitalRead(2), 0, 1, 0, 255);
-    // send sensor values:
-    SerialUSB.print(firstSensor, DEC);
-    SerialUSB.print(",");
-    SerialUSB.print(secondSensor, DEC);
-    SerialUSB.print(",");
-    SerialUSB.println(thirdSensor, DEC);
-  }
+    // if we get a valid byte, read analog ins:
+    if (SerialUSB.available() > 0) {
+        // get incoming byte:
+        inByte = SerialUSB.read();
+        // read first analog input, map it into the range 0-255:
+        firstSensor = map(analogRead(0), 0, 4095, 0, 255);
+        // delay 10 ms to let the ADC value change:
+        delay(10);
+        // read second analog input, map it into the range 0-255:
+        secondSensor = map(analogRead(1), 0, 4095, 0, 255);
+        // read switch, map it to 0 or 255
+        thirdSensor = map(digitalRead(2), 0, 1, 0, 255);
+        // send sensor values:
+        SerialUSB.print(firstSensor, DEC);
+        SerialUSB.print(",");
+        SerialUSB.print(secondSensor, DEC);
+        SerialUSB.print(",");
+        SerialUSB.println(thirdSensor, DEC);
+    }
 }
 
 void establishContact() {
-  while (SerialUSB.available() <= 0) {
-    SerialUSB.println("0,0,0");   // send an initial string
-    delay(300);
-  }
+    while (SerialUSB.available() <= 0) {
+        SerialUSB.println("0,0,0");   // send an initial string
+        delay(300);
+    }
 }
-
 
 /*
 Processing code to run with this example:
