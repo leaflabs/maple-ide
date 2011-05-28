@@ -1,22 +1,24 @@
 /*
+  VirtualColorMixer
+
   This example reads three analog sensors (potentiometers are easiest)
- and sends their values serially. The Processing and Max/MSP programs
- at the bottom take those three values and use them to change the
- background color of the screen.
+  and sends their values serially. The Processing and Max/MSP programs
+  at the bottom take those three values and use them to change the
+  background color of the screen.
 
- The circuit:
- * potentiometers attached to pins 15, 16, and 17
+  The circuit:
+  * potentiometers attached to pins 15, 16, and 17
 
- http://www.arduino.cc/en/Tutorial/VirtualColorMixer
+  http://www.arduino.cc/en/Tutorial/VirtualColorMixer
 
- created 2 Dec 2006
- by David A. Mellis
- modified 14 Apr 2009
- by Tom Igoe and Scott Fitzgerald
+  created 2 Dec 2006
+  by David A. Mellis
+  modified 14 Apr 2009
+  by Tom Igoe and Scott Fitzgerald
 
- Ported to the Maple 27 May 2010 by Bryan Newbold
-
- */
+  Ported to the Maple 27 May 2010
+  by Bryan Newbold
+*/
 
 const int redPin = 15;     // sensor to control red color
 const int greenPin = 16;   // sensor to control green color
