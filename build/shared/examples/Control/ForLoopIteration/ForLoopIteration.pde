@@ -1,5 +1,5 @@
 /*
-  For Loop Iteration
+  for loop iteration
 
   Demonstrates the use of a for() loop.
   Lights multiple LEDs in sequence, then in reverse.
@@ -12,36 +12,37 @@
   modified 5 Jul 2009
   by Tom Igoe
 
-  http://www.arduino.cc/en/Tutorial/ForLoop
+  http://leaflabs.com/docs/lang/cpp/for.html
 
-  Modified for Maple by LeafLabs, 13 February 2011.
+  Modified for Maple
+  by LeafLabs
 */
 
 int delayTime = 100;           // The higher the number, the slower the timing.
 
 void setup() {
-  // use a for loop to initialize each pin as an output:
-  for (int thisPin = 2; thisPin <= 7; thisPin++) {
-    pinMode(thisPin, OUTPUT);
-  }
+    // Use a for loop to initialize each pin as an output:
+    for (int thisPin = 2; thisPin <= 7; thisPin++) {
+        pinMode(thisPin, OUTPUT);
+    }
 }
 
 void loop() {
-  // loop from the lowest pin to the highest:
-  for (int thisPin = 2; thisPin <= 7; thisPin++) {
-    // turn the pin on:
-    digitalWrite(thisPin, HIGH);
-    delay(delayTime);
-    // turn the pin off:
-    digitalWrite(thisPin, LOW);
-  }
+    // Loop from the lowest pin to the highest:
+    for (int thisPin = 2; thisPin <= 7; thisPin++) {
+        // Turn the pin on:
+        digitalWrite(thisPin, HIGH);
+        delay(delayTime);
+        // Turn the pin off:
+        digitalWrite(thisPin, LOW);
+    }
 
-  // loop from the highest pin to the lowest:
-  for (int thisPin = 7; thisPin >= 2; thisPin--) {
-    // turn the pin on:
-    digitalWrite(thisPin, HIGH);
-    delay(delayTime);
-    // turn the pin off:
-    digitalWrite(thisPin, LOW);
-  }
+    // Loop from the highest pin to the lowest:
+    for (int thisPin = 7; thisPin >= 2; thisPin--) {
+        // Turn the pin on:
+        digitalWrite(thisPin, HIGH);
+        delay(delayTime);
+        // Turn the pin off:
+        digitalWrite(thisPin, LOW);
+    }
 }
