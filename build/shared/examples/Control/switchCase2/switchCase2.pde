@@ -22,17 +22,17 @@
 */
 
 void setup() {
-    // initialize the LED pins:
+    // Initialize the LED pins:
     for (int thisPin = 2; thisPin <= 6; thisPin++) {
         pinMode(thisPin, OUTPUT);
     }
 }
 
 void loop() {
-    // read the sensor:
+    // Read the sensor:
     if (SerialUSB.available() > 0) {
         int inByte = SerialUSB.read();
-        // do something different depending on the character received.
+        // Do something different depending on the character received.
         // The switch statement expects single number values for each
         // case; in this example, though, you're using single quotes
         // to tell the controller to get the ASCII value for the
@@ -54,7 +54,7 @@ void loop() {
             digitalWrite(6, HIGH);
             break;
         default:
-            // turn all the LEDs off:
+            // Turn all the LEDs off:
             for (int thisPin = 2; thisPin < 7; thisPin++) {
                 digitalWrite(thisPin, LOW);
             }
