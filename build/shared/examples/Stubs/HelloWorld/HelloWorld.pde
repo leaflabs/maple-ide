@@ -1,9 +1,7 @@
-
 void setup() {
+
 }
 
 void loop() {
-  SerialUSB.println("Hello World!");
+    SerialUSB.println("Hello World!");
 }
-
-
