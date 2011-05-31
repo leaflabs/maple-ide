@@ -1,5 +1,5 @@
-
 void setup() {
+    pinMode(0, INPUT_ANALOG);
 }
 
 void loop() {
