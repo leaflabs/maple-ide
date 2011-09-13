@@ -149,7 +149,7 @@ maple_RET6RAM.build.error_led_port=GPIOA
 maple_RET6RAM.build.error_led_pin=5
 
 ##############################################################
-maple_native.name=LeafLabs Maple Native (prototype) to Flash
+maple_native.name=LeafLabs Maple Native (Beta) to Flash
 
 maple_native.upload.file_type=bin
 maple_native.upload.maximum_size=500000
@@ -174,7 +174,7 @@ maple_native.build.error_led_port=GPIOC
 maple_native.build.error_led_pin=15
 
 ##############################################################
-maple_nativeRAM.name=LeafLabs Maple Native (prototype) to RAM
+maple_nativeRAM.name=LeafLabs Maple Native (Beta) to RAM
 
 maple_nativeRAM.upload.file_type=bin
 maple_nativeRAM.upload.maximum_size=500000
