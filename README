@@ -101,7 +101,7 @@ Linux build requirements:
    necessary JDI package which the IDE needs to build. Thus, you will
    need to get the sun-java6-jdk to build everything even if you
    already have openjdk installed. The sun version is NOT FREE
-   SOFTWARE, so youll need to tap into nonfree/multiverse
+   SOFTWARE, so you'll need to tap into nonfree/multiverse
    repositories. On ubuntu 10.10 you can do:
    
    $ sudo add-apt-repository ppa:sun-java-community-team/sun-java6
