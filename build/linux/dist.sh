@@ -73,14 +73,12 @@ find arduino -name "Thumbs.db" -exec rm -f {} ';'
 echo Creating tarball and finishing...
 version=maple-ide-$revision
 mv arduino $version
-# FIXME re-insert this once we've actually got a 64 bit version
-# echo Using 64-bit librxtxSerial.so
-# cp dist/lib/librxtxSerial.so.x86_64 $version/lib/librxtxSerial.so
-# cp dist/lib/RXTXcomm.jar.x86_64 $version/lib/RXTXcomm.jar
 
-# tar cfz $version-linux64.tgz $version
-
-# echo Done with 64bit.
+echo Using 64-bit librxtxSerial.so
+cp dist/lib/librxtxSerial.so.x86_64 $version/lib/librxtxSerial.so
+cp dist/lib/RXTXcomm.jar.x86_64 $version/lib/RXTXcomm.jar
+tar cfz $version-linux64.tgz $version
+echo Done with 64bit.
 
 echo Using 32-bit librxtxSerial.so
 cp dist/lib/librxtxSerial.so.i386 $version/lib/librxtxSerial.so
