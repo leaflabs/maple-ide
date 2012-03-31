@@ -24,8 +24,8 @@
 int ledPin = 9;
 
 void setup() {
-    // Declare ledPin as an OUTPUT:
-    pinMode(ledPin, OUTPUT);
+    // Declare ledPin in PWM mode:
+    pinMode(ledPin, PWM);
 }
 
 void loop() {
