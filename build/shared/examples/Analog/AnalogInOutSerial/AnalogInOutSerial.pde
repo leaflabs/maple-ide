@@ -44,7 +44,7 @@ void loop() {
     // read the analog in value:
     sensorValue = analogRead(analogInPin);
     // map it to the range of the analog out:
-    outputValue = map(sensorValue, 0, 1023, 0, 65535);
+    outputValue = map(sensorValue, 0, 4095, 0, 65535);
     // change the analog out value:
     pwmWrite(pwmOutPin, outputValue);
 
