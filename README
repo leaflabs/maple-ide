@@ -17,7 +17,7 @@ This is the source code repository for the maple-ide; if you just want to
 program your Maple board you probably want to download a binary release package
 for your particular platform. Binaries are linked from:
 
-    http://leaflabs.com/docs/maple-ide/install/
+    http://leaflabs.com/docs/maple-ide-install.html
 
 This IDE includes a full ARM compiler toolchain ("arm-none-eabi-gcc") and a low
 level library for the STM32 Cortex-M3 platform called libmaple. The toolchain
@@ -32,7 +32,7 @@ If you are a "power hacker" just looking to modify the Maple IDE compilation
 process or get at libmaple directly we strongly recommend that you check out
 the alternative workflow described at
 
-    http://leaflabs.com/docs/libmaple/unix-toolchain/
+    http://leaflabs.com/docs/unix-toolchain.html
 
 Arduino Compatibility Disclaimer
 ------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ In order to successfully build the IDE, you'll need to get a fresh
 clone of libmaple.  For this, you'll need to download Git (you've
 probably already done this), and get a fresh clone of libmaple with
 
-    $ git clone git://github.com/leaflabs/libmaple.git
+    $ git clone https://github.com/leaflabs/libmaple.git
 
 The libmaple documentation is automatically generated, and you need to
 be able to build it to get a full-featured IDE.  The documentation
@@ -86,7 +86,7 @@ dependencies are:
  3) Breathe: A Doxygen-to-Sphinx bridge by Michael Jones.  LeafLabs
     maintains a fork of Breathe here:
 
-        $ git clone git://github.com/leaflabs/breathe.git
+        $ git clone https://github.com/leaflabs/breathe.git
 
     We sometimes modify the breathe internals to suit our own needs.
     While we do submit pull requests to try to get our changes merged
